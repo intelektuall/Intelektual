@@ -1,0 +1,73 @@
+name: sopan_santun_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Internationalization
+  flutter_localizations:
+    sdk: flutter
+
+  # Provider & State Management
+  provider: ^6.1.4
+  shared_preferences: ^2.2.2
+
+  # Form & Validation
+  flutter_form_builder: ^10.0.1
+  form_builder_validators: ^11.2.0
+
+  # UI & Animations
+  animations: ^2.0.11
+  flutter_expandable_fab: ^2.0.0
+  smooth_page_indicator: ^1.1.0
+  flutter_staggered_animations: ^1.1.1
+  expandable_cardview: ^1.1.0
+  expansion_tile_card: ^3.0.0
+  carousel_slider: ^5.1.1
+  font_awesome_flutter: ^10.7.0
+  lottie: ^3.1.0
+  modal_bottom_sheet: ^3.0.0
+
+  # Charts & Visual
+  fl_chart: ^1.0.0
+
+  # Tools & Utilities
+  image_picker: ^1.1.1
+  url_launcher: ^6.2.5
+  get: ^4.6.5
+  intl: ^0.20.2
+  google_fonts: ^6.1.0
+  pdf: ^3.10.4
+  printing: ^5.11.0
+  path_provider: ^2.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+    - assets/animations/loading.json
+
+  # fonts:
+  #   - family: ComicNeue
+  #     fonts:
+  #       - asset: assets/fonts/ComicNeue-Regular.ttf
+  #   - family: NotoSans
+  #     fonts:
+  #       - asset: assets/fonts/Noto/NotoSans-Regular.ttf
+  #   - family: NotoEmoji
+  #     fonts:
+  #       - asset: assets/fonts/Noto/NotoColorEmoji.ttf
