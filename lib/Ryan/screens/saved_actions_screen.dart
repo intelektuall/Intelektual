@@ -202,9 +202,9 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
                               ),
                               color: isDark ? Colors.grey[800] : Colors.black87,
                               onSelected: (value) {
-                                if (value == 0)
+                                if (value == 0) {
                                   _changeView(true);
-                                else if (value == 1)
+                                } else if (value == 1)
                                   _changeView(false);
                                 else if (value == 2)
                                   _changeSorting(SortingType.latest);

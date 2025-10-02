@@ -127,7 +127,7 @@ class _ReportDialogState extends State<ReportDialog> {
                               }
                             },
                           );
-                        }).toList(),
+                        }),
 
                         if (isOtherSelected) ...[
                           Padding(

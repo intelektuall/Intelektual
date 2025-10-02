@@ -1,3 +1,4 @@
+// Eka/activity/Profile_About.dart
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,8 +40,16 @@ class _ProfileAboutState extends State<ProfileAbout> {
 
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
+    try {
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tidak dapat membuka: $url')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error membuka url: $e')),
+      );
     }
   }
 
@@ -113,7 +122,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // FOTO TIM
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(24),
@@ -125,8 +133,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
                             fit: BoxFit.cover,
                           ),
                         ),
-
-                        // NAMA & STATUS
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -159,8 +165,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
                             ),
                           ),
                         ),
-
-                        // TOMBOL ICON
                         Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: Row(

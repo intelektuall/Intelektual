@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TambahEventPage extends StatefulWidget {
+  const TambahEventPage({super.key});
+
   @override
   _TambahEventPageState createState() => _TambahEventPageState();
 }

@@ -3,7 +3,7 @@ import '../models/coral_species.dart';
 import 'content_filter_provider.dart';
 
 class CoralSpeciesProvider with ChangeNotifier {
-  List<CoralSpecies> _allSpecies = coralSpeciesList;
+  final List<CoralSpecies> _allSpecies = coralSpeciesList;
   List<CoralSpecies> _filteredSpecies = coralSpeciesList;
 
   List<CoralSpecies> get species => _filteredSpecies;

@@ -1,3 +1,4 @@
+// Eka/provider/settings_provider.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,21 +20,30 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> _loadSettingsFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    _isLockAppOn = prefs.getBool("lockApp") ?? true;
-    _backgroundMode = prefs.getString("backgroundMode") ?? "Putih";
-    _isNotificationEnabled = prefs.getBool("notification") ?? false;
-    _isPowerSavingMode = prefs.getBool("powerSaving") ?? false;
-    _language = prefs.getString("language") ?? "Indonesia";
-    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _isLockAppOn = prefs.getBool("lockApp") ?? true;
+      _backgroundMode = prefs.getString("backgroundMode") ?? "Putih";
+      _isNotificationEnabled = prefs.getBool("notification") ?? false;
+      _isPowerSavingMode = prefs.getBool("powerSaving") ?? false;
+      _language = prefs.getString("language") ?? "Indonesia";
+      notifyListeners();
+    } catch (e) {
+      // Jika terjadi error, tetap gunakan nilai default.
+      debugPrint("Error loading settings: $e");
+    }
   }
 
   Future<void> _saveToPrefs(String key, dynamic value) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (value is bool) {
-      await prefs.setBool(key, value);
-    } else if (value is String) {
-      await prefs.setString(key, value);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (value is bool) {
+        await prefs.setBool(key, value);
+      } else if (value is String) {
+        await prefs.setString(key, value);
+      }
+    } catch (e) {
+      debugPrint("Error saving $key: $e");
     }
   }
 

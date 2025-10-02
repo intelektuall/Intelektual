@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MyLoginAndSignin extends StatefulWidget {
+  const MyLoginAndSignin({super.key});
+
   @override
   State<MyLoginAndSignin> createState() => _MyLoginAndSigninState();
 }

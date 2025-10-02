@@ -4,7 +4,7 @@ import 'SeeAllScreen.dart';
 class DetailScreen extends StatelessWidget {
   final String animalName;
 
-  DetailScreen({required this.animalName});
+  const DetailScreen({super.key, required this.animalName});
 
   @override
   Widget build(BuildContext context) {

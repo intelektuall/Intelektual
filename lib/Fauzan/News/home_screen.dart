@@ -8,6 +8,8 @@ import 'Widgets/main_news.dart';
 import 'Widgets/news_card.dart';
 
 class FauzanNewsHomeScreen extends StatefulWidget {
+  const FauzanNewsHomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

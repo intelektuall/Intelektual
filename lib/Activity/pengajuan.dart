@@ -8,11 +8,15 @@ import 'package:provider/provider.dart';
 import '../Provider/hewan_provider.dart';
 
 class AddAnimalScreen extends StatefulWidget {
+  const AddAnimalScreen({super.key});
+
   @override
   _AddAnimalScreenState createState() => _AddAnimalScreenState();
 }
 
 class SubmissionHistoryScreen extends StatelessWidget {
+  const SubmissionHistoryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<HewanProvider>(context);
@@ -525,11 +529,11 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                                       duration: Duration(seconds: 2),
                                     );
                                   },
-                            child: Text('Batal'),
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 16),
                               side: BorderSide(color: Colors.blueAccent),
                             ),
+                            child: Text('Batal'),
                           ),
                         ),
                         SizedBox(width: 16),
@@ -640,6 +644,16 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                                       }
                                     }
                                   : null,
+                              style: OutlinedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                side: BorderSide(
+                                  color:
+                                      formController.isAgreed.value &&
+                                          !_isSubmitting
+                                      ? Colors.blueAccent
+                                      : Colors.grey,
+                                ),
+                              ),
 
                               child: _isSubmitting
                                   ? SizedBox(
@@ -663,16 +677,6 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                                             : Colors.grey,
                                       ),
                                     ),
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                side: BorderSide(
-                                  color:
-                                      formController.isAgreed.value &&
-                                          !_isSubmitting
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              ),
                             ),
                           ),
                         ),

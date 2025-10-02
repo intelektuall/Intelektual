@@ -13,6 +13,8 @@ import '../Provider/hewan_provider.dart';
 import '../legend.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -299,11 +301,11 @@ class HomeContent extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => SeeAllScreen()),
             ),
-            child: Text("Lihat Semua"),
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
+            child: Text("Lihat Semua"),
           ),
         ],
       ),
@@ -338,7 +340,7 @@ class HomeContent extends StatelessWidget {
 class ProtectedAnimal extends StatefulWidget {
   final String name, count, location, image, status;
 
-  const ProtectedAnimal({
+  const ProtectedAnimal({super.key, 
     required this.name,
     required this.count,
     required this.location,

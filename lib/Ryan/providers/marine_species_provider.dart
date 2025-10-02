@@ -3,7 +3,7 @@ import '../models/marine_species.dart';
 import 'content_filter_provider.dart';
 
 class MarineSpeciesProvider with ChangeNotifier {
-  List<MarineSpecies> _allSpecies = marineSpeciesList;
+  final List<MarineSpecies> _allSpecies = marineSpeciesList;
   List<MarineSpecies> _filteredSpecies = marineSpeciesList;
 
   List<MarineSpecies> get species => _filteredSpecies;

@@ -10,13 +10,13 @@ class DetailScreen extends StatefulWidget {
   final DateTime date;
 
   const DetailScreen({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.headline,
     required this.newsbody,
     required this.synopsis,
     required this.date,
-  }) : super(key: key);
+  });
 
   @override
   _DetailScreenState createState() => _DetailScreenState();

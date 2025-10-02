@@ -1,9 +1,7 @@
-import '/Fauzan/Event/EventPage.dart';
 import '/Fauzan/Event/Notification/notification_provider.dart';
 import '/Fauzan/Event/Providers/event_provider.dart';
 import '/Fauzan/LoginPage/Providers/LoginValidation.dart';
 import '/Fauzan/LoginPage/Providers/ProviderLogin.dart';
-import '/Fauzan/LoginPage/login_screen.dart';
 import '/Activity/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

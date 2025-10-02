@@ -6,6 +6,8 @@ import 'Notification/notification_model.dart';
 import 'package:intl/intl.dart';
 
 class NotificationPage extends StatelessWidget {
+  const NotificationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final notifications = context.watch<NotificationProvider>().notifications;

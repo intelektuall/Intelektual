@@ -1,3 +1,4 @@
+// Eka/activity/Profile_Edit.dart
 import 'package:flutter/material.dart';
 
 class ProfileEdit extends StatefulWidget {
@@ -44,6 +45,10 @@ class _ProfileEditState extends State<ProfileEdit> {
         'status': statusController.text,
         'bio': bioController.text,
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Harap setujui perubahan terlebih dahulu")),
+      );
     }
   }
 

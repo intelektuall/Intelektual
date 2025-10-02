@@ -9,6 +9,8 @@ import 'Notification/notification_provider.dart';
 import 'NotificationPage.dart';
 
 class EventLautPage extends StatefulWidget {
+  const EventLautPage({super.key});
+
   @override
   State<EventLautPage> createState() => _EventLautPageState();
 }
@@ -59,10 +61,12 @@ class _EventLautPageState extends State<EventLautPage> {
     final events = context.watch<EventProvider>().events;
 
     final filteredEvents = events.where((event) {
-      if (selectedLocation != null && event.location != selectedLocation)
+      if (selectedLocation != null && event.location != selectedLocation) {
         return false;
-      if (selectedCategory != null && event.category != selectedCategory)
+      }
+      if (selectedCategory != null && event.category != selectedCategory) {
         return false;
+      }
       if (showJoinedOnly && !event.joined) return false;
       return true;
     }).toList();
@@ -209,12 +213,12 @@ class _EventLautPageState extends State<EventLautPage> {
                                     child: TextButton(
                                       onPressed: () =>
                                           context.read<EventProvider>().toggleJoin(event),
-                                      child: Text(event.joined ? "Batalkan" : "Gabung"),
                                       style: TextButton.styleFrom(
                                         foregroundColor: event.joined
                                             ? colorScheme.error
                                             : colorScheme.primary,
                                       ),
+                                      child: Text(event.joined ? "Batalkan" : "Gabung"),
                                     ),
                                   ),
                                 ],

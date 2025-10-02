@@ -207,7 +207,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     },
                     activeColor: Colors.blueAccent,
                   );
-                }).toList(),
+                }),
 
                 const SizedBox(height: 16),
                 Text("Fauna Laut", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: textColor)),
@@ -224,7 +224,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     },
                     activeColor: Colors.blueAccent,
                   );
-                }).toList(),
+                }),
 
                 if (selectedFaunaSubtypes.isNotEmpty)
                   Column(

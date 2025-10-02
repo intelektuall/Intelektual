@@ -7,8 +7,7 @@ class NewsCard extends StatefulWidget {
   final News news;
   final bool isGrid;
 
-  const NewsCard({Key? key, required this.news, required this.isGrid})
-    : super(key: key);
+  const NewsCard({super.key, required this.news, required this.isGrid});
 
   @override
   _NewsCardState createState() => _NewsCardState();

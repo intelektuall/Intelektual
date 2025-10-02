@@ -5,7 +5,7 @@ import '../Models/news_model.dart';
 class MainNews extends StatelessWidget {
   final News news;
 
-  const MainNews({Key? key, required this.news}) : super(key: key);
+  const MainNews({super.key, required this.news});
 
   @override
   Widget build(BuildContext context) {

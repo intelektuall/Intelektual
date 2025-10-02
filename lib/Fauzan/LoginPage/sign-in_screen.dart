@@ -10,6 +10,8 @@ class MySignin extends StatelessWidget {
 }
 
 class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;

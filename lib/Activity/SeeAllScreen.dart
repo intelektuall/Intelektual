@@ -6,6 +6,8 @@ import 'DetailScreen.dart';
 import 'pengajuan.dart';
 
 class SeeAllScreen extends StatefulWidget {
+  const SeeAllScreen({super.key});
+
   @override
   _SeeAllScreenState createState() => _SeeAllScreenState();
 }
@@ -250,10 +252,10 @@ class _SeeAllScreenState extends State<SeeAllScreen>
               context,
               MaterialPageRoute(builder: (_) => AddAnimalScreen()),
             ),
-            child: Icon(Icons.add),
             tooltip: 'Ajukan Hewan Baru',
             backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
             foregroundColor: isDark ? Colors.white : Colors.white,
+            child: Icon(Icons.add),
           ),
           FloatingActionButton.small(
             heroTag: 'viewHistory',
@@ -261,10 +263,10 @@ class _SeeAllScreenState extends State<SeeAllScreen>
               context,
               MaterialPageRoute(builder: (_) => SubmissionHistoryScreen()),
             ),
-            child: Icon(Icons.history),
             tooltip: 'Riwayat Pengajuan',
             backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
             foregroundColor: isDark ? Colors.white : Colors.white,
+            child: Icon(Icons.history),
           ),
         ],
       ),
@@ -277,7 +279,7 @@ class AnimalCard extends StatelessWidget {
   final Map<String, dynamic> animal;
   final bool isDark;
 
-  const AnimalCard({required this.animal, required this.isDark});
+  const AnimalCard({super.key, required this.animal, required this.isDark});
 
   @override
   Widget build(BuildContext context) {

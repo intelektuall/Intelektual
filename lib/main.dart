@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -101,7 +102,7 @@ class MainApp extends StatelessWidget {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
       // === Lokalisasi ===
-      locale: const Locale('id'),
+      locale: settings.language == "Indonesia" ? const Locale('id') : const Locale('en'),
       supportedLocales: const [
         Locale('id'),
         Locale('en'),
