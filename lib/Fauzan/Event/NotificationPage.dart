@@ -28,15 +28,18 @@ class NotificationPage extends StatelessWidget {
               separatorBuilder: (_, __) => SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final item = notifications[index];
-                final formattedTime =
-                    DateFormat('dd/MM/yyyy - HH:mm').format(item.timestamp);
+                final formattedTime = DateFormat(
+                  'dd/MM/yyyy - HH:mm',
+                ).format(item.timestamp);
 
                 return ExpansionTileCard(
                   baseColor: theme.cardColor,
                   elevation: 2,
                   borderRadius: BorderRadius.circular(12),
-                  leading: Icon(Icons.notifications_none_outlined,
-                      color: colorScheme.onSurface),
+                  leading: Icon(
+                    Icons.notifications_none_outlined,
+                    color: colorScheme.onSurface,
+                  ),
                   title: Text(
                     "Persetujuan Event ${item.nama}",
                     style: theme.textTheme.titleMedium,
@@ -81,7 +84,8 @@ class NotificationPage extends StatelessWidget {
                                     controller: scrollController,
                                     padding: const EdgeInsets.all(20),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Center(
                                           child: Container(
@@ -90,40 +94,45 @@ class NotificationPage extends StatelessWidget {
                                             margin: EdgeInsets.only(bottom: 16),
                                             decoration: BoxDecoration(
                                               color: colorScheme.outlineVariant,
-                                              borderRadius: BorderRadius.circular(2),
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
                                             ),
                                           ),
                                         ),
                                         Text(
                                           "Detail Notifikasi",
-                                          style: theme.textTheme.titleMedium?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         SizedBox(height: 16),
                                         Text(
                                           "Judul Event:",
-                                          style: theme.textTheme.bodyMedium?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(item.nama),
                                         SizedBox(height: 16),
                                         Text(
                                           "Lokasi:",
-                                          style: theme.textTheme.bodyMedium?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(item.lokasi),
                                         SizedBox(height: 16),
                                         Text(
                                           "Waktu Disetujui:",
-                                          style: theme.textTheme.bodyMedium?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(formattedTime),

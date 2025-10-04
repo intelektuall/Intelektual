@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:sopan_santun_app/Fauzan/Event/EventPage.dart';
 
 // === Provider Hatami ===
 import 'Provider/hewan_provider.dart';
@@ -102,24 +103,22 @@ class MainApp extends StatelessWidget {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
       // === Lokalisasi ===
-      locale: settings.language == "Indonesia" ? const Locale('id') : const Locale('en'),
-      supportedLocales: const [
-        Locale('id'),
-        Locale('en'),
-      ],
+      locale: settings.language == "Indonesia"
+          ? const Locale('id')
+          : const Locale('en'),
+      supportedLocales: const [Locale('id'), Locale('en')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      // === Halaman pertama ===
+      // // === Halaman pertama ===
       home: MyLoginAndSignin(),
+      // home: EventLautPage(),
 
       // === Routing halaman tambahan ===
-      routes: {
-        '/newpage_unlocked': (context) => const NewPageUnlocked(),
-      },
+      routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
     );
   }
 }

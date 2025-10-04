@@ -16,7 +16,13 @@ class _TambahEventPageState extends State<TambahEventPage> {
   TimeOfDay? startTime;
   TimeOfDay? endTime;
 
-  final List<String> lokasiList = ['Aceh', 'Medan', 'Jakarta', 'Surabaya', 'Bali'];
+  final List<String> lokasiList = [
+    'Aceh',
+    'Medan',
+    'Jakarta',
+    'Surabaya',
+    'Bali',
+  ];
   final List<String> kategoriList = ['Lingkungan', 'Edukasi', 'Sosial'];
 
   @override
@@ -42,7 +48,8 @@ class _TambahEventPageState extends State<TambahEventPage> {
               SizedBox(height: 8),
               TextFormField(
                 decoration: inputDecoration(context, "Masukkan nama event"),
-                validator: (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? "Wajib diisi" : null,
                 onChanged: (val) => namaEvent = val,
               ),
               SizedBox(height: 20),
@@ -53,7 +60,11 @@ class _TambahEventPageState extends State<TambahEventPage> {
                 value: lokasi,
                 hint: Text("Pilih Lokasi"),
                 decoration: inputDecoration(context, null),
-                items: lokasiList.map((lok) => DropdownMenuItem(value: lok, child: Text(lok))).toList(),
+                items: lokasiList
+                    .map(
+                      (lok) => DropdownMenuItem(value: lok, child: Text(lok)),
+                    )
+                    .toList(),
                 onChanged: (val) => setState(() => lokasi = val),
                 validator: (val) => val == null ? "Wajib pilih lokasi" : null,
               ),
@@ -65,7 +76,11 @@ class _TambahEventPageState extends State<TambahEventPage> {
                 value: kategori,
                 hint: Text("Pilih Kategori"),
                 decoration: inputDecoration(context, null),
-                items: kategoriList.map((kat) => DropdownMenuItem(value: kat, child: Text(kat))).toList(),
+                items: kategoriList
+                    .map(
+                      (kat) => DropdownMenuItem(value: kat, child: Text(kat)),
+                    )
+                    .toList(),
                 onChanged: (val) => setState(() => kategori = val),
                 validator: (val) => val == null ? "Wajib pilih kategori" : null,
               ),
@@ -93,7 +108,8 @@ class _TambahEventPageState extends State<TambahEventPage> {
                           ? "Pilih tanggal"
                           : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
                     ).copyWith(prefixIcon: Icon(Icons.calendar_today_rounded)),
-                    validator: (_) => selectedDate == null ? "Wajib pilih tanggal" : null,
+                    validator: (_) =>
+                        selectedDate == null ? "Wajib pilih tanggal" : null,
                   ),
                 ),
               ),
@@ -114,7 +130,9 @@ class _TambahEventPageState extends State<TambahEventPage> {
                               context: context,
                               locale: const Locale('id'),
                               child: MediaQuery(
-                                data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                                data: MediaQuery.of(
+                                  context,
+                                ).copyWith(alwaysUse24HourFormat: true),
                                 child: child!,
                               ),
                             );
@@ -126,11 +144,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration: inputDecoration(
-                            context,
-                            startTime == null ? "Waktu mulai" : startTime!.format(context),
-                          ).copyWith(prefixIcon: Icon(Icons.access_time_rounded)),
-                          validator: (_) => startTime == null ? "Wajib pilih waktu mulai" : null,
+                          decoration:
+                              inputDecoration(
+                                context,
+                                startTime == null
+                                    ? "Waktu mulai"
+                                    : startTime!.format(context),
+                              ).copyWith(
+                                prefixIcon: Icon(Icons.access_time_rounded),
+                              ),
+                          validator: (_) => startTime == null
+                              ? "Wajib pilih waktu mulai"
+                              : null,
                         ),
                       ),
                     ),
@@ -147,7 +172,9 @@ class _TambahEventPageState extends State<TambahEventPage> {
                               context: context,
                               locale: const Locale('id'),
                               child: MediaQuery(
-                                data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                                data: MediaQuery.of(
+                                  context,
+                                ).copyWith(alwaysUse24HourFormat: true),
                                 child: child!,
                               ),
                             );
@@ -159,11 +186,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration: inputDecoration(
-                            context,
-                            endTime == null ? "Waktu selesai" : endTime!.format(context),
-                          ).copyWith(prefixIcon: Icon(Icons.access_time_outlined)),
-                          validator: (_) => endTime == null ? "Wajib pilih waktu selesai" : null,
+                          decoration:
+                              inputDecoration(
+                                context,
+                                endTime == null
+                                    ? "Waktu selesai"
+                                    : endTime!.format(context),
+                              ).copyWith(
+                                prefixIcon: Icon(Icons.access_time_outlined),
+                              ),
+                          validator: (_) => endTime == null
+                              ? "Wajib pilih waktu selesai"
+                              : null,
                         ),
                       ),
                     ),
