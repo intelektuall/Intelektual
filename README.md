@@ -1,3 +1,9 @@
-# sopan_santun_app
+College Project - (https://sdgs.un.org/goals/goal14)
 
-A new Flutter project.
+DeepBlue - Life Below Water
+
+Our Team:
+- MHD.Hatami
+- Fauzan Ramadhan Harahap
+- Eka Satria
+- Ryan Rafly Tanjung
