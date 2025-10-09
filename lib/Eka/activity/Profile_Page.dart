@@ -1,16 +1,18 @@
-// Eka/activity/Profile_Page.dart
+// /Eka/activity/Profile_Page.dart
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animations/animations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '/Eka/activity/Profile_About.dart';
 import '/Eka/activity/Profile_Edit.dart';
 import '/Eka/activity/Profile_Settings.dart';
 import '/Eka/provider/settings_provider.dart';
+import '/Eka/provider/profile_stream.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -20,8 +22,8 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  File? _pickedImage;       // foto yang sudah final & tampil
-  File? _pendingImage;      // foto sementara saat upload
+  File? _pickedImage;
+  Uint8List? _profileImageBytes;
   final ImagePicker _picker = ImagePicker();
 
   StreamController<double>? _uploadProgressController;
@@ -34,99 +36,113 @@ class _MyProfileState extends State<MyProfile> {
   String ttl = "Planet Mars, 20 Oktober";
   String email = "ultramannex@gmail.com";
   String nohp = "+62 821-6679-7788";
-  String pekerjaan = "Penjaga Galaksi";
-  String alamatRumah = "Base Alpha, Mars";
-  String hobi = "Berlatih bela diri";
-  String status = "Single";
-  String bio = "Ultraman dari masa depan. Penyuka keadilan dan cahaya.";
+
+  // field yang dikelola lewat profile stream
+  String pekerjaan = "";
+  String alamatRumah = "";
+  String hobi = "";
+  String status = "";
+  String bio = "";
+
+  late ProfileStreamProvider _profileProvider;
+  StreamSubscription<Map<String, dynamic>>? _profileSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadSavedProfileImage();
+
+    _profileProvider = ProfileStreamProvider();
+    // inisialisasi stream secara async: load dulu lalu subscribe
+    _initProfileStream();
+  }
+
+  Future<void> _initProfileStream() async {
+    await _profileProvider.loadProfile();
+    // listen; stream.multi (di provider) akan langsung mengirim currentData
+    _profileSubscription = _profileProvider.stream.listen(
+      (data) {
+        setState(() {
+          pekerjaan = (data["pekerjaan"] ?? pekerjaan) as String;
+          alamatRumah = (data["alamatRumah"] ?? alamatRumah) as String;
+          hobi = (data["hobi"] ?? hobi) as String;
+          status = (data["status"] ?? status) as String;
+          bio = (data["bio"] ?? bio) as String;
+        });
+      },
+      onError: (e) {
+        debugPrint("Profile stream error: $e");
+      },
+    );
   }
 
   @override
   void dispose() {
-    // Tutup controller bila perlu
     try {
-      if (_uploadProgressController != null && !_uploadProgressController!.isClosed) {
-        _uploadProgressController!.close();
-      }
-    } catch (e) {
-      // ignore
-    }
+      _uploadProgressController?.close();
+      _profileSubscription?.cancel();
+    } catch (_) {}
     super.dispose();
   }
 
+  /// Muat foto profil Base64 (disimpan terpisah di prefs)
   Future<void> _loadSavedProfileImage() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final path = prefs.getString('profile_image_path');
-      if (path != null && path.isNotEmpty) {
+      final base64String = prefs.getString('profile_image_base64');
+      if (base64String != null && base64String.isNotEmpty) {
         setState(() {
-          _pickedImage = File(path);
+          _profileImageBytes = base64Decode(base64String);
         });
       }
     } catch (e) {
-      debugPrint("Gagal load image path: $e");
+      debugPrint("Gagal memuat gambar Base64: $e");
     }
   }
 
-  Future<void> _saveProfileImagePath(String path) async {
+  /// Simpan gambar ke SharedPreferences (Base64)
+  Future<void> _saveProfileImageAsBase64(String path) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('profile_image_path', path);
+      final bytes = await File(path).readAsBytes();
+      final base64String = base64Encode(bytes);
+      await prefs.setString('profile_image_base64', base64String);
+      setState(() {
+        _profileImageBytes = bytes;
+      });
     } catch (e) {
-      debugPrint("Gagal save image path: $e");
+      debugPrint("Gagal menyimpan gambar Base64: $e");
     }
   }
 
-  // Simulasi upload yang mengirim progress lewat Stream
+  /// Simulasi upload (progress bar)
   Future<void> _simulateUpload(String path) async {
-    // tutup controller lama kalau ada
     try {
-      if (_uploadProgressController != null && !_uploadProgressController!.isClosed) {
-        await _uploadProgressController!.close();
-      }
+      await _uploadProgressController?.close();
     } catch (_) {}
-
     _uploadProgressController = StreamController<double>();
     setState(() {
       _isUploading = true;
-      _pendingImage = File(path); // tahan dulu
+      _pickedImage = File(path);
     });
 
     try {
-      const int steps = 20; // 20 langkah -> durasi ~2 detik
+      const int steps = 20;
       for (int i = 1; i <= steps; i++) {
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (_uploadProgressController != null && !_uploadProgressController!.isClosed) {
-          _uploadProgressController!.add(i / steps);
-        }
+        await Future.delayed(const Duration(milliseconds: 80));
+        _uploadProgressController?.add(i / steps);
       }
 
-      // Simulasi upload selesai: simpan & pindahkan pending -> picked
-      await _saveProfileImagePath(path);
-
-      setState(() {
-        _pickedImage = _pendingImage;
-        _pendingImage = null;
-        _isUploading = false;
-      });
+      await _saveProfileImageAsBase64(path);
     } catch (e) {
-      debugPrint("Error saat simulasi upload: $e");
-      // pada error, batalkan state upload
-      setState(() {
-        _pendingImage = null;
-        _isUploading = false;
-      });
+      debugPrint("Error saat upload gambar: $e");
     } finally {
-      // tutup controller di akhirnya
+      setState(() {
+        _isUploading = false;
+        _pickedImage = null;
+      });
       try {
-        if (_uploadProgressController != null && !_uploadProgressController!.isClosed) {
-          await _uploadProgressController!.close();
-        }
+        await _uploadProgressController?.close();
       } catch (_) {}
       _uploadProgressController = null;
     }
@@ -139,16 +155,14 @@ class _MyProfileState extends State<MyProfile> {
         imageQuality: 80,
       );
       if (pickedFile != null) {
-        // jangan set _pickedImage langsung — kita pakai pending & tunggu upload selesai
         await _simulateUpload(pickedFile.path);
       }
     } catch (e) {
       debugPrint("Error pick image: $e");
-      // kamu bisa tampilkan SnackBar atau dialog kalau mau
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memilih gambar: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal memilih gambar: $e')));
       }
     }
   }
@@ -165,17 +179,17 @@ class _MyProfileState extends State<MyProfile> {
             ListTile(
               leading: const Icon(Icons.camera_alt),
               title: const Text('Buka Kamera'),
-              onTap: () async {
+              onTap: () {
                 Navigator.of(context).pop();
-                await _pickImage(ImageSource.camera);
+                _pickImage(ImageSource.camera);
               },
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
               title: const Text('Pilih dari Galeri'),
-              onTap: () async {
+              onTap: () {
                 Navigator.of(context).pop();
-                await _pickImage(ImageSource.gallery);
+                _pickImage(ImageSource.gallery);
               },
             ),
             ListTile(
@@ -183,15 +197,11 @@ class _MyProfileState extends State<MyProfile> {
               title: const Text('Hapus Foto Profil'),
               onTap: () async {
                 Navigator.of(context).pop();
-                try {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.remove('profile_image_path');
-                } catch (e) {
-                  debugPrint("Gagal remove prefs: $e");
-                }
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('profile_image_base64');
                 setState(() {
                   _pickedImage = null;
-                  _pendingImage = null;
+                  _profileImageBytes = null;
                 });
               },
             ),
@@ -201,20 +211,22 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  void updateEditableData({
+  // Update data profil via provider
+  Future<void> updateEditableData({
     required String newPekerjaan,
     required String newAlamat,
     required String newHobi,
     required String newStatus,
     required String newBio,
-  }) {
-    setState(() {
-      pekerjaan = newPekerjaan;
-      alamatRumah = newAlamat;
-      hobi = newHobi;
-      status = newStatus;
-      bio = newBio;
-    });
+  }) async {
+    final updatedData = {
+      "pekerjaan": newPekerjaan,
+      "alamatRumah": newAlamat,
+      "hobi": newHobi,
+      "status": newStatus,
+      "bio": newBio,
+    };
+    await _profileProvider.updateProfile(updatedData);
   }
 
   void handleMenuSelection(String value) async {
@@ -236,15 +248,15 @@ class _MyProfileState extends State<MyProfile> {
     final result = await Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => page,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeScaleTransition(animation: animation, child: child);
-        },
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeScaleTransition(animation: animation, child: child),
+        transitionDuration: const Duration(milliseconds: 400),
       ),
     );
 
+    // Jika edit mengembalikan result, gunakan itu (tetapi provider sudah menangani penyimpanan)
     if (value == 'edit' && result != null && result is Map) {
-      updateEditableData(
+      await updateEditableData(
         newPekerjaan: result['pekerjaan'] ?? pekerjaan,
         newAlamat: result['alamatRumah'] ?? alamatRumah,
         newHobi: result['hobi'] ?? hobi,
@@ -267,32 +279,14 @@ class _MyProfileState extends State<MyProfile> {
         children: [
           Text(label, style: TextStyle(fontSize: 14, color: labelColor)),
           const SizedBox(height: 4),
-          Text(value, style: TextStyle(fontSize: 16, color: valueColor)),
+          Text(
+            value.isNotEmpty ? value : "-",
+            style: TextStyle(fontSize: 16, color: valueColor),
+          ),
           const Divider(),
         ],
       ),
     );
-  }
-
-  Future<bool> _onWillPop() async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi'),
-        content: const Text('Kembali ke halaman sebelumnya?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Batal'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Ya'),
-          ),
-        ],
-      ),
-    );
-    return result ?? false;
   }
 
   @override
@@ -304,11 +298,8 @@ class _MyProfileState extends State<MyProfile> {
     final textColor = isDarkMode ? Colors.white : Colors.black87;
     final subTextColor = isDarkMode ? Colors.grey[400]! : Colors.blueGrey;
 
-    // Widget avatar: kalau sedang uploading -> tampilkan persentase,
-    // kalau tidak -> tampilkan foto (dengan AnimatedSwitcher untuk fade)
     Widget avatarWidget() {
       if (_isUploading) {
-        // Pastikan ada stream. Jika controller null (edge-case), tampil 0%
         final stream = _uploadProgressController?.stream;
         return StreamBuilder<double>(
           stream: stream,
@@ -321,20 +312,19 @@ class _MyProfileState extends State<MyProfile> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // lingkaran dasar abu-abu
                   CircleAvatar(radius: 50, backgroundColor: Colors.grey[300]),
-                  // lingkaran progress (di belakang teks)
                   SizedBox(
                     width: 100,
                     height: 100,
                     child: CircularProgressIndicator(
                       value: progress,
                       strokeWidth: 6,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.blueAccent,
+                      ),
                       backgroundColor: Colors.grey.shade300,
                     ),
                   ),
-                  // persentase teks
                   Text(
                     "$percent%",
                     style: const TextStyle(
@@ -349,17 +339,18 @@ class _MyProfileState extends State<MyProfile> {
           },
         );
       } else {
-        // Tampilkan foto (default asset kalau null)
         return SizedBox(
           width: 100,
           height: 100,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: CircleAvatar(
-              key: ValueKey<String>(_pickedImage?.path ?? 'default_avatar'),
+              key: ValueKey<String>(
+                _profileImageBytes != null ? 'custom_image' : 'default_avatar',
+              ),
               radius: 50,
-              backgroundImage: _pickedImage != null
-                  ? FileImage(_pickedImage!)
+              backgroundImage: _profileImageBytes != null
+                  ? MemoryImage(_profileImageBytes!)
                   : const AssetImage('assets/images/1.png') as ImageProvider,
               backgroundColor: Colors.white,
             ),
@@ -368,130 +359,105 @@ class _MyProfileState extends State<MyProfile> {
       }
     }
 
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        backgroundColor: backgroundColor,
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          automaticallyImplyLeading: false,
-          title: Text(
-            "Profile Page",
-            style: TextStyle(
-              fontSize: 20,
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        title: Text(
+          "Profile Page",
+          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+        ),
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert,
               color: isDarkMode ? Colors.white : Colors.black,
             ),
+            onSelected: handleMenuSelection,
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'edit', child: Text('Edit Info Tambahan')),
+              PopupMenuItem(value: 'settings', child: Text('Settings')),
+              PopupMenuItem(value: 'about', child: Text('About Us')),
+            ],
           ),
-          actions: [
-            Tooltip(
-              message: "Menu lainnya",
-              child: PopupMenuButton<String>(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: isDarkMode ? Colors.white : Colors.black,
-                ),
-                onSelected: handleMenuSelection,
-                itemBuilder: (context) => const [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Edit Info Tambahan'),
-                  ),
-                  PopupMenuItem(value: 'settings', child: Text('Settings')),
-                  PopupMenuItem(value: 'about', child: Text('About Us')),
-                ],
-              ),
-            ),
-          ],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: isDarkMode ? Colors.white : Colors.black),
-            onPressed: () async {
-              final shouldPop = await _onWillPop();
-              if (shouldPop) Navigator.of(context).pop();
-            },
-          ),
-        ),
-        body: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                children: [
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      avatarWidget(),
-                      Positioned(
-                        bottom: 4,
-                        right: 4,
-                        child: GestureDetector(
-                          onTap: _showImagePickerOptions,
-                          child: Tooltip(
-                            message: "Ubah foto profil",
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundColor: Colors.blueAccent,
-                              child: const Icon(
-                                Icons.edit,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                            ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Row(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    avatarWidget(),
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: _showImagePickerOptions,
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Colors.blueAccent,
+                          child: const Icon(
+                            Icons.edit,
+                            size: 16,
+                            color: Colors.white,
                           ),
                         ),
                       ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        email,
+                        style: TextStyle(fontSize: 14, color: subTextColor),
+                      ),
                     ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          email,
-                          style: TextStyle(fontSize: 14, color: subTextColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const Divider(),
-            buildInfoTile("Nomor HP", nohp, subTextColor, textColor),
-            buildInfoTile("Jenis Kelamin", gender, subTextColor, textColor),
-            buildInfoTile("Umur", umur, subTextColor, textColor),
-            buildInfoTile("Tempat/Tanggal Lahir", ttl, subTextColor, textColor),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                "Informasi Tambahan",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
                 ),
+              ],
+            ),
+          ),
+          const Divider(),
+          buildInfoTile("Nomor HP", nohp, subTextColor, textColor),
+          buildInfoTile("Jenis Kelamin", gender, subTextColor, textColor),
+          buildInfoTile("Umur", umur, subTextColor, textColor),
+          buildInfoTile("Tempat/Tanggal Lahir", ttl, subTextColor, textColor),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Informasi Tambahan",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
               ),
             ),
-            const SizedBox(height: 8),
-            buildInfoTile("Pekerjaan", pekerjaan, subTextColor, textColor),
-            buildInfoTile("Alamat Rumah", alamatRumah, subTextColor, textColor),
-            buildInfoTile("Hobi", hobi, subTextColor, textColor),
-            buildInfoTile("Status Pernikahan", status, subTextColor, textColor),
-            buildInfoTile("Bio", bio, subTextColor, textColor),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          buildInfoTile("Pekerjaan", pekerjaan, subTextColor, textColor),
+          buildInfoTile("Alamat Rumah", alamatRumah, subTextColor, textColor),
+          buildInfoTile("Hobi", hobi, subTextColor, textColor),
+          buildInfoTile("Status Pernikahan", status, subTextColor, textColor),
+          buildInfoTile("Bio", bio, subTextColor, textColor),
+        ],
       ),
     );
   }

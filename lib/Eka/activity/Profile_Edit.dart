@@ -1,5 +1,6 @@
-// Eka/activity/Profile_Edit.dart
+// /Eka/activity/Profile_Edit.dart
 import 'package:flutter/material.dart';
+import '/Eka/provider/profile_stream.dart';
 
 class ProfileEdit extends StatefulWidget {
   final String pekerjaan, alamatRumah, hobi, status, bio;
@@ -36,20 +37,37 @@ class _ProfileEditState extends State<ProfileEdit> {
     bioController = TextEditingController(text: widget.bio);
   }
 
-  void saveData() {
-    if (agree) {
-      Navigator.pop(context, {
-        'pekerjaan': pekerjaanController.text,
-        'alamatRumah': alamatController.text,
-        'hobi': hobiController.text,
-        'status': statusController.text,
-        'bio': bioController.text,
-      });
-    } else {
+  @override
+  void dispose() {
+    pekerjaanController.dispose();
+    alamatController.dispose();
+    hobiController.dispose();
+    statusController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+
+  void saveData() async {
+    if (!agree) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Harap setujui perubahan terlebih dahulu")),
       );
+      return;
     }
+
+    final updatedData = {
+      'pekerjaan': pekerjaanController.text,
+      'alamatRumah': alamatController.text,
+      'hobi': hobiController.text,
+      'status': statusController.text,
+      'bio': bioController.text,
+    };
+
+    // Update ke provider (akan menyimpan ke SharedPreferences juga)
+    await ProfileStreamProvider().updateProfile(updatedData);
+
+    // kembali dengan result
+    if (mounted) Navigator.pop(context, updatedData);
   }
 
   Widget buildEditableField(String label, TextEditingController controller) {
@@ -60,17 +78,12 @@ class _ProfileEditState extends State<ProfileEdit> {
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          Tooltip(
-            message: "Edit $label",
-            child: TextField(
-              controller: controller,
-              maxLines: label == "Bio" ? 3 : 1,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                filled: true,
-              ),
+          TextField(
+            controller: controller,
+            maxLines: label == "Bio" ? 3 : 1,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              filled: true,
             ),
           ),
         ],
@@ -80,23 +93,10 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        title: Text(
-          "Edit Info Tambahan",
-          style: TextStyle(
-            color: isDarkMode ? Colors.white : Colors.black,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        elevation: 4,
+        title: const Text("Edit Info Tambahan", style: TextStyle(color: Colors.white)),
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: 12, bottom: 24),
@@ -108,34 +108,23 @@ class _ProfileEditState extends State<ProfileEdit> {
           buildEditableField("Bio", bioController),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Tooltip(
-              message: "Wajib menyetujui untuk menyimpan perubahan",
-              child: CheckboxListTile(
-                title: const Text("Saya menyetujui untuk menyimpan perubahan"),
-                value: agree,
-                onChanged: (val) => setState(() => agree = val ?? false),
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
+            child: CheckboxListTile(
+              title: const Text("Saya menyetujui untuk menyimpan perubahan"),
+              value: agree,
+              onChanged: (val) => setState(() => agree = val ?? false),
+              controlAffinity: ListTileControlAffinity.leading,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Tooltip(
-              message: "Klik untuk menyimpan perubahan",
-              child: ElevatedButton(
-                onPressed: agree ? saveData : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: agree ? Colors.blueAccent : Colors.grey,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  "Simpan",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
+            child: ElevatedButton(
+              onPressed: agree ? saveData : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
+              child: const Text("Simpan Perubahan", style: TextStyle(color: Colors.white)),
             ),
           ),
         ],
