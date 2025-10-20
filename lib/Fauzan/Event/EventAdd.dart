@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TambahEventPage extends StatefulWidget {
-  const TambahEventPage({super.key});
-
   @override
   _TambahEventPageState createState() => _TambahEventPageState();
 }
@@ -23,20 +21,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
     'Surabaya',
     'Bali',
   ];
+
   final List<String> kategoriList = ['Lingkungan', 'Edukasi', 'Sosial'];
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Tambah Event"),
-        backgroundColor: theme.appBarTheme.backgroundColor ?? Colors.blueAccent,
+        backgroundColor: Colors.blueAccent.withOpacity(0.7),
         elevation: 0,
       ),
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -44,49 +40,54 @@ class _TambahEventPageState extends State<TambahEventPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Nama Event", style: theme.textTheme.bodyMedium),
+              Text("Nama Event", style: labelStyle),
               SizedBox(height: 8),
               TextFormField(
-                decoration: inputDecoration(context, "Masukkan nama event"),
-                validator: (val) =>
-                    val == null || val.isEmpty ? "Wajib diisi" : null,
+                decoration: inputDecoration("Masukkan nama event"),
+                validator:
+                    (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
                 onChanged: (val) => namaEvent = val,
               ),
               SizedBox(height: 20),
 
-              Text("Lokasi", style: theme.textTheme.bodyMedium),
+              Text("Lokasi", style: labelStyle),
               SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: lokasi,
                 hint: Text("Pilih Lokasi"),
-                decoration: inputDecoration(context, null),
-                items: lokasiList
-                    .map(
-                      (lok) => DropdownMenuItem(value: lok, child: Text(lok)),
-                    )
-                    .toList(),
+                decoration: inputDecoration(null),
+                items:
+                    lokasiList
+                        .map(
+                          (lok) =>
+                              DropdownMenuItem(value: lok, child: Text(lok)),
+                        )
+                        .toList(),
                 onChanged: (val) => setState(() => lokasi = val),
                 validator: (val) => val == null ? "Wajib pilih lokasi" : null,
               ),
               SizedBox(height: 20),
 
-              Text("Kategori", style: theme.textTheme.bodyMedium),
+              Text("Kategori", style: labelStyle),
               SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: kategori,
                 hint: Text("Pilih Kategori"),
-                decoration: inputDecoration(context, null),
-                items: kategoriList
-                    .map(
-                      (kat) => DropdownMenuItem(value: kat, child: Text(kat)),
-                    )
-                    .toList(),
+                decoration: inputDecoration(null),
+                items:
+                    kategoriList
+                        .map(
+                          (kat) =>
+                              DropdownMenuItem(value: kat, child: Text(kat)),
+                        )
+                        .toList(),
                 onChanged: (val) => setState(() => kategori = val),
                 validator: (val) => val == null ? "Wajib pilih kategori" : null,
               ),
               SizedBox(height: 20),
 
-              Text("Tanggal", style: theme.textTheme.bodyMedium),
+              // ======================= TANGGAL ==========================
+              Text("Tanggal", style: labelStyle),
               SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
@@ -103,19 +104,20 @@ class _TambahEventPageState extends State<TambahEventPage> {
                 child: AbsorbPointer(
                   child: TextFormField(
                     decoration: inputDecoration(
-                      context,
                       selectedDate == null
                           ? "Pilih tanggal"
                           : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
                     ).copyWith(prefixIcon: Icon(Icons.calendar_today_rounded)),
-                    validator: (_) =>
-                        selectedDate == null ? "Wajib pilih tanggal" : null,
+                    validator:
+                        (_) =>
+                            selectedDate == null ? "Wajib pilih tanggal" : null,
                   ),
                 ),
               ),
               SizedBox(height: 20),
 
-              Text("Waktu", style: theme.textTheme.bodyMedium),
+              // ===================== WAKTU (Start & End) ======================
+              Text("Waktu", style: labelStyle),
               SizedBox(height: 8),
               Row(
                 children: [
@@ -144,18 +146,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration:
-                              inputDecoration(
-                                context,
-                                startTime == null
-                                    ? "Waktu mulai"
-                                    : startTime!.format(context),
-                              ).copyWith(
-                                prefixIcon: Icon(Icons.access_time_rounded),
-                              ),
-                          validator: (_) => startTime == null
-                              ? "Wajib pilih waktu mulai"
-                              : null,
+                          decoration: inputDecoration(
+                            startTime == null
+                                ? "Waktu mulai"
+                                : startTime!.format(context),
+                          ).copyWith(
+                            prefixIcon: Icon(Icons.access_time_rounded),
+                          ),
+                          validator:
+                              (_) =>
+                                  startTime == null
+                                      ? "Wajib pilih waktu mulai"
+                                      : null,
                         ),
                       ),
                     ),
@@ -186,24 +188,25 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration:
-                              inputDecoration(
-                                context,
-                                endTime == null
-                                    ? "Waktu selesai"
-                                    : endTime!.format(context),
-                              ).copyWith(
-                                prefixIcon: Icon(Icons.access_time_outlined),
-                              ),
-                          validator: (_) => endTime == null
-                              ? "Wajib pilih waktu selesai"
-                              : null,
+                          decoration: inputDecoration(
+                            endTime == null
+                                ? "Waktu selesai"
+                                : endTime!.format(context),
+                          ).copyWith(
+                            prefixIcon: Icon(Icons.access_time_outlined),
+                          ),
+                          validator:
+                              (_) =>
+                                  endTime == null
+                                      ? "Wajib pilih waktu selesai"
+                                      : null,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
+
               SizedBox(height: 30),
 
               SizedBox(
@@ -222,15 +225,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       });
                     }
                   },
+
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    foregroundColor: colorScheme.onPrimary,
+                    backgroundColor: Colors.blueAccent,
                     padding: EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text("Simpan", style: TextStyle(fontSize: 16)),
+                  child: Text(
+                    "Simpan",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 ),
               ),
             ],
@@ -240,14 +246,16 @@ class _TambahEventPageState extends State<TambahEventPage> {
     );
   }
 
-  InputDecoration inputDecoration(BuildContext context, String? hint) {
-    final theme = Theme.of(context);
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: theme.textTheme.bodySmall,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-      isDense: true,
-    );
-  }
+  final labelStyle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Colors.grey[800],
+  );
+
+  InputDecoration inputDecoration(String? hint) => InputDecoration(
+    hintText: hint,
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+    isDense: true,
+  );
 }

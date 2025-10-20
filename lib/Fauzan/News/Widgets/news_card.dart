@@ -46,42 +46,37 @@ class _NewsCardState extends State<NewsCard> {
                   crossAxisCount: 4,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children:
-                      shareOptions.map((option) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                            final label = option['label'];
-                            final message =
-                                label == 'Salin Link'
-                                    ? 'Link disalin'
-                                    : 'Berbagi melalui $label...';
+                  children: shareOptions.map((option) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        final label = option['label'];
+                        final message = label == 'Salin Link'
+                            ? 'Link disalin'
+                            : 'Berbagi melalui $label...';
 
-                            ScaffoldMessenger.of(
-                              context,
-                            ).showSnackBar(SnackBar(content: Text(message)));
-                          },
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(message)));
+                      },
 
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircleAvatar(
-                                radius: 24,
-                                child: Icon(
-                                  option['icon'] as IconData,
-                                  size: 24,
-                                ),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                option['label'] as String,
-                                style: TextStyle(fontSize: 12),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            child: Icon(option['icon'] as IconData, size: 24),
                           ),
-                        );
-                      }).toList(),
+                          SizedBox(height: 6),
+                          Text(
+                            option['label'] as String,
+                            style: TextStyle(fontSize: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
                 SizedBox(height: 10),
                 TextButton(
@@ -119,18 +114,17 @@ class _NewsCardState extends State<NewsCard> {
               title: Text("Laporkan Berita"),
               content: SingleChildScrollView(
                 child: Column(
-                  children:
-                      reportReasons.map((reason) {
-                        return CheckboxListTile(
-                          title: Text(reason),
-                          value: selectedReasons[reason],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedReasons[reason] = value ?? false;
-                            });
-                          },
-                        );
-                      }).toList(),
+                  children: reportReasons.map((reason) {
+                    return CheckboxListTile(
+                      title: Text(reason),
+                      value: selectedReasons[reason],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedReasons[reason] = value ?? false;
+                        });
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
               actions: [
@@ -139,19 +133,18 @@ class _NewsCardState extends State<NewsCard> {
                   onPressed: () => Navigator.pop(context),
                 ),
                 ElevatedButton(
-                  onPressed:
-                      atLeastOneSelected
-                          ? () {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  "Laporan Anda telah dikirim. Terima kasih atas partisipasinya.",
-                                ),
+                  onPressed: atLeastOneSelected
+                      ? () {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Laporan Anda telah dikirim. Terima kasih atas partisipasinya.",
                               ),
-                            );
-                          }
-                          : null,
+                            ),
+                          );
+                        }
+                      : null,
                   child: Text("Kirim"),
                 ),
               ],
@@ -176,14 +169,13 @@ class _NewsCardState extends State<NewsCard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => DetailScreen(
-                        imageUrl: widget.news.imageUrl,
-                        headline: widget.news.headline,
-                        newsbody: widget.news.newsbody,
-                        synopsis: widget.news.synopsis,
-                        date: widget.news.date,
-                      ),
+                  builder: (context) => DetailScreen(
+                    imageUrl: widget.news.imageUrl,
+                    headline: widget.news.headline,
+                    newsbody: widget.news.content,
+                    synopsis: widget.news.content,
+                    date: widget.news.date,
+                  ),
                 ),
               );
             },
@@ -209,7 +201,7 @@ class _NewsCardState extends State<NewsCard> {
                         SizedBox(),
                         Divider(height: 7, color: Colors.grey[400]),
                         Text(
-                          widget.news.synopsis,
+                          widget.news.content,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[700],
@@ -230,10 +222,9 @@ class _NewsCardState extends State<NewsCard> {
                                       isBookmarked
                                           ? Icons.bookmark
                                           : Icons.bookmark_border,
-                                      color:
-                                          isBookmarked
-                                              ? Colors.blueAccent
-                                              : Colors.grey[700],
+                                      color: isBookmarked
+                                          ? Colors.blueAccent
+                                          : Colors.grey[700],
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -285,14 +276,13 @@ class _NewsCardState extends State<NewsCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder:
-                  (context) => DetailScreen(
-                    imageUrl: widget.news.imageUrl,
-                    headline: widget.news.headline,
-                    newsbody: widget.news.newsbody,
-                    synopsis: widget.news.synopsis,
-                    date: widget.news.date,
-                  ),
+              builder: (context) => DetailScreen(
+                imageUrl: widget.news.imageUrl,
+                headline: widget.news.headline,
+                newsbody: widget.news.content,
+                synopsis: widget.news.content,
+                date: widget.news.date,
+              ),
             ),
           );
         },
@@ -331,7 +321,7 @@ class _NewsCardState extends State<NewsCard> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            widget.news.synopsis,
+                            widget.news.content,
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey[700],
@@ -372,50 +362,48 @@ class _NewsCardState extends State<NewsCard> {
                             _showReportDialog(context);
                           }
                         },
-                        itemBuilder:
-                            (BuildContext context) => [
-                              PopupMenuItem<String>(
-                                value: 'bookmark',
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      isBookmarked
-                                          ? Icons.bookmark
-                                          : Icons.bookmark_border,
-                                      color:
-                                          isBookmarked
-                                              ? Colors.blueAccent
-                                              : Colors.black,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(isBookmarked ? 'Tersimpan' : 'Simpan'),
-                                  ],
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem<String>(
+                            value: 'bookmark',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isBookmarked
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color: isBookmarked
+                                      ? Colors.blueAccent
+                                      : Colors.black,
                                 ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'share',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.share, color: Colors.black),
-                                    SizedBox(width: 8),
-                                    Text('Bagikan'),
-                                  ],
+                                SizedBox(width: 8),
+                                Text(isBookmarked ? 'Tersimpan' : 'Simpan'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'share',
+                            child: Row(
+                              children: [
+                                Icon(Icons.share, color: Colors.black),
+                                SizedBox(width: 8),
+                                Text('Bagikan'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'report',
+                            child: Row(
+                              children: [
+                                Icon(Icons.report, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Laporkan',
+                                  style: TextStyle(color: Colors.red),
                                 ),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'report',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.report, color: Colors.red),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      'Laporkan',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

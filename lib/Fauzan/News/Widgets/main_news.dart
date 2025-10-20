@@ -14,14 +14,13 @@ class MainNews extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) => DetailScreen(
-                  imageUrl: news.imageUrl,
-                  headline: news.headline,
-                  newsbody: news.newsbody,
-                  synopsis: news.synopsis,
-                  date: news.date,
-                ),
+            builder: (context) => DetailScreen(
+              imageUrl: news.imageUrl,
+              headline: news.headline,
+              newsbody: news.content,
+              synopsis: news.content,
+              date: news.date,
+            ),
           ),
         );
       },
@@ -59,7 +58,7 @@ class MainNews extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  news.synopsis,
+                  news.content,
                   style: TextStyle(fontSize: 16, color: Colors.white70),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

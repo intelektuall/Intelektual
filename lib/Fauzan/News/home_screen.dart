@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'Models/news_model.dart';
-import 'Widgets/main_news.dart';
-import 'Widgets/news_card.dart';
+import 'package:provider/provider.dart';
+import 'package:sopan_santun_app/Fauzan/News/Models/news_model.dart';
+import 'package:sopan_santun_app/Fauzan/News/Models/news_provider.dart';
+import 'package:sopan_santun_app/Fauzan/News/Widgets/main_news.dart';
+import 'package:sopan_santun_app/Fauzan/News/Widgets/news_card.dart';
 
 class FauzanNewsHomeScreen extends StatefulWidget {
   const FauzanNewsHomeScreen({super.key});
@@ -23,6 +25,14 @@ class _HomeScreenState extends State<FauzanNewsHomeScreen> {
   bool isGrid = false;
   bool _isLoadingNews = false;
 
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => Provider.of<NewsProvider>(context, listen: false).fetchNews(),
+    );
+  }
+
   void _toggleView() {
     setState(() {
       _isLoadingNews = true;
@@ -36,98 +46,26 @@ class _HomeScreenState extends State<FauzanNewsHomeScreen> {
     });
   }
 
-  List<News> get filteredNews {
+  List<News> _filterNews(List<News> allNews) {
     if (selectedChoice == null || selectedChoice == 'Latest') {
-      List<News> sorted = List.from(newsList);
+      List<News> sorted = List.from(allNews);
       sorted.sort((a, b) => b.date.compareTo(a.date));
       return sorted;
     }
-
-    return newsList
-        .where(
-          (news) =>
-              news.category.toLowerCase() == selectedChoice!.toLowerCase(),
-        )
+    return allNews
+        .where((n) => n.category.toLowerCase() == selectedChoice!.toLowerCase())
         .toList();
-  }
-
-  Widget _buildNewsContent() {
-    if (_isLoadingNews) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40),
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    if (filteredNews.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(child: Text("Tidak ada berita tersedia.")),
-      );
-    }
-
-    if (isGrid) {
-      return AnimationLimiter(
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: filteredNews.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemBuilder: (context, index) {
-            return AnimationConfiguration.staggeredGrid(
-              position:
-                  index, // (1) Menentukan urutan animasi untuk setiap item di grid
-              columnCount:
-                  2, // (2) Jumlah kolom pada grid, digunakan untuk sinkronisasi animasi
-              duration: Duration(
-                milliseconds: 800,
-              ), // (3) Durasi animasi munculnya item
-              child: ScaleAnimation(
-                // (4) Efek memperbesar item saat muncul
-                child: FadeInAnimation(
-                  // (5) Efek memudar saat item muncul
-                  child: NewsCard(news: filteredNews[index], isGrid: true),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      return AnimationLimiter(
-        child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: filteredNews.length,
-          itemBuilder: (context, index) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: Duration(milliseconds: 800),
-              child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: NewsCard(news: filteredNews[index], isGrid: false),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<NewsProvider>(context);
+    final newsList = provider.newsList;
+    final filteredNews = _filterNews(newsList);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("DeepNews"),
+        title: const Text("DeepNews"),
         backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
@@ -137,102 +75,139 @@ class _HomeScreenState extends State<FauzanNewsHomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (newsList.isNotEmpty) ...[
-              Stack(
+      body: provider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : provider.errorMessage != null
+          ? Center(child: Text(provider.errorMessage!))
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AnimationConfiguration.synchronized(
-                    duration: Duration(milliseconds: 600),
-                    child: SlideAnimation(
-                      verticalOffset: -50,
-                      child: CarouselSlider(
-                        carouselController: _carouselController,
-                        options: CarouselOptions(
-                          height: 260.0,
-                          autoPlay: true,
-                          enlargeCenterPage: false,
-                          viewportFraction: 1.0,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                        ),
-                        items:
-                            newsList
-                                .map((newsItem) => MainNews(news: newsItem))
-                                .toList(),
-                      ),
-                    ),
-                  ),
-
-                  // Positioned dots inside the image (bottom center)
-                  Positioned(
-                    bottom: 12,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: AnimationConfiguration.synchronized(
-                        duration: Duration(milliseconds: 500),
-                        child: FadeInAnimation(
-                          child: AnimatedSmoothIndicator(
-                            activeIndex:
-                                _currentIndex, // (1) Indeks titik yang sedang aktif
-                            count: newsList.length, // (2) Total jumlah titik
-                            effect: WormEffect(
-                              // (3) Efek animasi worm
-                              dotHeight: 8, // (4) Tinggi titik
-                              dotWidth: 8, // (5) Lebar titik
-                              activeDotColor:
-                                  Colors.white, // (6) Warna titik aktif
-                              dotColor:
-                                  Colors.white54, // (7) Warna titik non-aktif
+                  if (newsList.isNotEmpty) ...[
+                    Stack(
+                      children: [
+                        AnimationConfiguration.synchronized(
+                          duration: const Duration(milliseconds: 600),
+                          child: SlideAnimation(
+                            verticalOffset: -50,
+                            child: CarouselSlider(
+                              carouselController: _carouselController,
+                              options: CarouselOptions(
+                                height: 260.0,
+                                autoPlay: true,
+                                enlargeCenterPage: false,
+                                viewportFraction: 1.0,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                },
+                              ),
+                              items: newsList
+                                  .map((newsItem) => MainNews(news: newsItem))
+                                  .toList(),
                             ),
                           ),
                         ),
-                      ),
+                        Positioned(
+                          bottom: 12,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: AnimatedSmoothIndicator(
+                              activeIndex: _currentIndex,
+                              count: newsList.length,
+                              effect: const WormEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                activeDotColor: Colors.white,
+                                dotColor: Colors.white54,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Wrap(
+                      spacing: 5,
+                      children: choices.map((choice) {
+                        return ChoiceChip(
+                          label: Text(choice),
+                          selected: selectedChoice == choice,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              selectedChoice = selected ? choice : null;
+                            });
+                          },
+                        );
+                      }).toList(),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  _isLoadingNews
+                      ? const Center(child: CircularProgressIndicator())
+                      : filteredNews.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text("Tidak ada berita tersedia."),
+                          ),
+                        )
+                      : isGrid
+                      ? GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: filteredNews.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.75,
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                              ),
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredGrid(
+                              position: index,
+                              columnCount: 2,
+                              duration: const Duration(milliseconds: 800),
+                              child: ScaleAnimation(
+                                child: FadeInAnimation(
+                                  child: NewsCard(
+                                    news: filteredNews[index],
+                                    isGrid: true,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: filteredNews.length,
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 800),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: NewsCard(
+                                    news: filteredNews[index],
+                                    isGrid: false,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                 ],
               ),
-
-              SizedBox(height: 10),
-            ],
-
-            // Filter Chip
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Wrap(
-                spacing: 5,
-                children: List.generate(
-                  choices.length,
-                  (index) => AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: Duration(milliseconds: 400),
-                    child: ScaleAnimation(
-                      child: ChoiceChip(
-                        label: Text(choices[index]),
-                        selected: selectedChoice == choices[index],
-                        onSelected: (bool selected) {
-                          setState(() {
-                            selectedChoice = selected ? choices[index] : null;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ),
-
-            SizedBox(height: 10),
-            _buildNewsContent(),
-          ],
-        ),
-      ),
     );
   }
 }

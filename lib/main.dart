@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sopan_santun_app/Fauzan/Event/EventPage.dart';
+import 'package:sopan_santun_app/Fauzan/Event/Notification/notification_database.dart';
+import 'package:sopan_santun_app/Fauzan/News/Models/news_provider.dart';
 
 // === Provider Hatami ===
 import 'Provider/hewan_provider.dart';
@@ -45,6 +47,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => LoginValidationProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
 
         // === Provider Eka ===
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
@@ -60,9 +63,12 @@ void main() {
         ChangeNotifierProvider(create: (_) => CardOverlayProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
       ],
+
       child: const MainApp(),
     ),
   );
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatelessWidget {

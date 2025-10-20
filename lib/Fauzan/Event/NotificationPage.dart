@@ -5,22 +5,39 @@ import 'Notification/notification_provider.dart';
 import 'Notification/notification_model.dart';
 import 'package:intl/intl.dart';
 
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
+class NotificationPage extends StatefulWidget {
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() async {
+      await Provider.of<NotificationProvider>(
+        context,
+        listen: false,
+      ).loadNotifications();
+      setState(() => _isLoading = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final notifications = context.watch<NotificationProvider>().notifications;
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Riwayat Notifikasi"),
-        backgroundColor: theme.appBarTheme.backgroundColor ?? Colors.blueAccent,
+        backgroundColor: Colors.blueAccent.withOpacity(0.7),
       ),
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: notifications.isEmpty
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator()) // ⏳ Loading indikator
+          : notifications.isEmpty
           ? Center(child: Text("Belum ada notifikasi."))
           : ListView.separated(
               itemCount: notifications.length,
@@ -32,32 +49,33 @@ class NotificationPage extends StatelessWidget {
                   'dd/MM/yyyy - HH:mm',
                 ).format(item.timestamp);
 
+                // Tentukan teks berdasarkan tipe notifikasi
+                final isJoin = item.tipe == 'join';
+                final titleText = isJoin
+                    ? "Anda Bergabung ke Event ${item.nama}"
+                    : "Persetujuan Event ${item.nama}";
+                final contentText = isJoin
+                    ? 'Anda telah bergabung dengan event berikut.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime'
+                    : 'Event anda dengan detail ini sudah disetujui oleh tim kami.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime';
+
                 return ExpansionTileCard(
-                  baseColor: theme.cardColor,
+                  baseColor: isJoin ? Colors.green[50] : Colors.blue[50],
                   elevation: 2,
                   borderRadius: BorderRadius.circular(12),
                   leading: Icon(
-                    Icons.notifications_none_outlined,
-                    color: colorScheme.onSurface,
+                    isJoin
+                        ? Icons.event_available_outlined
+                        : Icons.notifications_none_outlined,
                   ),
-                  title: Text(
-                    "Persetujuan Event ${item.nama}",
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  subtitle: Text(
-                    formattedTime,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  title: Text(titleText),
+                  subtitle: Text(formattedTime),
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 8,
                       ),
-                      child: Text(
-                        'Event anda dengan detail ini sudah disetujui oleh tim kami .\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime',
-                        style: theme.textTheme.bodyMedium,
-                      ),
+                      child: Text(contentText, style: TextStyle(fontSize: 14)),
                     ),
                     SizedBox(height: 8),
                     Align(
@@ -93,46 +111,45 @@ class NotificationPage extends StatelessWidget {
                                             height: 4,
                                             margin: EdgeInsets.only(bottom: 16),
                                             decoration: BoxDecoration(
-                                              color: colorScheme.outlineVariant,
+                                              color: Colors.grey[400],
                                               borderRadius:
                                                   BorderRadius.circular(2),
                                             ),
                                           ),
                                         ),
                                         Text(
-                                          "Detail Notifikasi",
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                          isJoin
+                                              ? "Detail Event yang Anda Ikuti"
+                                              : "Detail Notifikasi",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                         SizedBox(height: 16),
                                         Text(
                                           "Judul Event:",
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(item.nama),
                                         SizedBox(height: 16),
                                         Text(
                                           "Lokasi:",
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(item.lokasi),
                                         SizedBox(height: 16),
                                         Text(
-                                          "Waktu Disetujui:",
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                          "Waktu:",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                         SizedBox(height: 4),
                                         Text(formattedTime),
@@ -144,8 +161,9 @@ class NotificationPage extends StatelessWidget {
                             },
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: colorScheme.primary,
-                            foregroundColor: colorScheme.onPrimary,
+                            backgroundColor: isJoin
+                                ? Colors.green
+                                : Colors.blueAccent,
                           ),
                           child: Text("Lihat Detail"),
                         ),

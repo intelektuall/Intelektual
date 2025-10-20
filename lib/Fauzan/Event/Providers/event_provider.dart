@@ -1,54 +1,86 @@
 import 'package:flutter/material.dart';
-import 'event_model.dart';
-import 'db_helper.dart';
+import '../DB/db_helper.dart';
+
+class Event {
+  final String title;
+  final String category;
+  final String location;
+  final DateTime? date;
+  final String? startTime;
+  final String? endTime;
+  bool joined;
+
+  Event({
+    required this.title,
+    required this.category,
+    required this.location,
+    this.date,
+    this.startTime,
+    this.endTime,
+    this.joined = false,
+  });
+}
 
 class EventProvider with ChangeNotifier {
-  List<Event> _events = [];
+  final List<Event> _events = [];
+  final DBHelper _dbHelper = DBHelper();
+
   List<Event> get events => _events;
 
   EventProvider() {
     loadEvents();
   }
 
-  /// Load semua event dari DB dan kembalikan List<Event>
-  Future<List<Event>> loadEvents() async {
-    // Pastikan DBHelper.getEvents() mengembalikan List<Event>
-    _events = await DBHelper.getEvents();
+  Future<void> loadEvents() async {
+    // ✅ Dummy event tetap ada
+    _events.clear();
+    _events.addAll([
+      Event(
+        title: "Bersih Pantai",
+        location: "Bali",
+        category: "Lingkungan",
+        date: DateTime(2025, 7, 15),
+        startTime: "08:00",
+        endTime: "10:00",
+      ),
+      Event(
+        title: "Seminar Kelautan",
+        location: "Jakarta",
+        category: "Edukasi",
+        date: DateTime(2025, 7, 20),
+        startTime: "13:30",
+        endTime: "15:00",
+      ),
+      Event(
+        title: "Cleaning Sungai Sembahe",
+        location: "Medan",
+        category: "Sosial",
+        date: DateTime(2025, 7, 20),
+        startTime: "13:30",
+        endTime: "15:00",
+      ),
+    ]);
+
+    // ✅ Ambil status join dari SQLite
+    final statuses = await _dbHelper.getJoinStatuses();
+    for (var e in _events) {
+      if (statuses.containsKey(e.title)) {
+        e.joined = statuses[e.title]!;
+      }
+    }
+
     notifyListeners();
-    return _events;
   }
 
-  /// Tambah event ke DB
-  Future<void> addEvent(Event event) async {
-    await DBHelper.insertEvent(event);
-    await loadEvents();
+  void addEvent(Event event) {
+    // Hanya disimpan di memori (tidak ke database)
+    _events.add(event);
+    notifyListeners();
   }
 
-  /// Toggle joined (update di DB)
   Future<void> toggleJoin(Event event) async {
-    final updated = Event(
-      id: event.id,
-      title: event.title,
-      category: event.category,
-      location: event.location,
-      date: event.date,
-      startTime: event.startTime,
-      endTime: event.endTime,
-      joined: !event.joined,
-    );
-    await DBHelper.updateEvent(updated);
-    await loadEvents();
-  }
-
-  /// Hapus event berdasarkan id
-  Future<void> deleteEvent(int id) async {
-    await DBHelper.deleteEvent(id);
-    await loadEvents();
-  }
-
-  /// Hapus semua event (reset)
-  Future<void> clearEvents() async {
-    await DBHelper.clearEvents();
-    await loadEvents();
+    event.joined = !event.joined;
+    await _dbHelper.saveJoinStatus(event.title, event.joined);
+    notifyListeners();
   }
 }
