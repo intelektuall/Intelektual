@@ -33,7 +33,7 @@ class NotificationProvider with ChangeNotifier {
   /// 🔔 Notifikasi ketika user bergabung ke event
   Future<void> addJoinNotification(String nama, String lokasi) async {
     final notif = NotificationModel(
-      nama: "Anda bergabung ke event $nama",
+      nama: nama,
       lokasi: lokasi,
       timestamp: DateTime.now(),
       tipe: 'join',

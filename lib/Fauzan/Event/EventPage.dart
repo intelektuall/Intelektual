@@ -248,7 +248,6 @@ class _EventLautPageState extends State<EventLautPage> {
                                                 content: Text(
                                                   "Anda bergabung ke event ${event.title}",
                                                 ),
-                                                backgroundColor: Colors.green,
                                                 duration: Duration(seconds: 2),
                                               ),
                                             );
@@ -261,8 +260,6 @@ class _EventLautPageState extends State<EventLautPage> {
                                                 content: Text(
                                                   "Anda membatalkan keikutsertaan di ${event.title}",
                                                 ),
-                                                backgroundColor:
-                                                    Colors.redAccent,
                                                 duration: Duration(seconds: 2),
                                               ),
                                             );

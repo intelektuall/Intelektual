@@ -36,7 +36,7 @@ class _NotificationPageState extends State<NotificationPage> {
         backgroundColor: Colors.blueAccent.withOpacity(0.7),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator()) // ⏳ Loading indikator
+          ? Center(child: CircularProgressIndicator())
           : notifications.isEmpty
           ? Center(child: Text("Belum ada notifikasi."))
           : ListView.separated(
@@ -49,14 +49,14 @@ class _NotificationPageState extends State<NotificationPage> {
                   'dd/MM/yyyy - HH:mm',
                 ).format(item.timestamp);
 
-                // Tentukan teks berdasarkan tipe notifikasi
                 final isJoin = item.tipe == 'join';
                 final titleText = isJoin
-                    ? "Anda Bergabung ke Event ${item.nama}"
-                    : "Persetujuan Event ${item.nama}";
+                    ? "Anda bergabung ke event ${item.nama}"
+                    : "Event ${item.nama} disetujui";
+
                 final contentText = isJoin
-                    ? 'Anda telah bergabung dengan event berikut.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime'
-                    : 'Event anda dengan detail ini sudah disetujui oleh tim kami.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime';
+                    ? 'Terima kasih telah bergabung dalam event berikut.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime'
+                    : 'Event anda telah disetujui oleh tim kami.\n\nNama Event: ${item.nama}\nLokasi: ${item.lokasi}\n\n$formattedTime';
 
                 return ExpansionTileCard(
                   baseColor: isJoin ? Colors.green[50] : Colors.blue[50],
