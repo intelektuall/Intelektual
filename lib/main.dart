@@ -79,8 +79,8 @@ void main() async {
       child: MainApp(analytics: analytics, observer: observer),
     ),
   );
-  WidgetsFlutterBinding.ensureInitialized();
-  await NotificationDatabase.instance.deleteDatabaseFile();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatelessWidget {
