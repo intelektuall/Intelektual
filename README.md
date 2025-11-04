@@ -7,3 +7,8 @@ Our Team:
 - Fauzan Ramadhan Harahap
 - Eka Satria
 - Ryan Rafly Tanjung
+
+Include
+- SQFLite ✅
+- API ✅
+- Firebase ✅
