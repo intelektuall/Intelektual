@@ -13,7 +13,8 @@ import '../Provider/hewan_provider.dart';
 import '../legend.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String uid;
+  const HomeScreen(this.uid, {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -340,7 +341,8 @@ class HomeContent extends StatelessWidget {
 class ProtectedAnimal extends StatefulWidget {
   final String name, count, location, image, status;
 
-  const ProtectedAnimal({super.key, 
+  const ProtectedAnimal({
+    super.key,
     required this.name,
     required this.count,
     required this.location,

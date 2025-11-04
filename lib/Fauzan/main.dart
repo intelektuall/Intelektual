@@ -1,3 +1,5 @@
+import 'package:sopan_santun_app/Fauzan/LoginPage/Firebase_Auth/launch.dart';
+
 import '/Fauzan/Event/Notification/notification_provider.dart';
 import '/Fauzan/Event/Providers/event_provider.dart';
 import '/Fauzan/LoginPage/Providers/LoginValidation.dart';
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      home: HomeScreen(),
+      home: LaunchScreen(),
     );
   }
 }

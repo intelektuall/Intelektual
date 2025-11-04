@@ -1,9 +1,13 @@
 // main.dart
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sopan_santun_app/Fauzan/Event/EventPage.dart';
 import 'package:sopan_santun_app/Fauzan/Event/Notification/notification_database.dart';
+import 'package:sopan_santun_app/Fauzan/LoginPage/Firebase_Auth/launch.dart';
 import 'package:sopan_santun_app/Fauzan/News/Models/news_provider.dart';
 
 // === Provider Hatami ===
@@ -35,7 +39,15 @@ import 'Fauzan/LoginPage/login_screen.dart';
 // === Tambahan halaman Ryan jika ingin akses lewat route ===
 import 'Ryan/screens/newpage_unlocked.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding Flutter siap
+  await Firebase.initializeApp();
+  await FirebaseAuth.instance.signOut();
+
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -64,7 +76,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
       ],
 
-      child: const MainApp(),
+      child: MainApp(analytics: analytics, observer: observer),
     ),
   );
   // WidgetsFlutterBinding.ensureInitialized();
@@ -72,7 +84,9 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const MainApp({super.key, required this.analytics, required this.observer});
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +96,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Sopan Santun App",
+      navigatorObservers: [observer],
 
       // === Tema default (light)
       theme: ThemeData(
@@ -120,7 +135,7 @@ class MainApp extends StatelessWidget {
       ],
 
       // // === Halaman pertama ===
-      home: MyLoginAndSignin(),
+      home: LaunchScreen(),
       // home: EventLautPage(),
 
       // === Routing halaman tambahan ===

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "960963628657",
+    "project_id": "deepsea-660b7",
+    "storage_bucket": "deepsea-660b7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960963628657:android:38723fe91087bf571a55d0",
+        "android_client_info": {
+          "package_name": "com.example.sopan_santun_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbLU33W8jrak1Nk8Z13mTUiW8zs_pPvi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
