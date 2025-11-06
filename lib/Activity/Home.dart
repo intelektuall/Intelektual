@@ -13,8 +13,7 @@ import '../Provider/hewan_provider.dart';
 import '../legend.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String uid;
-  const HomeScreen(this.uid, {super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -90,12 +89,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
 
   @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  @override
+  void initState() {
+    super.initState();
+    // Pastikan data di-load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<HewanProvider>();
+      if (provider.apiAnimals.isEmpty && !provider.isLoadingApi) {
+        print('🔄 HomeContent: Memuat data dari API...');
+        provider.fetchAnimalsFromAPI();
+      } else {
+        print('📊 HomeContent: Data sudah tersedia: ${provider.allAnimals.length} hewan');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppBar(context), body: _buildBody(context));
+    return Scaffold(
+      appBar: _buildAppBar(context), 
+      body: _buildBody(context)
+    );
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -107,25 +129,49 @@ class HomeContent extends StatelessWidget {
               ? Colors.blueAccent
               : Colors.blueAccent),
       title: _buildSearchField(context),
-      actions: [_buildProfileButton(context)],
+      actions: [
+        _buildProfileButton(context),
+        // 🔄 UPDATE: Tambah refresh indicator di appbar
+        Consumer<HewanProvider>(
+          builder: (context, provider, _) {
+            if (provider.isLoadingApi) {
+              return Padding(
+                padding: EdgeInsets.only(right: 16),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildSearchField(BuildContext context) {
     final theme = Theme.of(context);
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Cari tahu tentang laut...",
-        hintStyle: TextStyle(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white70
-              : Colors.white.withOpacity(0.7),
+    return Container(
+      height: 40,
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: "Cari tahu tentang laut...",
+          hintStyle: TextStyle(
+            color: theme.brightness == Brightness.dark
+                ? Colors.white70
+                : Colors.white.withOpacity(0.7),
+          ),
+          prefixIcon: Icon(Icons.search, color: Colors.white),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 8),
         ),
-        prefixIcon: Icon(Icons.search, color: Colors.white),
-        border: InputBorder.none,
-        contentPadding: EdgeInsets.symmetric(vertical: 12),
+        style: TextStyle(color: Colors.white, fontSize: 14),
       ),
-      style: TextStyle(color: Colors.white),
     );
   }
 
@@ -173,7 +219,7 @@ class HomeContent extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(Icons.waving_hand, color: Colors.amber),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,16 +231,21 @@ class HomeContent extends StatelessWidget {
                                 fontSize: 16,
                               ),
                             ),
+                            const SizedBox(height: 4),
                             Text(
-                              "Temukan keanekaragaman hayati laut di seluruh dunia",
+                              "Temukan keanekaragaman hayati\nlaut di seluruh dunia",
                               style: TextStyle(
                                 fontSize: 14,
                                 color: theme.textTheme.bodyMedium?.color,
+                                height: 1.3,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
                       ),
+                      const SizedBox(width: 8),
                       IconButton(
                         icon: Icon(Icons.close, size: 18),
                         onPressed: () => provider.showWelcomeBanner = false,
@@ -224,12 +275,39 @@ class HomeContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 🔧 FIX: Text dipindah ke baris terpisah
           Text(
             "Keanekaragaman Hayati di Tiap Samudra",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18, 
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
-          const LegendWidget(),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(
+                child: LegendWidget(),
+              ),
+              // 🔧 FIX: Refresh button dipindah ke samping legend
+              Consumer<HewanProvider>(
+                builder: (context, provider, _) {
+                  return IconButton(
+                    icon: Icon(Icons.refresh, size: 20),
+                    onPressed: provider.isLoadingApi 
+                        ? null 
+                        : () => provider.fetchAnimalsFromAPI(),
+                    tooltip: 'Refresh Data',
+                  );
+                },
+              ),
+            ],
+          ),
+          
           const SizedBox(height: 16),
           SizedBox(
             height: 250,
@@ -265,9 +343,12 @@ class HomeContent extends StatelessWidget {
                             "Selatan",
                             "Arktik",
                           ];
-                          return Text(
-                            samudra[value.toInt()],
-                            style: TextStyle(fontSize: 12),
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              samudra[value.toInt()],
+                              style: TextStyle(fontSize: 11),
+                            ),
                           );
                         },
                       ),
@@ -293,9 +374,18 @@ class HomeContent extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "Hewan yang Dilindungi",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Consumer<HewanProvider>(
+            builder: (context, provider, _) {
+              return Text(
+                "Hewan yang Dilindungi (${provider.protectedAnimals.length})",
+                style: TextStyle(
+                  fontSize: 18, 
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              );
+            },
           ),
           TextButton(
             onPressed: () => Navigator.push(
@@ -303,10 +393,13 @@ class HomeContent extends StatelessWidget {
               MaterialPageRoute(builder: (context) => SeeAllScreen()),
             ),
             style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: Text("Lihat Semua"),
+            child: Text(
+              "Lihat Semua",
+              style: TextStyle(fontSize: 14),
+            ),
           ),
         ],
       ),
@@ -317,6 +410,21 @@ class HomeContent extends StatelessWidget {
     final theme = Theme.of(context);
     return Consumer<HewanProvider>(
       builder: (context, provider, _) {
+        // 🔄 UPDATE: Handle loading state
+        if (provider.isLoadingApi && provider.protectedAnimals.isEmpty) {
+          return _buildLoadingState();
+        }
+
+        // 🔄 UPDATE: Handle error state
+        if (provider.apiError != null && provider.protectedAnimals.isEmpty) {
+          return _buildErrorState(provider, context);
+        }
+
+        // 🔄 UPDATE: Handle empty state
+        if (provider.protectedAnimals.isEmpty) {
+          return _buildEmptyState();
+        }
+
         return ListView.separated(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -336,13 +444,88 @@ class HomeContent extends StatelessWidget {
       },
     );
   }
+
+  // 🔄 UPDATE: Widget untuk loading state
+  Widget _buildLoadingState() {
+    return Container(
+      height: 200,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(
+              'Memuat data hewan...',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 🔄 UPDATE: Widget untuk error state
+  Widget _buildErrorState(HewanProvider provider, BuildContext context) {
+    return Container(
+      height: 200,
+      padding: EdgeInsets.all(16),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.orange),
+            SizedBox(height: 16),
+            Text(
+              'Gagal memuat data',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Menggunakan data lokal',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => provider.fetchAnimalsFromAPI(),
+              icon: Icon(Icons.refresh),
+              label: Text('Coba Lagi'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 🔄 UPDATE: Widget untuk empty state
+  Widget _buildEmptyState() {
+    return Container(
+      height: 150,
+      padding: EdgeInsets.all(16),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.search_off, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Tidak ada hewan yang dilindungi',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class ProtectedAnimal extends StatefulWidget {
   final String name, count, location, image, status;
 
-  const ProtectedAnimal({
-    super.key,
+  const ProtectedAnimal({super.key, 
     required this.name,
     required this.count,
     required this.location,
@@ -384,6 +567,14 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                   width: 70,
                   height: 70,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 70,
+                      height: 70,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.image, color: Colors.grey[600]),
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 12),
@@ -408,7 +599,10 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                         Expanded(
                           child: Text(
                             widget.location,
-                            style: TextStyle(color: Colors.grey[600]),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -451,7 +645,10 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                             : Colors.lightBlue[50],
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(widget.count, style: TextStyle(fontSize: 12)),
+                      child: Text(
+                        widget.count, 
+                        style: TextStyle(fontSize: 12)
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -459,6 +656,7 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                     icon: Icon(
                       _isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: _isFavorite ? Colors.red : Colors.grey[600],
+                      size: 20,
                     ),
                     onPressed: () {
                       setState(() => _isFavorite = !_isFavorite);
@@ -486,7 +684,6 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                     },
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
-                    iconSize: 24,
                   ),
                 ],
               ),

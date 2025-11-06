@@ -1,26 +1,28 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Provider/hewan_provider.dart';
 
-class AddAnimalScreen extends StatefulWidget {
-  const AddAnimalScreen({super.key});
-
+class SubmissionHistoryScreen extends StatefulWidget {
   @override
-  _AddAnimalScreenState createState() => _AddAnimalScreenState();
+  State<SubmissionHistoryScreen> createState() => _SubmissionHistoryScreenState();
 }
 
-class SubmissionHistoryScreen extends StatelessWidget {
-  const SubmissionHistoryScreen({super.key});
+class _SubmissionHistoryScreenState extends State<SubmissionHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _refreshData();
+  }
+
+  Future<void> _refreshData() async {
+    final provider = Provider.of<HewanProvider>(context, listen: false);
+    await provider.loadSubmissions(); // Ganti dari _loadSubmissions ke loadSubmissions
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<HewanProvider>(context);
-    final submissions = provider.submissions;
 
     return Scaffold(
       appBar: AppBar(
@@ -32,664 +34,489 @@ class SubmissionHistoryScreen extends StatelessWidget {
           ),
         ),
         iconTheme: Theme.of(context).iconTheme,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _refreshData,
+            tooltip: 'Refresh Data',
+          ),
+          IconButton(
+            icon: Icon(Icons.sync),
+            onPressed: () async {
+              await _showUpdateConfirmation(context);
+            },
+            tooltip: 'Update Data',
+          ),
+        ],
       ),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: FutureBuilder(
+          future: _initializeData(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-      body: submissions.isEmpty
-          ? Center(
-              child: Text(
-                'Belum ada riwayat pengajuan',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            )
-          : ListView.builder(
-              padding: EdgeInsets.all(16),
-              itemCount: submissions.length,
-              itemBuilder: (context, index) {
-                final submission = submissions[index];
-                return Card(
-                  color: Theme.of(context).cardColor,
-                  margin: EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.pets,
-                      color: submission['status'] == 'Approved'
-                          ? Colors.green
-                          : submission['status'] == 'Rejected'
-                          ? Colors.red
-                          : Colors.orange,
-                    ),
-                    title: Text(submission['name'] ?? 'No Name'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            return Column(
+              children: [
+                if (provider.pendingSubmissions.isNotEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(12),
+                    color: Colors.orange[100],
+                    child: Row(
                       children: [
-                        Text(submission['status'] ?? 'No Status'),
-                        Text(
-                          submission['timestamp'].toString(),
-                          style: TextStyle(fontSize: 12),
+                        Icon(Icons.info, color: Colors.orange[800]),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '${provider.pendingSubmissions.length} pengajuan menunggu update',
+                            style: TextStyle(color: Colors.orange[800]),
+                          ),
                         ),
                       ],
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [Icon(Icons.chevron_right)],
-                    ),
                   ),
-                );
-              },
-            ),
-    );
-  }
-}
-
-class _AddAnimalScreenState extends State<AddAnimalScreen> {
-  final ImagePicker _picker = ImagePicker();
-  File? _imageFile;
-  bool _isSubmitting = false;
-  bool _showBanner = true;
-  late FormController formController;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    formController = Provider.of<HewanProvider>(
-      context,
-      listen: false,
-    ).formController;
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: source,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null && pickedFile.path.isNotEmpty) {
-        setState(() {
-          _imageFile = File(pickedFile.path);
-        });
-      } else {
-        Get.snackbar(
-          'Peringatan',
-          'Tidak ada gambar yang dipilih',
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        'Gagal Mengambil Gambar',
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      debugPrint('Error picking image: $e');
-    }
-  }
-
-  void showLoadingDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierLabel: 'Loading',
-      transitionDuration: Duration(milliseconds: 300),
-      pageBuilder: (_, __, ___) {
-        return Center(
-          child: Container(
-            padding: EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text("Mengirim data...", style: TextStyle(fontSize: 16)),
+                _buildLastUpdateInfo(provider),
+                _buildStatsInfo(provider),
+                Expanded(child: _buildSubmissionsList(provider)),
               ],
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, _, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: ScaleTransition(
-            scale: CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutBack,
-            ),
-            child: child,
-          ),
-        );
-      },
-    );
-  }
-
-  void _showImageSourceDialog() {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            );
+          },
+        ),
       ),
-      builder: (_) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Wrap(
-              runSpacing: 10,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ListTile(
-                  leading: const Icon(Icons.photo, color: Colors.blueAccent),
-                  title: const Text('Pilih dari Galeri'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.gallery);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.camera_alt, color: Colors.blueAccent),
-                  title: const Text('Ambil dari Kamera'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(ImageSource.camera);
-                  },
-                ),
-                const SizedBox(height: 8),
-                TextButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.cancel, color: Colors.red),
-                  label: Text("Batal", style: TextStyle(color: Colors.red)),
-                ),
-              ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: _refreshData,
+        child: Icon(Icons.refresh),
+        tooltip: 'Refresh Data',
+      ),
+    );
+  }
+
+  Future<void> _initializeData(BuildContext context) async {
+    final provider = Provider.of<HewanProvider>(context, listen: false);
+    // Data sudah di-load oleh provider di constructor
+  }
+
+  Widget _buildLastUpdateInfo(HewanProvider provider) {
+    return FutureBuilder<DateTime?>(
+      future: provider.getLastUpdateTime(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(8),
+            color: Colors.grey[100],
+            child: Text(
+              'Terakhir update: ${_formatDate(snapshot.data!)}',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
-          ),
-        );
+          );
+        }
+        return SizedBox();
       },
     );
   }
 
-  Widget _buildImagePreview() {
+  Widget _buildStatsInfo(HewanProvider provider) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(8),
+      color: Colors.blue[50],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildStatItem('Total', provider.submissions.length.toString()),
+          _buildStatItem('Pending', provider.pendingSubmissions.length.toString()),
+          _buildStatItem('Disetujui', 
+            provider.submissions.where((s) => s['status'] == 'Approved').length.toString()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Foto Hewan*',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).textTheme.bodyLarge?.color
-          ),
+          value,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue[800]),
         ),
-        SizedBox(height: 8),
-        GestureDetector(
-          onTap: _showImageSourceDialog,
-          child: Container(
-            height: 180,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: _imageFile == null
-                    ? Theme.of(context).dividerColor
-                    : Colors.blueAccent,
-                width: 1.5,
-              ),
-            ),
-
-            child: _imageFile == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add_a_photo, size: 48, color: Colors.grey),
-                      SizedBox(height: 8),
-                      Text(
-                        'Tambahkan Foto',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  )
-                : FutureBuilder<File>(
-                    future: Future.value(_imageFile),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(snapshot.data!, fit: BoxFit.cover),
-                        );
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    },
-                  ),
-          ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
         ),
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        title: Text(
-          'Ajukan Hewan Baru',
-          style: TextStyle(
-            color: Theme.of(context).appBarTheme.foregroundColor,
-          ),
-        ),
-        iconTheme: Theme.of(context).iconTheme,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    backgroundColor: Theme.of(context).cardColor,
-                    title: Text('Informasi Pengajuan'),
-                    content: Text(
-                      'Data yang Anda ajukan akan diverifikasi terlebih dahulu...',
-                      textAlign: TextAlign.center,
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text('Mengerti'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+  Widget _buildSubmissionsList(HewanProvider provider) {
+    if (provider.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
 
-      body: Column(
-        children: [
-          if (_showBanner)
-            MaterialBanner(
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              content: Text(
-                "Pastikan hewan yang Anda tambahkan belum terdaftar di aplikasi",
-                style: TextStyle(color: Colors.blueAccent[800]),
-              ),
-              actions: [
-                TextButton(
-                  child: Text(
-                    "TUTUP",
-                    style: TextStyle(color: Colors.blueAccent[800]),
+    final submissions = provider.submissions;
+
+    if (submissions.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.history, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Belum ada riwayat pengajuan',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Ajukan hewan baru melalui menu "Ajukan Hewan"',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: submissions.length,
+      itemBuilder: (context, index) {
+        final submission = submissions[index];
+        return _buildSubmissionCard(context, submission, provider);
+      },
+    );
+  }
+
+  Widget _buildSubmissionCard(BuildContext context, Map<String, dynamic> submission, HewanProvider provider) {
+    return Card(
+      color: Theme.of(context).cardColor,
+      margin: EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: Icon(
+          Icons.pets,
+          color: _getStatusColor(submission['status']),
+        ),
+        title: Text(
+          submission['name'] ?? 'No Name',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  submission['status'] ?? 'No Status',
+                  style: TextStyle(
+                    color: _getStatusColor(submission['status']),
+                    fontWeight: FontWeight.bold,
                   ),
-                  onPressed: () => setState(() => _showBanner = false),
                 ),
+                if (!(submission['isSynced'] ?? true))
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'BARU',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
               ],
             ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: FormBuilder(
-                key: formController.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildImagePreview(),
-                    SizedBox(height: 24),
-                    FormBuilderTextField(
-                      name: 'name',
-                      controller: formController.nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Nama Hewan*',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                        ),
-                        hintStyle: TextStyle(
-                          color: Theme.of(context).hintColor,
-                        ),
-                      ),
-
-                      validator: FormBuilderValidators.required(
-                        errorText: 'Nama hewan harus diisi',
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Jenis Hewan*',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge?.color
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    ...['Mamalia', 'Reptil', 'Ikan', 'Burung'].map(
-                      (type) => Obx(
-                        () => RadioListTile(
-                          title: Text(type),
-                          value: type,
-                          groupValue: formController.selectedType.value,
-                          onChanged: (val) =>
-                              formController.selectedType.value = val as String,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Lokasi*',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge?.color
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children:
-                          ['Hindia', 'Atlantik', 'Pasifik', 'Selatan', 'Arktik']
-                              .map(
-                                (loc) => Obx(
-                                  () => ChoiceChip(
-                                    label: Text("Samudra $loc"),
-                                    selected:
-                                        formController.selectedLocation.value ==
-                                        loc,
-                                    onSelected: (selected) =>
-                                        formController.selectedLocation.value =
-                                            selected ? loc : '',
-                                    selectedColor: Colors.blueAccent[100],
-                                    labelStyle: TextStyle(
-                                      color:
-                                          formController
-                                                  .selectedLocation
-                                                  .value ==
-                                              loc
-                                          ? Colors.blueAccent[800]
-                                          : Colors.grey[800],
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: 'count',
-                      controller: formController.countController,
-                      decoration: InputDecoration(
-                        labelText: 'Perkiraan jumlah yang masih hidup*',
-                        border: OutlineInputBorder(),
-                        hintText: 'Contoh: 1500',
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                          errorText: 'Jumlah harus diisi',
-                        ),
-                        FormBuilderValidators.numeric(
-                          errorText: 'Harus berupa angka',
-                        ),
-                      ]),
-                    ),
-                    SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: 'desc',
-                      controller: formController.descController,
-                      decoration: InputDecoration(
-                        labelText: 'Deskripsi hewan*',
-                        border: OutlineInputBorder(),
-                        hintText: 'Ciri-ciri, habitat, perilaku, dll',
-                        alignLabelWithHint: true,
-                      ),
-                      maxLines: 3,
-                      validator: FormBuilderValidators.required(
-                        errorText: 'Deskripsi harus diisi',
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Card(
-                      color: Colors.grey[50],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Perhatian:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red[800],
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              '1. Pastikan data yang Anda masukkan akurat\n'
-                              '2. Foto harus asli dan jelas\n'
-                              '3. Pengajuan palsu akan ditolak',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Obx(
-                      () => CheckboxListTile(
-                        title: Text(
-                          'Saya menyatakan data yang diisi adalah benar dan siap untuk diverifikasi',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        value: formController.isAgreed.value,
-                        onChanged: (val) =>
-                            formController.isAgreed.value = val ?? false,
-                        controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: _isSubmitting
-                                ? null
-                                : () {
-                                    formController.resetForm();
-                                    setState(() => _imageFile = null);
-                                    Navigator.pop(context);
-                                    Get.snackbar(
-                                      'Dibatalkan',
-                                      'Pengajuan dibatalkan',
-                                      duration: Duration(seconds: 2),
-                                    );
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              side: BorderSide(color: Colors.blueAccent),
-                            ),
-                            child: Text('Batal'),
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: Obx(
-                            () => OutlinedButton(
-                              onPressed:
-                                  formController.isAgreed.value &&
-                                      !_isSubmitting
-                                  ? () async {
-                                      if (formController.formKey.currentState
-                                              ?.saveAndValidate() ??
-                                          false) {
-                                        if (formController
-                                                .selectedType
-                                                .value
-                                                .isEmpty ||
-                                            formController
-                                                .selectedLocation
-                                                .value
-                                                .isEmpty) {
-                                          Get.snackbar(
-                                            'Form Tidak Lengkap',
-                                            'Harap pilih jenis dan lokasi hewan',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                          return;
-                                        }
-
-                                        if (_imageFile == null) {
-                                          Get.snackbar(
-                                            'Foto Diperlukan',
-                                            'Harap tambahkan foto hewan',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                          return;
-                                        }
-
-                                        showLoadingDialog(); // 👈 Tambahkan ini
-                                        setState(() => _isSubmitting = true);
-
-                                        try {
-                                          final formData = {
-                                            'name': formController
-                                                .nameController
-                                                .text,
-                                            'type': formController
-                                                .selectedType
-                                                .value,
-                                            'location': formController
-                                                .selectedLocation
-                                                .value,
-                                            'count': formController
-                                                .countController
-                                                .text,
-                                            'desc': formController
-                                                .descController
-                                                .text,
-                                            'image': _imageFile?.path ?? '',
-                                            'timestamp': DateTime.now(),
-                                            'status': 'Pending',
-                                          };
-
-                                          final provider =
-                                              Provider.of<HewanProvider>(
-                                                context,
-                                                listen: false,
-                                              );
-                                          await Future.delayed(
-                                            Duration(seconds: 2),
-                                          ); // Simulasi delay kirim
-                                          provider.addSubmission(formData);
-
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).pop(); //
-                                          setState(() {
-                                            _isSubmitting = false;
-                                            _imageFile = null;
-                                          });
-
-                                          Get.snackbar(
-                                            'Berhasil',
-                                            'Pengajuan hewan berhasil dikirim',
-                                            backgroundColor: Colors.green,
-                                            colorText: Colors.white,
-                                            duration: Duration(seconds: 3),
-                                          );
-
-                                          formController.resetForm();
-                                          if (mounted) Navigator.pop(context);
-                                        } catch (e) {
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).pop(); //
-                                          setState(() => _isSubmitting = false);
-                                          Get.snackbar(
-                                            'Error',
-                                            'Gagal mengirim pengajuan: $e',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                        }
-                                      }
-                                    }
-                                  : null,
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                side: BorderSide(
-                                  color:
-                                      formController.isAgreed.value &&
-                                          !_isSubmitting
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              ),
-
-                              child: _isSubmitting
-                                  ? SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              Colors.blueAccent,
-                                            ),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Ajukan',
-                                      style: TextStyle(
-                                        color:
-                                            formController.isAgreed.value &&
-                                                !_isSubmitting
-                                            ? Colors.blueAccent
-                                            : Colors.grey,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                  ],
-                ),
+            Text(
+              'Jenis: ${submission['type']}',
+              style: TextStyle(fontSize: 12),
+            ),
+            Text(
+              'Lokasi: ${submission['location']}',
+              style: TextStyle(fontSize: 12),
+            ),
+            Text(
+              'Diajukan: ${_formatDate(submission['timestamp'])}',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) => _handleMenuAction(value, submission, provider),
+          itemBuilder: (BuildContext context) => [
+            PopupMenuItem(
+              value: 'view',
+              child: Row(
+                children: [
+                  Icon(Icons.visibility, size: 20),
+                  SizedBox(width: 8),
+                  Text('Lihat Detail'),
+                ],
               ),
             ),
+            PopupMenuItem(
+              value: 'edit',
+              child: Row(
+                children: [
+                  Icon(Icons.edit, size: 20),
+                  SizedBox(width: 8),
+                  Text('Edit'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              child: Row(
+                children: [
+                  Icon(Icons.delete, size: 20, color: Colors.red),
+                  SizedBox(width: 8),
+                  Text('Hapus', style: TextStyle(color: Colors.red)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        onTap: () => _showSubmissionDetails(context, submission),
+      ),
+    );
+  }
+
+  void _handleMenuAction(String action, Map<String, dynamic> submission, HewanProvider provider) {
+    final id = submission['id'];
+    if (id == null) return;
+
+    switch (action) {
+      case 'view':
+        _showSubmissionDetails(context, submission);
+        break;
+      case 'edit':
+        _showEditDialog(context, submission, provider);
+        break;
+      case 'delete':
+        _showDeleteConfirmation(context, id, provider);
+        break;
+    }
+  }
+
+  void _showSubmissionDetails(BuildContext context, Map<String, dynamic> submission) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Detail Pengajuan'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDetailRow('Nama', submission['name']),
+              _buildDetailRow('Jenis', submission['type']),
+              _buildDetailRow('Lokasi', submission['location']),
+              _buildDetailRow('Perkiraan Jumlah', submission['count']),
+              _buildDetailRow('Deskripsi', submission['desc']),
+              _buildDetailRow('Status', submission['status']),
+              _buildDetailRow('Tanggal Pengajuan', _formatDate(submission['timestamp'])),
+              if (submission['image'] != null && submission['image'].isNotEmpty)
+                _buildDetailRow('Foto', 'Tersedia'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Tutup'),
           ),
         ],
       ),
     );
+  }
+
+  void _showEditDialog(BuildContext context, Map<String, dynamic> submission, HewanProvider provider) {
+    final nameController = TextEditingController(text: submission['name']);
+    final countController = TextEditingController(text: submission['count']);
+    final descController = TextEditingController(text: submission['desc']);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit Pengajuan'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: 'Nama Hewan'),
+              ),
+              TextField(
+                controller: countController,
+                decoration: InputDecoration(labelText: 'Jumlah'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: descController,
+                decoration: InputDecoration(labelText: 'Deskripsi'),
+                maxLines: 3,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final updatedSubmission = {
+                ...submission,
+                'name': nameController.text,
+                'count': countController.text,
+                'desc': descController.text,
+                'timestamp': DateTime.now(),
+              };
+              
+              await provider.updateSubmission(submission['id'], updatedSubmission);
+              Navigator.pop(context);
+            },
+            child: Text('Simpan'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, int id, HewanProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Hapus Pengajuan'),
+        content: Text('Apakah Anda yakin ingin menghapus pengajuan ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteSubmission(id);
+              Navigator.pop(context);
+            },
+            child: Text('Hapus', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showUpdateConfirmation(BuildContext context) async {
+    final provider = Provider.of<HewanProvider>(context, listen: false);
+    
+    if (provider.pendingSubmissions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Tidak ada data baru untuk diupdate')),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Update Data'),
+        content: Text(
+            'Ada ${provider.pendingSubmissions.length} pengajuan baru. Update sekarang?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _performUpdate(context);
+            },
+            child: Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _performUpdate(BuildContext context) async {
+    final provider = Provider.of<HewanProvider>(context, listen: false);
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Mengupdate data...'),
+          ],
+        ),
+      ),
+    );
+
+    try {
+      await provider.syncPendingSubmissions();
+      Navigator.pop(context);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Data berhasil diupdate'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal update data: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$label: ',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Expanded(child: Text(value)),
+        ],
+      ),
+    );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'Approved':
+        return Colors.green;
+      case 'Rejected':
+        return Colors.red;
+      default:
+        return Colors.orange;
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 }

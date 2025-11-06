@@ -3,6 +3,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:provider/provider.dart';
 import '../Provider/hewan_provider.dart';
 import 'DetailScreen.dart';
+import 'add_animal_screen.dart';
 import 'pengajuan.dart';
 
 class SeeAllScreen extends StatefulWidget {
@@ -18,10 +19,23 @@ class _SeeAllScreenState extends State<SeeAllScreen>
   bool _isGrid = false;
   bool _sortNewest = true;
 
-  @override
+  @override 
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
+
+    // Pastikan data di-load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<HewanProvider>();
+      if (provider.apiAnimals.isEmpty && !provider.isLoadingApi) {
+        print('SeeAllScreen: Memuat data dari API...');
+        provider.fetchAnimalsFromAPI();
+      } else {
+        print(
+          'SeeAllScreen: Data sudah tersedia: ${provider.allAnimals.length} hewan',
+        );
+      }
+    });
   }
 
   @override
@@ -49,13 +63,139 @@ class _SeeAllScreenState extends State<SeeAllScreen>
       data = data.where((e) => e['location'] == lokasi).toList();
     }
 
-    data.sort((a, b) {
-      DateTime aDate = a['timestamp'];
-      DateTime bDate = b['timestamp'];
-      return _sortNewest ? bDate.compareTo(aDate) : aDate.compareTo(bDate);
-    });
+    // 🔧 FIX: Safe sorting dengan error handling
+    try {
+      data.sort((a, b) {
+        DateTime aDate;
+        DateTime bDate;
+
+        // Handle jika timestamp adalah DateTime object
+        if (a['timestamp'] is DateTime) {
+          aDate = a['timestamp'];
+          bDate = b['timestamp'];
+        }
+        // Handle jika timestamp adalah String
+        else if (a['timestamp'] is String) {
+          aDate = DateTime.parse(a['timestamp']);
+          bDate = DateTime.parse(b['timestamp']);
+        }
+        // Fallback ke DateTime.now()
+        else {
+          aDate = DateTime.now();
+          bDate = DateTime.now();
+        }
+
+        return _sortNewest ? bDate.compareTo(aDate) : aDate.compareTo(bDate);
+      });
+    } catch (e) {
+      print('❌ Error sorting data: $e');
+      // Tetap return data meski sorting gagal
+    }
 
     return data;
+  }
+
+  // 🔄 UPDATE: Widget untuk loading indicator
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 16),
+          Text('Memuat data dari server...', style: TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  // 🔄 UPDATE: Widget untuk error state
+  Widget _buildErrorWidget(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, size: 64, color: Colors.orange),
+          SizedBox(height: 16),
+          Text(
+            'Gagal memuat data',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              'Menggunakan data lokal',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: () {
+              context.read<HewanProvider>().fetchAnimalsFromAPI();
+            },
+            icon: Icon(Icons.refresh),
+            label: Text('Coba Lagi'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // UPDATE: Widget untuk menampilkan list/grid animals
+  Widget _buildAnimalList(List<Map<String, dynamic>> animals, bool isDark) {
+    if (animals.isEmpty) {
+      return Center(
+        child: Text(
+          'Tidak ada data',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
+    if (_isGrid) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            int crossAxisCount = 2;
+            if (constraints.maxWidth < 360) {
+              crossAxisCount = 1;
+            }
+            double spacing = 8.0;
+            double width =
+                (constraints.maxWidth - ((crossAxisCount - 1) * spacing)) /
+                crossAxisCount;
+            double height = width * 1.1;
+            double ratio = width / height;
+            return GridView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: animals.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: spacing,
+                mainAxisSpacing: spacing,
+                childAspectRatio: ratio,
+              ),
+              itemBuilder: (context, index) =>
+                  AnimalCard(animal: animals[index], isDark: isDark),
+            );
+          },
+        ),
+      );
+    } else {
+      return ListView.separated(
+        padding: EdgeInsets.all(10),
+        itemCount: animals.length,
+        itemBuilder: (context, index) =>
+            AnimalCard(animal: animals[index], isDark: isDark),
+        separatorBuilder: (context, index) => Divider(
+          height: 1,
+          color: isDark ? Colors.grey[700] : Colors.grey[300],
+        ),
+      );
+    }
   }
 
   @override
@@ -63,20 +203,45 @@ class _SeeAllScreenState extends State<SeeAllScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final provider = context.watch<HewanProvider>();
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Spesies Langka",
-          style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        title: Row(
+          children: [
+            Text(
+              "Spesies Langka",
+              style: TextStyle(color: isDark ? Colors.white : Colors.black),
+            ),
+            // UPDATE: Tambah loading indicator kecil di appbar
+            if (provider.isLoadingApi) ...[
+              SizedBox(width: 8),
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ],
+          ],
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: isDark ? Colors.white : Colors.black),
+          icon: Icon(
+            Icons.arrow_back,
+            color: isDark ? Colors.white : Colors.black,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: isDark ? Colors.grey[900] : Colors.white,
         actions: [
+          // UPDATE: Tambah refresh button
+          if (!provider.isLoadingApi)
+            IconButton(
+              icon: Icon(
+                Icons.refresh,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+              onPressed: () => provider.fetchAnimalsFromAPI(),
+              tooltip: 'Refresh Data',
+            ),
           PopupMenuButton<String>(
             onSelected: (value) {
               setState(() {
@@ -98,13 +263,17 @@ class _SeeAllScreenState extends State<SeeAllScreen>
                   children: [
                     Icon(
                       Icons.grid_view,
-                      color: _isGrid ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                      color: _isGrid
+                          ? Colors.blueAccent
+                          : (isDark ? Colors.white : Colors.black),
                     ),
                     SizedBox(width: 8),
                     Text(
                       'Tampilan Grid',
                       style: TextStyle(
-                        color: _isGrid ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                        color: _isGrid
+                            ? Colors.blueAccent
+                            : (isDark ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
@@ -116,13 +285,17 @@ class _SeeAllScreenState extends State<SeeAllScreen>
                   children: [
                     Icon(
                       Icons.view_list,
-                      color: !_isGrid ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                      color: !_isGrid
+                          ? Colors.blueAccent
+                          : (isDark ? Colors.white : Colors.black),
                     ),
                     SizedBox(width: 8),
                     Text(
                       'Tampilan List',
                       style: TextStyle(
-                        color: !_isGrid ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                        color: !_isGrid
+                            ? Colors.blueAccent
+                            : (isDark ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
@@ -137,13 +310,17 @@ class _SeeAllScreenState extends State<SeeAllScreen>
                   children: [
                     Icon(
                       Icons.arrow_downward,
-                      color: _sortNewest ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                      color: _sortNewest
+                          ? Colors.blueAccent
+                          : (isDark ? Colors.white : Colors.black),
                     ),
                     SizedBox(width: 8),
                     Text(
                       'Urutkan Terbaru',
                       style: TextStyle(
-                        color: _sortNewest ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                        color: _sortNewest
+                            ? Colors.blueAccent
+                            : (isDark ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
@@ -155,13 +332,17 @@ class _SeeAllScreenState extends State<SeeAllScreen>
                   children: [
                     Icon(
                       Icons.arrow_upward,
-                      color: !_sortNewest ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                      color: !_sortNewest
+                          ? Colors.blueAccent
+                          : (isDark ? Colors.white : Colors.black),
                     ),
                     SizedBox(width: 8),
                     Text(
                       'Urutkan Terlama',
                       style: TextStyle(
-                        color: !_sortNewest ? Colors.blueAccent : (isDark ? Colors.white : Colors.black),
+                        color: !_sortNewest
+                            ? Colors.blueAccent
+                            : (isDark ? Colors.white : Colors.black),
                       ),
                     ),
                   ],
@@ -190,59 +371,21 @@ class _SeeAllScreenState extends State<SeeAllScreen>
           ],
         ),
       ),
-      body: Container(
-        color: isDark ? Colors.grey[900] : Colors.white,
-        child: TabBarView(
-          controller: _tabController,
-          children: List.generate(7, (index) {
-            final animals = _getFilteredAnimals(provider, index);
-            return _isGrid
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        int crossAxisCount = 2;
-                        if (constraints.maxWidth < 360) {
-                          crossAxisCount = 1;
-                        }
-                        double spacing = 8.0;
-                        double width = (constraints.maxWidth -
-                                ((crossAxisCount - 1) * spacing)) /
-                            crossAxisCount;
-                        double height = width * 1.1;
-                        double ratio = width / height;
-                        return GridView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: animals.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            crossAxisSpacing: spacing,
-                            mainAxisSpacing: spacing,
-                            childAspectRatio: ratio,
-                          ),
-                          itemBuilder: (context, index) => AnimalCard(
-                            animal: animals[index],
-                            isDark: isDark,
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : ListView.separated(
-                    padding: EdgeInsets.all(10),
-                    itemCount: animals.length,
-                    itemBuilder: (context, index) => AnimalCard(
-                      animal: animals[index],
-                      isDark: isDark,
-                    ),
-                    separatorBuilder: (context, index) => Divider(
-                      height: 1,
-                      color: isDark ? Colors.grey[700] : Colors.grey[300],
-                    ),
-                  );
-          }),
-        ),
-      ),
+      //UPDATE: Body dengan kondisi loading/error/data
+      body: provider.isLoadingApi && provider.allAnimals.isEmpty
+          ? _buildLoadingIndicator()
+          : provider.apiError != null && provider.allAnimals.isEmpty
+          ? _buildErrorWidget(provider.apiError!)
+          : Container(
+              color: isDark ? Colors.grey[900] : Colors.white,
+              child: TabBarView(
+                controller: _tabController,
+                children: List.generate(7, (index) {
+                  final animals = _getFilteredAnimals(provider, index);
+                  return _buildAnimalList(animals, isDark);
+                }),
+              ),
+            ),
       floatingActionButton: ExpandableFab(
         distance: 112,
         children: [
@@ -292,9 +435,7 @@ class AnimalCard extends StatelessWidget {
       ),
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 6),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 2,
         color: isDark ? Colors.grey[800] : Colors.white,
         clipBehavior: Clip.antiAlias,
@@ -308,6 +449,13 @@ class AnimalCard extends StatelessWidget {
                 animal['image'],
                 fit: BoxFit.cover,
                 width: double.infinity,
+                //UPDATE: Tambah error builder untuk handle image error
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: Icon(Icons.image, color: Colors.grey[600]),
+                  );
+                },
               ),
             ),
             Padding(
