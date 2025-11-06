@@ -13,7 +13,8 @@ import '../Provider/hewan_provider.dart';
 import '../legend.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String uid;
+  const HomeScreen(this.uid, {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -107,17 +108,16 @@ class _HomeContentState extends State<HomeContent> {
         print('🔄 HomeContent: Memuat data dari API...');
         provider.fetchAnimalsFromAPI();
       } else {
-        print('📊 HomeContent: Data sudah tersedia: ${provider.allAnimals.length} hewan');
+        print(
+          '📊 HomeContent: Data sudah tersedia: ${provider.allAnimals.length} hewan',
+        );
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context), 
-      body: _buildBody(context)
-    );
+    return Scaffold(appBar: _buildAppBar(context), body: _buildBody(context));
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -278,28 +278,23 @@ class _HomeContentState extends State<HomeContent> {
           // 🔧 FIX: Text dipindah ke baris terpisah
           Text(
             "Keanekaragaman Hayati di Tiap Samudra",
-            style: TextStyle(
-              fontSize: 18, 
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 12),
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
-                child: LegendWidget(),
-              ),
+              const Expanded(child: LegendWidget()),
               // 🔧 FIX: Refresh button dipindah ke samping legend
               Consumer<HewanProvider>(
                 builder: (context, provider, _) {
                   return IconButton(
                     icon: Icon(Icons.refresh, size: 20),
-                    onPressed: provider.isLoadingApi 
-                        ? null 
+                    onPressed: provider.isLoadingApi
+                        ? null
                         : () => provider.fetchAnimalsFromAPI(),
                     tooltip: 'Refresh Data',
                   );
@@ -307,7 +302,7 @@ class _HomeContentState extends State<HomeContent> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
           SizedBox(
             height: 250,
@@ -378,10 +373,7 @@ class _HomeContentState extends State<HomeContent> {
             builder: (context, provider, _) {
               return Text(
                 "Hewan yang Dilindungi (${provider.protectedAnimals.length})",
-                style: TextStyle(
-                  fontSize: 18, 
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               );
@@ -396,10 +388,7 @@ class _HomeContentState extends State<HomeContent> {
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: Text(
-              "Lihat Semua",
-              style: TextStyle(fontSize: 14),
-            ),
+            child: Text("Lihat Semua", style: TextStyle(fontSize: 14)),
           ),
         ],
       ),
@@ -525,7 +514,8 @@ class _HomeContentState extends State<HomeContent> {
 class ProtectedAnimal extends StatefulWidget {
   final String name, count, location, image, status;
 
-  const ProtectedAnimal({super.key, 
+  const ProtectedAnimal({
+    super.key,
     required this.name,
     required this.count,
     required this.location,
@@ -645,10 +635,7 @@ class _ProtectedAnimalState extends State<ProtectedAnimal> {
                             : Colors.lightBlue[50],
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        widget.count, 
-                        style: TextStyle(fontSize: 12)
-                      ),
+                      child: Text(widget.count, style: TextStyle(fontSize: 12)),
                     ),
                   ),
                   const SizedBox(height: 8),
