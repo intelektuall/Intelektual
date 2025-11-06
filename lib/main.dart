@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ import 'Fauzan/LoginPage/Providers/ProviderLogin.dart';
 
 // === Provider Eka ===
 import 'Eka/provider/settings_provider.dart';
+import 'Eka/provider/firebase_helper.dart';
 
 // === Provider Ryan ===
 import 'Ryan/providers/link_provider.dart';
@@ -35,19 +37,20 @@ import 'Ryan/providers/cardOverlay/cardC_overlay_provider.dart';
 
 // === Halaman awal ===
 import 'Fauzan/LoginPage/login_screen.dart';
-
-// === Tambahan halaman Ryan jika ingin akses lewat route ===
 import 'Ryan/screens/newpage_unlocked.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding Flutter siap
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseAuth.instance.signOut();
 
+  // Pastikan Analytics aktif
+  await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
-    analytics: analytics,
-  );
+  final FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
   runApp(
     MultiProvider(
       providers: [
@@ -75,18 +78,54 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CardOverlayProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
       ],
-
       child: MainApp(analytics: analytics, observer: observer),
     ),
   );
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
+
   const MainApp({super.key, required this.analytics, required this.observer});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    _logAppStart();
+  }
+
+  Future<void> _logAppStart() async {
+    await widget.analytics.logAppOpen();
+    await widget.analytics.logEvent(
+      name: 'app_started',
+      parameters: {'timestamp': DateTime.now().toIso8601String()},
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    final isDark = settings.backgroundMode == "Hitam";
+
+    // Catat perubahan tema
+    widget.analytics.logEvent(
+      name: 'change_theme',
+      parameters: {'theme': isDark ? 'dark' : 'light'},
+    );
+
+    // Catat perubahan bahasa
+    widget.analytics.logEvent(
+      name: 'change_language',
+      parameters: {'language': settings.language},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +135,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Sopan Santun App",
-      navigatorObservers: [observer],
+      navigatorObservers: [widget.observer],
 
-      // === Tema default (light)
+      // === Tema terang ===
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -109,7 +148,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
 
-      // === Tema dark (jika user pilih Hitam)
+      // === Tema gelap ===
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
@@ -120,13 +159,11 @@ class MainApp extends StatelessWidget {
         ),
       ),
 
-      // === Aktifkan mode sesuai setting user
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
       // === Lokalisasi ===
-      locale: settings.language == "Indonesia"
-          ? const Locale('id')
-          : const Locale('en'),
+      locale:
+          settings.language == "Indonesia" ? const Locale('id') : const Locale('en'),
       supportedLocales: const [Locale('id'), Locale('en')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -134,11 +171,7 @@ class MainApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      // // === Halaman pertama ===
-      home: LaunchScreen(),
-      // home: EventLautPage(),
-
-      // === Routing halaman tambahan ===
+      home: const LaunchScreen(),
       routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
     );
   }
