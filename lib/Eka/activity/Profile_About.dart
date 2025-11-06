@@ -1,10 +1,11 @@
-// Eka/activity/Profile_About.dart
+// /Eka/activity/Profile_About.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '/Eka/model_eka/team_member.dart';
 import '/Eka/model_eka/team_service.dart';
 import '/Eka/model_eka/team_card.dart';
+import '/Eka/provider/firebase_helper.dart'; // <-- import helper
 
 class ProfileAbout extends StatefulWidget {
   const ProfileAbout({super.key});
@@ -22,6 +23,10 @@ class _ProfileAboutState extends State<ProfileAbout> {
   @override
   void initState() {
     super.initState();
+
+    // Log screen view saat About dibuka
+    FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'ProfileAbout');
+
     _fetchTeamMembers();
   }
 
@@ -32,11 +37,22 @@ class _ProfileAboutState extends State<ProfileAbout> {
         teamMembers = members;
         isLoading = false;
       });
+
+      // Log event berhasil memuat tim dan berapa banyak anggota
+      FirebaseAnalyticsHelper.logEvent(
+        name: 'team_fetch_success',
+        parameters: {'count': members.length},
+      );
     } catch (_) {
       setState(() {
         isError = true;
         isLoading = false;
       });
+
+      // Log event gagal memuat tim
+      FirebaseAnalyticsHelper.logEvent(
+        name: 'team_fetch_failure',
+      );
     }
   }
 
@@ -45,12 +61,30 @@ class _ProfileAboutState extends State<ProfileAbout> {
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Tidak dapat membuka: $url')));
+
+      // Log event gagal membuka url
+      FirebaseAnalyticsHelper.logEvent(
+        name: 'external_link_open_failed',
+        parameters: {'url': url},
+      );
+    } else {
+      // Log event berhasil membuka url
+      FirebaseAnalyticsHelper.logEvent(
+        name: 'external_link_opened',
+        parameters: {'url': url},
+      );
     }
   }
 
   void _openWhatsApp(String phone) {
     final url = 'https://wa.me/$phone';
     _launchURL(url);
+
+    // Log klik WhatsApp (juga dicatat lagi ketika open berhasil/ gagal di _launchURL)
+    FirebaseAnalyticsHelper.logEvent(
+      name: 'contact_clicked',
+      parameters: {'type': 'whatsapp', 'number': phone},
+    );
   }
 
   @override

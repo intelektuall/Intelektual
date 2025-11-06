@@ -1,7 +1,8 @@
-// Eka/activity/Profile_Settings.dart
+// /Eka/activity/Profile_Settings.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/Eka/provider/settings_provider.dart';
+import '/Eka/provider/firebase_helper.dart'; // <-- import helper
 
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
@@ -26,6 +27,9 @@ class ProfileSettings extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.bodyLarge;
     final surfaceColor = isDark ? Colors.grey[900] : Colors.white;
 
+    // Log screen view saat Settings dibuka
+    FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'ProfileSettings');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pengaturan"),
@@ -46,6 +50,12 @@ class ProfileSettings extends StatelessWidget {
               onChanged: (val) {
                 settings.setLockApp(val);
                 showSnackBar(context, "Kunci aplikasi ${val ? "diaktifkan" : "dinonaktifkan"}");
+
+                // Log event perubahan kunci aplikasi
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'setting_changed',
+                  parameters: {'setting': 'lock_app', 'value': val},
+                );
               },
             ),
           ),
@@ -64,6 +74,12 @@ class ProfileSettings extends StatelessWidget {
                 final newMode = val ? "Hitam" : "Putih";
                 settings.setBackgroundMode(newMode);
                 showSnackBar(context, "Mode latar belakang diubah ke $newMode");
+
+                // Log event perubahan background mode
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'setting_changed',
+                  parameters: {'setting': 'background_mode', 'value': newMode},
+                );
               },
             ),
           ),
@@ -80,6 +96,12 @@ class ProfileSettings extends StatelessWidget {
               onChanged: (val) {
                 settings.setNotification(val);
                 showSnackBar(context, "Notifikasi ${val ? "diaktifkan" : "dinonaktifkan"}");
+
+                // Log event perubahan notifikasi
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'setting_changed',
+                  parameters: {'setting': 'notification', 'value': val},
+                );
               },
             ),
           ),
@@ -96,6 +118,12 @@ class ProfileSettings extends StatelessWidget {
               onChanged: (val) {
                 settings.setPowerSavingMode(val);
                 showSnackBar(context, "Mode hemat daya ${val ? "diaktifkan" : "dinonaktifkan"}");
+
+                // Log event perubahan power saving
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'setting_changed',
+                  parameters: {'setting': 'power_saving', 'value': val},
+                );
               },
             ),
           ),
@@ -124,6 +152,12 @@ class ProfileSettings extends StatelessWidget {
               if (val != null) {
                 settings.setLanguage(val);
                 showSnackBar(context, "Bahasa diubah ke $val");
+
+                // Log event penggantian bahasa
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'setting_changed',
+                  parameters: {'setting': 'language', 'value': val},
+                );
               }
             },
           ),

@@ -1,6 +1,7 @@
 // /Eka/activity/Profile_Edit.dart
 import 'package:flutter/material.dart';
 import '/Eka/provider/profile_stream.dart';
+import '/Eka/provider/firebase_helper.dart'; // <-- import helper
 
 class ProfileEdit extends StatefulWidget {
   final String pekerjaan, alamatRumah, hobi, status, bio;
@@ -35,6 +36,9 @@ class _ProfileEditState extends State<ProfileEdit> {
     hobiController = TextEditingController(text: widget.hobi);
     statusController = TextEditingController(text: widget.status);
     bioController = TextEditingController(text: widget.bio);
+
+    // Log screen view saat halaman Edit dibuka
+    FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'ProfileEdit');
   }
 
   @override
@@ -52,6 +56,10 @@ class _ProfileEditState extends State<ProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Harap setujui perubahan terlebih dahulu")),
       );
+
+      // Log event user coba simpan tanpa setuju
+      FirebaseAnalyticsHelper.logEvent(name: 'edit_save_blocked_no_agree');
+
       return;
     }
 
@@ -65,6 +73,15 @@ class _ProfileEditState extends State<ProfileEdit> {
 
     // Update ke provider (akan menyimpan ke SharedPreferences juga)
     await ProfileStreamProvider().updateProfile(updatedData);
+
+    // Log event ketika user menyimpan perubahan
+    FirebaseAnalyticsHelper.logEvent(
+      name: 'profile_edit_saved',
+      parameters: {
+        'pekerjaan_len': pekerjaanController.text.length,
+        'alamat_len': alamatController.text.length,
+      },
+    );
 
     // kembali dengan result
     if (mounted) Navigator.pop(context, updatedData);
@@ -111,7 +128,15 @@ class _ProfileEditState extends State<ProfileEdit> {
             child: CheckboxListTile(
               title: const Text("Saya menyetujui untuk menyimpan perubahan"),
               value: agree,
-              onChanged: (val) => setState(() => agree = val ?? false),
+              onChanged: (val) {
+                setState(() => agree = val ?? false);
+
+                // Log event saat user toggle checkbox persetujuan
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'edit_agree_toggled',
+                  parameters: {'agree': agree},
+                );
+              },
               controlAffinity: ListTileControlAffinity.leading,
             ),
           ),

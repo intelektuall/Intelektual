@@ -6,19 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProfileStreamProvider {
   static final ProfileStreamProvider _instance = ProfileStreamProvider._internal();
   factory ProfileStreamProvider() => _instance;
+
   ProfileStreamProvider._internal() {
-    // stream yang memastikan setiap subscriber baru langsung menerima current data
+    // Stream yang memastikan setiap subscriber baru langsung menerima data terkini
     _stream = Stream<Map<String, dynamic>>.multi((controller) {
-      // kirimkan snapshot saat ini segera
+      // kirim snapshot saat ini segera
       controller.add(_currentData);
-      // forward event-event selanjutnya dari internal controller
+      // forward event berikutnya dari internal controller
       final sub = _controller.stream.listen(
         (data) => controller.add(data),
         onError: (e, s) => controller.addError(e, s),
       );
-      controller.onCancel = () {
-        sub.cancel();
-      };
+      controller.onCancel = () => sub.cancel();
     }, isBroadcast: true);
   }
 
@@ -43,21 +42,37 @@ class ProfileStreamProvider {
     if (dataString != null && dataString.isNotEmpty) {
       try {
         final decoded = jsonDecode(dataString) as Map<String, dynamic>;
-        // Merge decoded ke current (agar tidak kehilangan keys)
         _currentData = {..._currentData, ...decoded};
       } catch (e) {
-        // jika parse gagal, tetap gunakan default
+        // jika gagal decode, biarkan default
       }
     } else {
-      // simpan default agar ada key di prefs
+      // simpan default ke prefs agar tersedia
       await prefs.setString('profile_data', jsonEncode(_currentData));
     }
 
-    // pancarkan data saat ini
+    // kirim data terbaru ke stream
     _controller.add(_currentData);
   }
 
-  /// Update data (merge), simpan ke SharedPreferences, dan emit ke stream
+  /// Ambil data profil hanya sekali tanpa stream
+  Future<Map<String, dynamic>> getProfileOnce() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dataString = prefs.getString('profile_data');
+
+    if (dataString != null && dataString.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(dataString) as Map<String, dynamic>;
+        _currentData = {..._currentData, ...decoded};
+      } catch (e) {
+        // abaikan error decode
+      }
+    }
+
+    return Map<String, dynamic>.from(_currentData);
+  }
+
+  /// Update data, simpan ke SharedPreferences, dan kirim ke stream
   Future<void> updateProfile(Map<String, dynamic> newData) async {
     _currentData = {..._currentData, ...newData};
     final prefs = await SharedPreferences.getInstance();

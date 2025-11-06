@@ -1,4 +1,3 @@
-// /Eka/activity/Profile_Page.dart
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
@@ -13,6 +12,7 @@ import '/Eka/activity/Profile_Edit.dart';
 import '/Eka/activity/Profile_Settings.dart';
 import '/Eka/provider/settings_provider.dart';
 import '/Eka/provider/profile_stream.dart';
+import '/Eka/provider/firebase_helper.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -25,11 +25,8 @@ class _MyProfileState extends State<MyProfile> {
   File? _pickedImage;
   Uint8List? _profileImageBytes;
   final ImagePicker _picker = ImagePicker();
-
-  StreamController<double>? _uploadProgressController;
   bool _isUploading = false;
 
-  // contoh data profil (non-sensitive)
   String name = "Ultraman Nex";
   String gender = "Laki-laki";
   String umur = "300 Tahun";
@@ -37,7 +34,6 @@ class _MyProfileState extends State<MyProfile> {
   String email = "ultramannex@gmail.com";
   String nohp = "+62 821-6679-7788";
 
-  // field yang dikelola lewat profile stream
   String pekerjaan = "";
   String alamatRumah = "";
   String hobi = "";
@@ -45,47 +41,33 @@ class _MyProfileState extends State<MyProfile> {
   String bio = "";
 
   late ProfileStreamProvider _profileProvider;
-  StreamSubscription<Map<String, dynamic>>? _profileSubscription;
+  late Future<Map<String, dynamic>> _profileFuture;
 
   @override
   void initState() {
     super.initState();
+
+    // Log pembukaan halaman profil
+    FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'Profile_Page');
+    FirebaseAnalyticsHelper.logEvent(name: 'open_profile_page');
+
     _loadSavedProfileImage();
-
     _profileProvider = ProfileStreamProvider();
-    // inisialisasi stream secara async: load dulu lalu subscribe
-    _initProfileStream();
+    _profileFuture = _loadProfileOnce();
   }
 
-  Future<void> _initProfileStream() async {
+  Future<Map<String, dynamic>> _loadProfileOnce() async {
+    await Future.delayed(const Duration(milliseconds: 600));
     await _profileProvider.loadProfile();
-    // listen; stream.multi (di provider) akan langsung mengirim currentData
-    _profileSubscription = _profileProvider.stream.listen(
-      (data) {
-        setState(() {
-          pekerjaan = (data["pekerjaan"] ?? pekerjaan) as String;
-          alamatRumah = (data["alamatRumah"] ?? alamatRumah) as String;
-          hobi = (data["hobi"] ?? hobi) as String;
-          status = (data["status"] ?? status) as String;
-          bio = (data["bio"] ?? bio) as String;
-        });
-      },
-      onError: (e) {
-        debugPrint("Profile stream error: $e");
-      },
-    );
+    final map = await _profileProvider.getProfileOnce();
+
+    FirebaseAnalyticsHelper.logEvent(name: 'profile_loaded', parameters: {
+      'has_extra_info': map.isNotEmpty,
+    });
+
+    return map;
   }
 
-  @override
-  void dispose() {
-    try {
-      _uploadProgressController?.close();
-      _profileSubscription?.cancel();
-    } catch (_) {}
-    super.dispose();
-  }
-
-  /// Muat foto profil Base64 (disimpan terpisah di prefs)
   Future<void> _loadSavedProfileImage() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -100,7 +82,6 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
-  /// Simpan gambar ke SharedPreferences (Base64)
   Future<void> _saveProfileImageAsBase64(String path) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -115,55 +96,43 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
-  /// Simulasi upload (progress bar)
   Future<void> _simulateUpload(String path) async {
-    try {
-      await _uploadProgressController?.close();
-    } catch (_) {}
-    _uploadProgressController = StreamController<double>();
     setState(() {
       _isUploading = true;
       _pickedImage = File(path);
     });
 
-    try {
-      const int steps = 20;
-      for (int i = 1; i <= steps; i++) {
-        await Future.delayed(const Duration(milliseconds: 80));
-        _uploadProgressController?.add(i / steps);
-      }
-
-      await _saveProfileImageAsBase64(path);
-    } catch (e) {
-      debugPrint("Error saat upload gambar: $e");
-    } finally {
-      setState(() {
-        _isUploading = false;
-        _pickedImage = null;
-      });
-      try {
-        await _uploadProgressController?.close();
-      } catch (_) {}
-      _uploadProgressController = null;
+    const int steps = 20;
+    for (int i = 1; i <= steps; i++) {
+      await Future.delayed(const Duration(milliseconds: 80));
     }
+
+    await _saveProfileImageAsBase64(path);
+
+    setState(() {
+      _isUploading = false;
+      _pickedImage = null;
+    });
+
+    FirebaseAnalyticsHelper.logEvent(
+      name: 'profile_image_upload_complete',
+      parameters: {'method': 'simulated'},
+    );
   }
 
   Future<void> _pickImage(ImageSource source) async {
     try {
-      final pickedFile = await _picker.pickImage(
-        source: source,
-        imageQuality: 80,
-      );
+      final pickedFile =
+          await _picker.pickImage(source: source, imageQuality: 80);
       if (pickedFile != null) {
+        FirebaseAnalyticsHelper.logEvent(
+          name: 'profile_image_selected',
+          parameters: {'source': source.name},
+        );
         await _simulateUpload(pickedFile.path);
       }
     } catch (e) {
       debugPrint("Error pick image: $e");
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Gagal memilih gambar: $e')));
-      }
     }
   }
 
@@ -203,6 +172,9 @@ class _MyProfileState extends State<MyProfile> {
                   _pickedImage = null;
                   _profileImageBytes = null;
                 });
+                FirebaseAnalyticsHelper.logEvent(
+                  name: 'profile_image_deleted',
+                );
               },
             ),
           ],
@@ -211,7 +183,6 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  // Update data profil via provider
   Future<void> updateEditableData({
     required String newPekerjaan,
     required String newAlamat,
@@ -227,6 +198,22 @@ class _MyProfileState extends State<MyProfile> {
       "bio": newBio,
     };
     await _profileProvider.updateProfile(updatedData);
+    setState(() {
+      pekerjaan = newPekerjaan;
+      alamatRumah = newAlamat;
+      hobi = newHobi;
+      status = newStatus;
+      bio = newBio;
+    });
+
+    FirebaseAnalyticsHelper.logEvent(
+      name: 'profile_additional_updated',
+      parameters: {
+        'pekerjaan_set': newPekerjaan.isNotEmpty,
+        'alamat_set': newAlamat.isNotEmpty,
+        'hobi_set': newHobi.isNotEmpty,
+      },
+    );
   }
 
   void handleMenuSelection(String value) async {
@@ -239,10 +226,13 @@ class _MyProfileState extends State<MyProfile> {
         status: status,
         bio: bio,
       );
+      FirebaseAnalyticsHelper.logEvent(name: 'open_profile_edit');
     } else if (value == 'settings') {
       page = const ProfileSettings();
+      FirebaseAnalyticsHelper.logEvent(name: 'open_profile_settings');
     } else {
       page = const ProfileAbout();
+      FirebaseAnalyticsHelper.logEvent(name: 'open_profile_about');
     }
 
     final result = await Navigator.of(context).push(
@@ -254,7 +244,6 @@ class _MyProfileState extends State<MyProfile> {
       ),
     );
 
-    // Jika edit mengembalikan result, gunakan itu (tetapi provider sudah menangani penyimpanan)
     if (value == 'edit' && result != null && result is Map) {
       await updateEditableData(
         newPekerjaan: result['pekerjaan'] ?? pekerjaan,
@@ -267,11 +256,7 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Widget buildInfoTile(
-    String label,
-    String value,
-    Color labelColor,
-    Color valueColor,
-  ) {
+      String label, String value, Color labelColor, Color valueColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
       child: Column(
@@ -298,67 +283,6 @@ class _MyProfileState extends State<MyProfile> {
     final textColor = isDarkMode ? Colors.white : Colors.black87;
     final subTextColor = isDarkMode ? Colors.grey[400]! : Colors.blueGrey;
 
-    Widget avatarWidget() {
-      if (_isUploading) {
-        final stream = _uploadProgressController?.stream;
-        return StreamBuilder<double>(
-          stream: stream,
-          builder: (context, snapshot) {
-            final progress = (snapshot.data ?? 0.0).clamp(0.0, 1.0);
-            final percent = (progress * 100).toInt();
-            return SizedBox(
-              width: 100,
-              height: 100,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircleAvatar(radius: 50, backgroundColor: Colors.grey[300]),
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                      value: progress,
-                      strokeWidth: 6,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Colors.blueAccent,
-                      ),
-                      backgroundColor: Colors.grey.shade300,
-                    ),
-                  ),
-                  Text(
-                    "$percent%",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      } else {
-        return SizedBox(
-          width: 100,
-          height: 100,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: CircleAvatar(
-              key: ValueKey<String>(
-                _profileImageBytes != null ? 'custom_image' : 'default_avatar',
-              ),
-              radius: 50,
-              backgroundImage: _profileImageBytes != null
-                  ? MemoryImage(_profileImageBytes!)
-                  : const AssetImage('assets/images/1.png') as ImageProvider,
-              backgroundColor: Colors.white,
-            ),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -369,10 +293,8 @@ class _MyProfileState extends State<MyProfile> {
         ),
         actions: [
           PopupMenuButton<String>(
-            icon: Icon(
-              Icons.more_vert,
-              color: isDarkMode ? Colors.white : Colors.black,
-            ),
+            icon: Icon(Icons.more_vert,
+                color: isDarkMode ? Colors.white : Colors.black),
             onSelected: handleMenuSelection,
             itemBuilder: (context) => const [
               PopupMenuItem(value: 'edit', child: Text('Edit Info Tambahan')),
@@ -382,82 +304,109 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Row(
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 400),
+        child: FutureBuilder<Map<String, dynamic>>(
+          key: ValueKey(_profileFuture),
+          future: _profileFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return const Center(child: Text("Gagal memuat profil"));
+            }
+
+            final data = snapshot.data ?? {};
+            pekerjaan = data["pekerjaan"] ?? pekerjaan;
+            alamatRumah = data["alamatRumah"] ?? alamatRumah;
+            hobi = data["hobi"] ?? hobi;
+            status = data["status"] ?? status;
+            bio = data["bio"] ?? bio;
+
+            return ListView(
+              key: const ValueKey("profileLoaded"),
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    avatarWidget(),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap: _showImagePickerOptions,
-                        child: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.blueAccent,
-                          child: const Icon(
-                            Icons.edit,
-                            size: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  child: Row(
                     children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
-                        ),
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: _profileImageBytes != null
+                                  ? MemoryImage(_profileImageBytes!)
+                                  : const AssetImage('assets/images/1.png')
+                                      as ImageProvider,
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 4,
+                            right: 4,
+                            child: GestureDetector(
+                              onTap: _showImagePickerOptions,
+                              child: CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Colors.blueAccent,
+                                child: const Icon(Icons.edit,
+                                    size: 16, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        email,
-                        style: TextStyle(fontSize: 14, color: subTextColor),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: textColor)),
+                            const SizedBox(height: 4),
+                            Text(email,
+                                style: TextStyle(
+                                    fontSize: 14, color: subTextColor)),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+                const Divider(),
+                buildInfoTile("Nomor HP", nohp, subTextColor, textColor),
+                buildInfoTile("Jenis Kelamin", gender, subTextColor, textColor),
+                buildInfoTile("Umur", umur, subTextColor, textColor),
+                buildInfoTile("Tempat/Tanggal Lahir", ttl, subTextColor, textColor),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text("Informasi Tambahan",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: textColor)),
+                ),
+                const SizedBox(height: 8),
+                buildInfoTile("Pekerjaan", pekerjaan, subTextColor, textColor),
+                buildInfoTile("Alamat Rumah", alamatRumah, subTextColor, textColor),
+                buildInfoTile("Hobi", hobi, subTextColor, textColor),
+                buildInfoTile("Status Pernikahan", status, subTextColor, textColor),
+                buildInfoTile("Bio", bio, subTextColor, textColor),
               ],
-            ),
-          ),
-          const Divider(),
-          buildInfoTile("Nomor HP", nohp, subTextColor, textColor),
-          buildInfoTile("Jenis Kelamin", gender, subTextColor, textColor),
-          buildInfoTile("Umur", umur, subTextColor, textColor),
-          buildInfoTile("Tempat/Tanggal Lahir", ttl, subTextColor, textColor),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Informasi Tambahan",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          buildInfoTile("Pekerjaan", pekerjaan, subTextColor, textColor),
-          buildInfoTile("Alamat Rumah", alamatRumah, subTextColor, textColor),
-          buildInfoTile("Hobi", hobi, subTextColor, textColor),
-          buildInfoTile("Status Pernikahan", status, subTextColor, textColor),
-          buildInfoTile("Bio", bio, subTextColor, textColor),
-        ],
+            );
+          },
+        ),
       ),
     );
   }

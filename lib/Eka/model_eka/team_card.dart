@@ -1,6 +1,6 @@
 // Eka/model_eka/team_card.dart
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '/Eka/model_eka/team_member.dart';
 
@@ -13,46 +13,6 @@ class TeamCard extends StatelessWidget {
     required this.member,
     required this.onWhatsAppTap,
   });
-
-  Widget _buildImage(String imagePath) {
-    if (imagePath.isEmpty) {
-      return Container(
-        height: 100,
-        color: Colors.grey[300],
-        child: const Icon(Icons.image_not_supported),
-      );
-    }
-
-    if (imagePath.startsWith('http')) {
-      return Image.network(
-        imagePath,
-        height: 100,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-      );
-    } else if (imagePath.startsWith('/')) {
-      return Image.file(
-        File(imagePath),
-        height: 100,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-      );
-    } else {
-      final assetPath = imagePath.contains('assets/')
-          ? imagePath
-          : 'assets/images/$imagePath';
-      return Image.asset(
-        assetPath,
-        height: 100,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
-            const Icon(Icons.image_not_supported, size: 40),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +30,12 @@ class TeamCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Gambar: Bisa lokal (assets) atau dari URL
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: _buildImage(member.image),
+            child: _buildImageWidget(member.image),
           ),
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -103,6 +65,8 @@ class TeamCard extends StatelessWidget {
               ),
             ),
           ),
+
+          // Tombol bawah (Team & WhatsApp)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
@@ -144,5 +108,32 @@ class TeamCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Widget untuk menampilkan gambar dari URL atau lokal
+  Widget _buildImageWidget(String imagePath) {
+    if (imagePath.startsWith('http')) {
+      // Gambar online
+      return CachedNetworkImage(
+        imageUrl: imagePath,
+        height: 120,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        placeholder: (context, url) =>
+            const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) =>
+            const Icon(Icons.broken_image, size: 40),
+      );
+    } else {
+      // Gambar lokal (assets)
+      return Image.asset(
+        imagePath,
+        height: 120,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            const Icon(Icons.broken_image, size: 40),
+      );
+    }
   }
 }
