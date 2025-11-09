@@ -1,11 +1,11 @@
-// Eka/model_eka/team_service.dart
+// /Eka/model_eka/team_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '/Eka/model_eka/team_member.dart';
 
 class TeamService {
-  // Ganti dengan endpoint MockAPI kamu
-  final String apiUrl = 'https://68f088b30b966ad500333190.mockapi.io/Teammember';
+  final String apiUrl =
+      'https://68f088b30b966ad500333190.mockapi.io/Teammember';
 
   Future<List<TeamMember>> fetchTeamMembers() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -13,16 +13,19 @@ class TeamService {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
 
-      // Map data dari JSON ke model TeamMember
       return data.map((item) {
-        final image = item['image'] ?? '';
+        // ambil id dari API
+        final id = item['id'] ?? '0';
 
-        // Jika kosong, gunakan placeholder default
-        final fixedImage = image.isEmpty
+        // tentukan path gambar lokal berdasarkan id
+        final localImagePath = 'assets/images/$id.jpg';
+
+        // jika tidak ada file sesuai, gunakan default
+        final imagePath = (id == '0')
             ? 'assets/images/default_avatar.png'
-            : image;
+            : localImagePath;
 
-        return TeamMember.fromJson({...item, 'image': fixedImage});
+        return TeamMember.fromJson({...item, 'image': imagePath});
       }).toList();
     } else {
       throw Exception('Gagal memuat data tim');

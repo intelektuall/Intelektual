@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '/Eka/model_eka/team_member.dart';
 import '/Eka/model_eka/team_service.dart';
 import '/Eka/model_eka/team_card.dart';
-import '/Eka/provider/firebase_helper.dart'; // <-- import helper
+import '/Eka/provider/firebase_helper.dart';
 
 class ProfileAbout extends StatefulWidget {
   const ProfileAbout({super.key});
@@ -23,10 +23,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
   @override
   void initState() {
     super.initState();
-
-    // Log screen view saat About dibuka
     FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'ProfileAbout');
-
     _fetchTeamMembers();
   }
 
@@ -37,8 +34,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
         teamMembers = members;
         isLoading = false;
       });
-
-      // Log event berhasil memuat tim dan berapa banyak anggota
       FirebaseAnalyticsHelper.logEvent(
         name: 'team_fetch_success',
         parameters: {'count': members.length},
@@ -48,11 +43,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
         isError = true;
         isLoading = false;
       });
-
-      // Log event gagal memuat tim
-      FirebaseAnalyticsHelper.logEvent(
-        name: 'team_fetch_failure',
-      );
+      FirebaseAnalyticsHelper.logEvent(name: 'team_fetch_failure');
     }
   }
 
@@ -61,14 +52,11 @@ class _ProfileAboutState extends State<ProfileAbout> {
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Tidak dapat membuka: $url')));
-
-      // Log event gagal membuka url
       FirebaseAnalyticsHelper.logEvent(
         name: 'external_link_open_failed',
         parameters: {'url': url},
       );
     } else {
-      // Log event berhasil membuka url
       FirebaseAnalyticsHelper.logEvent(
         name: 'external_link_opened',
         parameters: {'url': url},
@@ -79,8 +67,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
   void _openWhatsApp(String phone) {
     final url = 'https://wa.me/$phone';
     _launchURL(url);
-
-    // Log klik WhatsApp (juga dicatat lagi ketika open berhasil/ gagal di _launchURL)
     FirebaseAnalyticsHelper.logEvent(
       name: 'contact_clicked',
       parameters: {'type': 'whatsapp', 'number': phone},
@@ -102,7 +88,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
         title: Text(
           "Profile About",
           style: TextStyle(
-            fontWeight: FontWeight.normal,
             fontSize: 20,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
@@ -123,7 +108,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
                         const Icon(Icons.error, color: Colors.red, size: 48),
                         const SizedBox(height: 8),
                         const Text("Gagal memuat data tim."),
-                        const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: _fetchTeamMembers,
                           child: const Text("Coba Lagi"),
@@ -140,7 +124,6 @@ class _ProfileAboutState extends State<ProfileAbout> {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: accentColor,
-                          letterSpacing: 0.8,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -165,15 +148,14 @@ class _ProfileAboutState extends State<ProfileAbout> {
                           },
                         ),
                       ),
-
-                      // FOOTER
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: isDarkMode ? Colors.grey[900] : Colors.white,
-                          borderRadius:
-                              const BorderRadius.vertical(top: Radius.circular(24)),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(24),
+                          ),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
@@ -189,10 +171,9 @@ class _ProfileAboutState extends State<ProfileAbout> {
                               "Terima kasih telah menggunakan aplikasi kami! Kami berharap dapat terus memberikan layanan terbaik untuk Anda.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: textColorPrimary,
-                              ),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: textColorPrimary),
                             ),
                             const SizedBox(height: 20),
                             Divider(thickness: 1, color: accentColor),

@@ -1,4 +1,3 @@
-// Eka/model_eka/team_member.dart
 class TeamMember {
   final String id;
   final String name;
@@ -19,7 +18,7 @@ class TeamMember {
       id: json['id'] ?? '',
       name: json['name'] ?? 'Unknown',
       status: json['status'] ?? 'Member',
-      image: json['image'] ?? '',
+      image: json['image'] ?? 'assets/images/default_avatar.png',
       whatsapp: json['whatsapp'] ?? '',
     );
   }

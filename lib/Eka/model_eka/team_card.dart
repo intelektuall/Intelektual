@@ -1,6 +1,4 @@
-// Eka/model_eka/team_card.dart
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '/Eka/model_eka/team_member.dart';
 
@@ -30,12 +28,18 @@ class TeamCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Gambar: Bisa lokal (assets) atau dari URL
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: _buildImageWidget(member.image),
+            child: Image.asset(
+              member.image,
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  Image.asset('assets/images/default_avatar.png',
+                      height: 120, width: double.infinity, fit: BoxFit.cover),
+            ),
           ),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -65,8 +69,6 @@ class TeamCard extends StatelessWidget {
               ),
             ),
           ),
-
-          // Tombol bawah (Team & WhatsApp)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
@@ -108,32 +110,5 @@ class TeamCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  /// Widget untuk menampilkan gambar dari URL atau lokal
-  Widget _buildImageWidget(String imagePath) {
-    if (imagePath.startsWith('http')) {
-      // Gambar online
-      return CachedNetworkImage(
-        imageUrl: imagePath,
-        height: 120,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) =>
-            const Icon(Icons.broken_image, size: 40),
-      );
-    } else {
-      // Gambar lokal (assets)
-      return Image.asset(
-        imagePath,
-        height: 120,
-        width: double.infinity,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.broken_image, size: 40),
-      );
-    }
   }
 }

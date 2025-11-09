@@ -1,18 +1,17 @@
-// /Eka/provider/profile_stream_provider.dart
+// /Eka/provider/profile_stream.dart
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileStreamProvider {
-  static final ProfileStreamProvider _instance = ProfileStreamProvider._internal();
+  static final ProfileStreamProvider _instance =
+      ProfileStreamProvider._internal();
   factory ProfileStreamProvider() => _instance;
 
   ProfileStreamProvider._internal() {
-    // Stream yang memastikan setiap subscriber baru langsung menerima data terkini
     _stream = Stream<Map<String, dynamic>>.multi((controller) {
       // kirim snapshot saat ini segera
       controller.add(_currentData);
-      // forward event berikutnya dari internal controller
       final sub = _controller.stream.listen(
         (data) => controller.add(data),
         onError: (e, s) => controller.addError(e, s),
@@ -44,14 +43,12 @@ class ProfileStreamProvider {
         final decoded = jsonDecode(dataString) as Map<String, dynamic>;
         _currentData = {..._currentData, ...decoded};
       } catch (e) {
-        // jika gagal decode, biarkan default
+        // biarkan default jika gagal decode
       }
     } else {
-      // simpan default ke prefs agar tersedia
       await prefs.setString('profile_data', jsonEncode(_currentData));
     }
 
-    // kirim data terbaru ke stream
     _controller.add(_currentData);
   }
 
