@@ -236,15 +236,19 @@ Future<void> main() async {
   // === Aktifkan Firebase Analytics ===
   await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  final FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
 
   // === Tes koneksi Firestore ===
   try {
-    await FirebaseFirestore.instance.collection('test_connection').doc('ping').set({
-      'connected': true,
-      'timestamp': DateTime.now().toIso8601String(),
-    });
+    await FirebaseFirestore.instance
+        .collection('test_connection')
+        .doc('ping')
+        .set({
+          'connected': true,
+          'timestamp': DateTime.now().toIso8601String(),
+        });
     debugPrint("Firestore connection success ✅");
   } catch (e) {
     debugPrint("Firestore connection failed ❌: $e");
@@ -280,6 +284,8 @@ Future<void> main() async {
       child: MainApp(analytics: analytics, observer: observer),
     ),
   );
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatefulWidget {
@@ -369,8 +375,8 @@ class _MainAppState extends State<MainApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
 
-       home: const LaunchScreen(),
-       routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
-     );
-   }
- }
+      home: const LaunchScreen(),
+      routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
+    );
+  }
+}
