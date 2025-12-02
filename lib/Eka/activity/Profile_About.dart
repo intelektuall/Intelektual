@@ -6,6 +6,7 @@ import '/Eka/model_eka/team_member.dart';
 import '/Eka/model_eka/team_service.dart';
 import '/Eka/model_eka/team_card.dart';
 import '/Eka/provider/firebase_helper.dart';
+import '/Eka/provider/permission_helper.dart'; // <-- PENTING: pastikan ini sudah diimport
 
 class ProfileAbout extends StatefulWidget {
   const ProfileAbout({super.key});
@@ -47,6 +48,9 @@ class _ProfileAboutState extends State<ProfileAbout> {
     }
   }
 
+  // ==========================================================
+  // OPEN URL (Dengan Logger Firebase)
+  // ==========================================================
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
@@ -64,12 +68,36 @@ class _ProfileAboutState extends State<ProfileAbout> {
     }
   }
 
-  void _openWhatsApp(String phone) {
+  // ==========================================================
+  // OPEN WHATSAPP (Membutuhkan permission Contacts)
+  // ==========================================================
+  Future<void> _openWhatsApp(String phone) async {
+    final granted = await PermissionHelper.requestContacts(context);
+
+    if (!granted) return;
+
     final url = 'https://wa.me/$phone';
     _launchURL(url);
+
     FirebaseAnalyticsHelper.logEvent(
       name: 'contact_clicked',
       parameters: {'type': 'whatsapp', 'number': phone},
+    );
+  }
+
+  // ==========================================================
+  // CALL PHONE (Membutuhkan permission Call)
+  // ==========================================================
+  Future<void> _callPhoneNumber(String phone) async {
+    final granted = await PermissionHelper.requestCall(context);
+    if (!granted) return;
+
+    final url = "tel:$phone";
+    _launchURL(url);
+
+    FirebaseAnalyticsHelper.logEvent(
+      name: 'call_clicked',
+      parameters: {'number': phone},
     );
   }
 
@@ -148,6 +176,8 @@ class _ProfileAboutState extends State<ProfileAbout> {
                           },
                         ),
                       ),
+
+                      // ================= FOOTER =====================
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
@@ -200,6 +230,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
                               ),
                               child: Column(
                                 children: [
+                                  // Email
                                   ListTile(
                                     leading: const Icon(Icons.email,
                                         color: Colors.blueAccent),
@@ -209,12 +240,14 @@ class _ProfileAboutState extends State<ProfileAbout> {
                                         "mailto:sopansantunteam@gmail.com"),
                                   ),
                                   const Divider(height: 1),
+
+                                  // TELEPON – pakai permission CALL
                                   ListTile(
                                     leading: const Icon(Icons.phone,
                                         color: Colors.green),
                                     title: const Text("+6289678136633"),
                                     onTap: () =>
-                                        _launchURL("tel:+6289678136633"),
+                                        _callPhoneNumber("+6289678136633"),
                                   ),
                                 ],
                               ),

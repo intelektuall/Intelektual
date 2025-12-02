@@ -17,9 +17,11 @@ class FirestoreService {
 
   // Stream realtime untuk perubahan data profil
   Stream<Map<String, dynamic>> getProfileStream(String userId) {
-    return _db.collection('profiles').doc(userId).snapshots().map(
-          (snapshot) => snapshot.data() ?? {},
-        );
+    return _db
+        .collection('profiles')
+        .doc(userId)
+        .snapshots()
+        .map((snapshot) => snapshot.data() ?? {});
   }
 
   // Ambil data profil sekali

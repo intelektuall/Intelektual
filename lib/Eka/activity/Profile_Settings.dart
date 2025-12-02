@@ -1,21 +1,21 @@
-// /Eka/activity/Profile_Settings.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/Eka/provider/settings_provider.dart';
-import '/Eka/provider/firebase_helper.dart'; // <-- import helper
+import '/Eka/provider/firebase_helper.dart';
+import '/Eka/provider/permission_helper.dart';
 
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
 
-  void showSnackBar(BuildContext context, String message) {
+  void showSnack(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
+        content: Text(msg),
+        duration: Duration(seconds: 2),
         backgroundColor: Colors.grey,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
     );
   }
@@ -23,140 +23,106 @@ class ProfileSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<SettingsProvider>(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textStyle = Theme.of(context).textTheme.bodyLarge;
-    final surfaceColor = isDark ? Colors.grey[900] : Colors.white;
-
-    // Log screen view saat Settings dibuka
-    FirebaseAnalyticsHelper.setCurrentScreen(screenName: 'ProfileSettings');
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final text = Theme.of(context).textTheme.bodyLarge;
+    final surface = dark ? Colors.grey[900] : Colors.white;
+    FirebaseAnalyticsHelper.setCurrentScreen(screenName: "ProfileSettings");
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pengaturan"),
+        title: Text("Pengaturan"),
         backgroundColor: Colors.blueAccent,
-        leading: const BackButton(color: Colors.white),
+        leading: BackButton(color: Colors.white),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         children: [
-          // === Kunci Aplikasi ===
+          // NOTIFIKASI + PERMISSION
           ListTile(
-            tileColor: surfaceColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            title: Text("Kunci Aplikasi", style: textStyle),
+            tileColor: surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: Text("Notifikasi", style: text),
             trailing: Switch(
-              value: settings.isLockAppOn,
+              value: settings.isNotificationEnabled,
               activeColor: Colors.blueAccent,
-              onChanged: (val) {
-                settings.setLockApp(val);
-                showSnackBar(context, "Kunci aplikasi ${val ? "diaktifkan" : "dinonaktifkan"}");
+              onChanged: (val) async {
+                if (val) {
+                  final ok = await PermissionHelper.requestNotification(context);
+                  if (!ok) {
+                    showSnack(context, "Izin notifikasi ditolak");
+                    return;
+                  }
+                }
 
-                // Log event perubahan kunci aplikasi
+                settings.setNotification(val);
+                showSnack(
+                  context,
+                  "Notifikasi ${val ? "diaktifkan" : "dinonaktifkan"}",
+                );
+
                 FirebaseAnalyticsHelper.logEvent(
-                  name: 'setting_changed',
-                  parameters: {'setting': 'lock_app', 'value': val},
+                  name: "setting_changed",
+                  parameters: {"setting": "notification", "value": val},
                 );
               },
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
-          // === Mode Latar Belakang ===
+          // MODE LATAR BELAKANG
           ListTile(
-            tileColor: surfaceColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            title: Text("Mode Latar Belakang", style: textStyle),
+            tileColor: surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: Text("Mode Latar Belakang", style: text),
             subtitle: Text(settings.backgroundMode),
             trailing: Switch(
               value: settings.backgroundMode == "Hitam",
               activeColor: Colors.blueAccent,
               onChanged: (val) {
-                final newMode = val ? "Hitam" : "Putih";
-                settings.setBackgroundMode(newMode);
-                showSnackBar(context, "Mode latar belakang diubah ke $newMode");
+                final mode = val ? "Hitam" : "Putih";
+                settings.setBackgroundMode(mode);
+                showSnack(context, "Mode latar belakang $mode");
 
-                // Log event perubahan background mode
                 FirebaseAnalyticsHelper.logEvent(
-                  name: 'setting_changed',
-                  parameters: {'setting': 'background_mode', 'value': newMode},
+                  name: "setting_changed",
+                  parameters: {"setting": "background_mode", "value": mode},
                 );
               },
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 24),
 
-          // === Notifikasi ===
-          ListTile(
-            tileColor: surfaceColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            title: Text("Notifikasi", style: textStyle),
-            trailing: Switch(
-              value: settings.isNotificationEnabled,
-              activeColor: Colors.blueAccent,
-              onChanged: (val) {
-                settings.setNotification(val);
-                showSnackBar(context, "Notifikasi ${val ? "diaktifkan" : "dinonaktifkan"}");
-
-                // Log event perubahan notifikasi
-                FirebaseAnalyticsHelper.logEvent(
-                  name: 'setting_changed',
-                  parameters: {'setting': 'notification', 'value': val},
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // === Mode Hemat Daya ===
-          ListTile(
-            tileColor: surfaceColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            title: Text("Mode Hemat Daya", style: textStyle),
-            trailing: Switch(
-              value: settings.isPowerSavingMode,
-              activeColor: Colors.blueAccent,
-              onChanged: (val) {
-                settings.setPowerSavingMode(val);
-                showSnackBar(context, "Mode hemat daya ${val ? "diaktifkan" : "dinonaktifkan"}");
-
-                // Log event perubahan power saving
-                FirebaseAnalyticsHelper.logEvent(
-                  name: 'setting_changed',
-                  parameters: {'setting': 'power_saving', 'value': val},
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // === Bahasa Aplikasi ===
+          // BAHASA
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text("Bahasa Aplikasi", style: textStyle),
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: Text("Bahasa Aplikasi", style: text),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           DropdownButtonFormField<String>(
             value: settings.language,
             decoration: InputDecoration(
               filled: true,
-              fillColor: surfaceColor,
+              fillColor: surface,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            items: const [
+            items: [
               DropdownMenuItem(value: "Indonesia", child: Text("Indonesia")),
               DropdownMenuItem(value: "English", child: Text("English")),
             ],
             onChanged: (val) {
               if (val != null) {
                 settings.setLanguage(val);
-                showSnackBar(context, "Bahasa diubah ke $val");
+                showSnack(context, "Bahasa diubah ke $val");
 
-                // Log event penggantian bahasa
                 FirebaseAnalyticsHelper.logEvent(
-                  name: 'setting_changed',
-                  parameters: {'setting': 'language', 'value': val},
+                  name: "setting_changed",
+                  parameters: {"setting": "language", "value": val},
                 );
               }
             },
