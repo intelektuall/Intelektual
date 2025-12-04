@@ -1,5 +1,6 @@
 import '/Fauzan/LoginPage/Providers/LoginValidation.dart';
 import '/Fauzan/LoginPage/Providers/ProviderLogin.dart';
+import '/Fauzan/LoginPage/Providers/AgreeTermsProvider.dart';
 import '/Fauzan/LoginPage/sign-in_screen.dart';
 import '/Activity/home.dart';
 import 'package:flutter/material.dart';

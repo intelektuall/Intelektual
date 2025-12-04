@@ -1,13 +1,14 @@
 // file: login_google_screen.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // 🔹 Tambahkan ini
 
 class LoginGoogleHelper {
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
   );
 
-  /// Sign in dengan Google
+  /// 🔹 Sign in dengan Google + sinkron ke Firestore
   static Future<User?> signInWithGoogle() async {
     try {
       // Pastikan sesi Google lama dilepas agar popup pilih akun muncul
@@ -27,7 +28,38 @@ class LoginGoogleHelper {
       final userCredential = await FirebaseAuth.instance.signInWithCredential(
         credential,
       );
-      return userCredential.user;
+      final user = userCredential.user;
+
+      // 🔹 Jika login berhasil, pastikan dokumen Firestore user dibuat
+      if (user != null) {
+        final userDoc = FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid);
+
+        final snapshot = await userDoc.get();
+
+        if (!snapshot.exists) {
+          await userDoc.set({
+            'nama': user.displayName ?? '',
+            'email': user.email ?? '',
+            'alamatRumah': '',
+            'bio': '',
+            'hobi': [],
+            'pekerjaan': '',
+            'profileImage': user.photoURL ?? '',
+            'profileImageBase64': '',
+            'status': 'active',
+            'nomorHP': '',
+            'jenisKelamin': '',
+            'umur': '',
+            'tempatTanggalLahir': '',
+            'statusPernikahan': '',
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+        }
+      }
+
+      return user;
     } catch (e) {
       throw Exception("Login Google gagal: $e");
     }
@@ -45,8 +77,7 @@ class LoginGoogleHelper {
       // disconnect untuk memastikan sesi OAuth dihapus (force reselect)
       await _googleSignIn.disconnect();
     } catch (e) {
-      // Jangan lempar kecuali kamu mau crash app — cukup log
-      // developer bisa melihat ini di debug console
+      // aman diabaikan, cukup log di debug mode
       // print("Logout Google gagal: $e");
     }
   }

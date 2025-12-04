@@ -1,4 +1,3 @@
-// /Eka/activity/Profile_Page.dart : setelah ada firestore ganteng punya eka
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -7,14 +6,14 @@ import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/Eka/provider/settings_provider.dart';
 import '/Eka/activity/Profile_Edit.dart';
 import '/Eka/activity/Profile_Settings.dart';
 import '/Eka/activity/Profile_About.dart';
 import '/Eka/provider/firestore_service.dart';
 import '/Eka/provider/firebase_helper.dart';
-
-// Tambahan import permission
 import '/Eka/provider/permission_helper.dart';
 
 class MyProfile extends StatefulWidget {
@@ -53,22 +52,19 @@ class _MyProfileState extends State<MyProfile> {
     setState(() => _localImageFile = localFile);
   }
 
-  // ================================================================
-  // *MODIFIKASI UTAMA* — memakai PermissionHelper
-  // ================================================================
   Future<void> _pickImage(ImageSource source) async {
     bool granted = false;
-
-if (source == ImageSource.camera) {
-  granted = await PermissionHelper.requestCamera(context);
-} else {
-  granted = await PermissionHelper.requestGallery(context);
-}
-
+    if (source == ImageSource.camera) {
+      granted = await PermissionHelper.requestCamera(context);
+    } else {
+      granted = await PermissionHelper.requestGallery(context);
+    }
 
     if (!granted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Akses ditolak. Tidak dapat membuka fitur.')),
+        const SnackBar(
+          content: Text('Akses ditolak. Tidak dapat membuka fitur.'),
+        ),
       );
       return;
     }
@@ -79,14 +75,14 @@ if (source == ImageSource.camera) {
 
       setState(() => _isUploading = true);
       final file = File(picked.path);
-
       await _saveLocalImage(file);
 
       final bytes = await file.readAsBytes();
       final base64String = base64Encode(bytes);
 
-      await FirestoreService()
-          .saveProfileData({'profileImageBase64': base64String}, 'user_001');
+      await FirestoreService().saveProfileData({
+        'profileImageBase64': base64String,
+      });
 
       setState(() {
         _base64Image = base64String;
@@ -100,14 +96,12 @@ if (source == ImageSource.camera) {
     }
   }
 
-  // ================================================================
-  // Bottom sheet tetap sama, hanya _pickImage memakai permission
-  // ================================================================
   void _showImagePickerOptions() {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) => Wrap(
         children: [
           ListTile(
@@ -134,8 +128,9 @@ if (source == ImageSource.camera) {
               final dir = await getApplicationDocumentsDirectory();
               final localFile = File(p.join(dir.path, 'profile_image.jpg'));
               if (await localFile.exists()) await localFile.delete();
-              await FirestoreService()
-                  .saveProfileData({'profileImageBase64': ''}, 'user_001');
+              await FirestoreService().saveProfileData({
+                'profileImageBase64': '',
+              });
               setState(() {
                 _localImageFile = null;
                 _base64Image = null;
@@ -149,21 +144,41 @@ if (source == ImageSource.camera) {
   }
 
   void handleMenuSelection(String value) async {
-    Widget page;
+    debugPrint("Navigasi ke halaman $value ...");
+    if (!mounted) return;
+
+    if (currentData.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Data profil belum dimuat.")),
+      );
+      return;
+    }
+
+    Widget page = const SizedBox(); // default aman
+
     if (value == 'edit') {
+      // 🔹 Konversi data hobi (List → String)
+      String hobiValue = "";
+      if (currentData['hobi'] is List) {
+        hobiValue = (currentData['hobi'] as List).join(", ");
+      } else if (currentData['hobi'] is String) {
+        hobiValue = currentData['hobi'];
+      }
+
       page = ProfileEdit(
         pekerjaan: currentData['pekerjaan'] ?? '',
         alamatRumah: currentData['alamatRumah'] ?? '',
-        hobi: currentData['hobi'] ?? '',
-        status: currentData['status'] ?? '',
+        hobi: hobiValue,
+        status: currentData['statusPernikahan'] ?? '',
         bio: currentData['bio'] ?? '',
       );
     } else if (value == 'settings') {
       page = const ProfileSettings();
-    } else {
+    } else if (value == 'about') {
       page = const ProfileAbout();
     }
 
+    // 🔹 Gunakan animasi FadeScale agar sesuai dengan struktur awal
     await Navigator.push(
       context,
       PageRouteBuilder(
@@ -175,7 +190,11 @@ if (source == ImageSource.camera) {
   }
 
   Widget buildInfoTile(
-      String label, String value, Color labelColor, Color valueColor) {
+    String label,
+    String value, {
+    Color? labelColor,
+    Color? valueColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Column(
@@ -183,8 +202,10 @@ if (source == ImageSource.camera) {
         children: [
           Text(label, style: TextStyle(color: labelColor, fontSize: 14)),
           const SizedBox(height: 4),
-          Text(value.isNotEmpty ? value : "-",
-              style: TextStyle(color: valueColor, fontSize: 16)),
+          Text(
+            value.isNotEmpty ? value : "-",
+            style: TextStyle(color: valueColor, fontSize: 16),
+          ),
           const Divider(),
         ],
       ),
@@ -208,7 +229,7 @@ if (source == ImageSource.camera) {
           PopupMenuButton<String>(
             onSelected: handleMenuSelection,
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit Info Tambahan')),
+              PopupMenuItem(value: 'edit', child: Text('Edit Profil')),
               PopupMenuItem(value: 'settings', child: Text('Settings')),
               PopupMenuItem(value: 'about', child: Text('About Us')),
             ],
@@ -216,7 +237,7 @@ if (source == ImageSource.camera) {
         ],
       ),
       body: StreamBuilder<Map<String, dynamic>>(
-        stream: FirestoreService().getProfileStream('user_001'),
+        stream: FirestoreService().getProfileStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text("Gagal memuat profil"));
@@ -238,6 +259,28 @@ if (source == ImageSource.camera) {
             imageProvider = const AssetImage('assets/images/1.png');
           }
 
+          // 🔹 Ambil semua data Firestore
+          final nama = currentData['nama'] ?? '';
+          final email = currentData['email'] ?? '';
+          final nomorHP = currentData['nomorHP'] ?? '';
+          final jenisKelamin = currentData['jenisKelamin'] ?? '';
+          final umur = currentData['umur'] ?? '';
+          final ttl = currentData['tempatTanggalLahir'] ?? '';
+          final pekerjaan = currentData['pekerjaan'] ?? '';
+          final alamatRumah = currentData['alamatRumah'] ?? '';
+          final hobi = currentData['hobi'] ?? '';
+          final statusPernikahan = currentData['statusPernikahan'] ?? '';
+          final bio = currentData['bio'] ?? '';
+
+          String hobiText = "-";
+          if (hobi != null) {
+            if (hobi is List && hobi.isNotEmpty) {
+              hobiText = hobi.join(", ");
+            } else if (hobi is String && hobi.isNotEmpty) {
+              hobiText = hobi;
+            }
+          }
+
           return ListView(
             children: [
               Padding(
@@ -247,7 +290,10 @@ if (source == ImageSource.camera) {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        CircleAvatar(radius: 50, backgroundImage: imageProvider),
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: imageProvider,
+                        ),
                         Positioned(
                           bottom: 0,
                           right: 0,
@@ -256,8 +302,11 @@ if (source == ImageSource.camera) {
                             child: const CircleAvatar(
                               radius: 14,
                               backgroundColor: Colors.blueAccent,
-                              child: Icon(Icons.edit,
-                                  size: 16, color: Colors.white),
+                              child: Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -268,13 +317,15 @@ if (source == ImageSource.camera) {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Ultraman Nex",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor)),
-                          Text("ultramannex@gmail.com",
-                              style: TextStyle(color: subTextColor)),
+                          Text(
+                            nama,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                          ),
+                          Text(email, style: TextStyle(color: subTextColor)),
                         ],
                       ),
                     ),
@@ -282,33 +333,72 @@ if (source == ImageSource.camera) {
                 ),
               ),
               buildInfoTile(
-                  "Nomor HP", "+62 821-6679-7788", subTextColor, textColor),
+                "Nomor HP",
+                nomorHP,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
               buildInfoTile(
-                  "Jenis Kelamin", "Laki-laki", subTextColor, textColor),
+                "Jenis Kelamin",
+                jenisKelamin,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
               buildInfoTile(
-                  "Umur", "300 Tahun", subTextColor, textColor),
-              buildInfoTile("Tempat/Tanggal Lahir",
-                  "Planet Mars, 20 Oktober", subTextColor, textColor),
+                "Umur",
+                umur,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
+              buildInfoTile(
+                "Tempat/Tanggal Lahir",
+                ttl,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
               const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text("Informasi Tambahan",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: textColor)),
+                child: Text(
+                  "Informasi Tambahan",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
               ),
               const SizedBox(height: 8),
-              buildInfoTile("Pekerjaan", currentData["pekerjaan"] ?? "",
-                  subTextColor, textColor),
-              buildInfoTile("Alamat Rumah", currentData["alamatRumah"] ?? "",
-                  subTextColor, textColor),
-              buildInfoTile("Hobi", currentData["hobi"] ?? "",
-                  subTextColor, textColor),
-              buildInfoTile("Status Pernikahan", currentData["status"] ?? "",
-                  subTextColor, textColor),
               buildInfoTile(
-                  "Bio", currentData["bio"] ?? "", subTextColor, textColor),
+                "Pekerjaan",
+                pekerjaan,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
+              buildInfoTile(
+                "Alamat Rumah",
+                alamatRumah,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
+              buildInfoTile(
+                "Hobi",
+                hobiText,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
+              buildInfoTile(
+                "Status Pernikahan",
+                statusPernikahan,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
+              buildInfoTile(
+                "Bio",
+                bio,
+                labelColor: subTextColor,
+                valueColor: textColor,
+              ),
             ],
           );
         },

@@ -15,7 +15,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
     super.initState();
     Auth auth = Auth();
     auth
-        .getUSer()
+        .getUser()
         .then((user) {
           MaterialPageRoute route;
           if (user != null) {
