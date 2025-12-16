@@ -199,7 +199,7 @@ import 'Provider/hewan_provider.dart';
 import 'Fauzan/Event/Notification/notification_provider.dart';
 import 'Fauzan/Event/Providers/event_provider.dart';
 import 'Fauzan/LoginPage/Providers/LoginValidation.dart';
-import 'Fauzan/LoginPage/Providers/ProviderLogin.dart';
+import 'Fauzan/LoginPage/Providers/AgreeTermsProvider.dart';
 
 // === Provider Eka ===
 import 'Eka/provider/settings_provider.dart';

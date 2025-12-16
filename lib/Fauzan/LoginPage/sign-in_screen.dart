@@ -2,13 +2,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:sopan_santun_app/Fauzan/LoginPage/Firebase_Auth/auth.dart';
 import '/Activity/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MySignin extends StatelessWidget {
   const MySignin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SignUpPage());
+    return const Scaffold(body: SignUpPage());
   }
 }
 
@@ -24,6 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
   final TextEditingController txtConfirmPassword = TextEditingController();
+
   String message = '';
   late Auth auth;
   bool isLoading = false;
@@ -35,6 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   Future<void> submit() async {
     setState(() {
       message = '';
@@ -62,10 +65,31 @@ class _SignUpPageState extends State<SignUpPage> {
 
     try {
       final userID = await auth.signUp(txtEmail.text, txtPassword.text);
-      if (userID != null && mounted) {
+
+      // 🔹 Setelah user berhasil dibuat, tambahkan ke Firestore
+      await FirebaseFirestore.instance.collection('Users').doc(userID).set({
+        'nama': txtName.text,
+        'email': txtEmail.text,
+        'alamatRumah': '',
+        'bio': '',
+        'hobi': [],
+        'pekerjaan': '',
+        'profileImage': '',
+        'profileImageBase64': '',
+        'status': 'active',
+        'nomorHP': '',
+        'jenisKelamin': '',
+        'umur': '',
+        'tempatTanggalLahir': '',
+        'statusPernikahan': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      if (mounted) {
         await analytics.logLogin(loginMethod: 'email_password');
         await analytics.setUserId(id: userID);
         await analytics.setUserProperty(name: 'login_type', value: 'manual');
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen(userID)),
@@ -74,6 +98,10 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       setState(() {
         message = e.toString();
+        isLoading = false;
+      });
+    } finally {
+      setState(() {
         isLoading = false;
       });
     }
@@ -107,9 +135,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   color: Colors.blueAccent,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width * 0.85,
                 decoration: BoxDecoration(
                   color: isDark ? Colors.grey[850] : Colors.white,
@@ -117,7 +145,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   boxShadow: isDark
                       ? []
                       : [
-                          BoxShadow(
+                          const BoxShadow(
                             color: Colors.black12,
                             blurRadius: 5,
                             spreadRadius: 2,
@@ -136,77 +164,41 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: isDark ? Colors.white : Colors.black,
                       ),
                     ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: txtName,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Nama",
-                        labelStyle: TextStyle(
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                      ),
-                      style: TextStyle(color: isDark ? Colors.white : null),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: txtEmail,
+                    const SizedBox(height: 20),
+                    _buildTextField(txtName, "Nama", isDark),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      txtEmail,
+                      "Email",
+                      isDark,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Email",
-                        labelStyle: TextStyle(
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                      ),
-                      style: TextStyle(color: isDark ? Colors.white : null),
                     ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: txtPassword,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Password",
-                        labelStyle: TextStyle(
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.visibility_off,
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                      ),
-                      style: TextStyle(color: isDark ? Colors.white : null),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      txtPassword,
+                      "Password",
+                      isDark,
+                      obscure: true,
                     ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: txtConfirmPassword,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Confirm Password",
-                        labelStyle: TextStyle(
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.visibility_off,
-                          color: isDark ? Colors.white70 : null,
-                        ),
-                      ),
-                      style: TextStyle(color: isDark ? Colors.white : null),
+                    const SizedBox(height: 10),
+                    _buildTextField(
+                      txtConfirmPassword,
+                      "Confirm Password",
+                      isDark,
+                      obscure: true,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: isLoading ? null : submit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 50,
                           vertical: 15,
                         ),
                       ),
                       child: isLoading
-                          ? SizedBox(
+                          ? const SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
@@ -216,7 +208,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                             )
-                          : Text(
+                          : const Text(
                               "Sign Up",
                               style: TextStyle(color: Colors.white),
                             ),
@@ -236,20 +228,15 @@ class _SignUpPageState extends State<SignUpPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    SizedBox(height: 5),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Sudah punya akun? Login",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.blueAccent,
-                          ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Text(
+                        "Sudah punya akun? Login",
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.blueAccent,
                         ),
                       ),
                     ),
@@ -260,6 +247,27 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  // 🔹 Helper builder textfield
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label,
+    bool isDark, {
+    bool obscure = false,
+    TextInputType? keyboardType,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscure,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: label,
+        labelStyle: TextStyle(color: isDark ? Colors.white70 : null),
+      ),
+      style: TextStyle(color: isDark ? Colors.white : null),
     );
   }
 }
