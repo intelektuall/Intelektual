@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import '/Eka/provider/settings_provider.dart';
 import '/Eka/provider/firebase_helper.dart';
 import '/Eka/provider/permission_helper.dart';
@@ -20,9 +22,7 @@ class ProfileSettings extends StatelessWidget {
     );
   }
 
-  // ==========================================================
-  // PRE-PERMISSION DIALOG (BARU)
-  // ==========================================================
+  // ================= PRE PERMISSION DIALOG =================
   Future<bool> _showPermissionReasonDialog(
     BuildContext context,
     String title,
@@ -81,21 +81,24 @@ class ProfileSettings extends StatelessWidget {
               activeColor: Colors.blueAccent,
               onChanged: (val) async {
                 if (val) {
-                  // ---- PRE DIALOG ----
-                  final agree = await _showPermissionReasonDialog(
-                    context,
-                    "Izin Notifikasi",
-                    "Aplikasi membutuhkan izin notifikasi untuk "
-                        "memberikan informasi dan pembaruan penting.",
-                  );
-                  if (!agree) return;
+                  // 🔍 cek status permission notifikasi
+                  final status = await Permission.notification.status;
 
-                  // ---- SYSTEM PERMISSION ----
-                  final granted =
-                      await PermissionHelper.requestNotification(context);
-                  if (!granted) {
-                    showSnack(context, "Izin notifikasi ditolak");
-                    return;
+                  if (!status.isGranted) {
+                    final agree = await _showPermissionReasonDialog(
+                      context,
+                      "Izin Notifikasi",
+                      "Aplikasi membutuhkan izin notifikasi untuk "
+                          "memberikan informasi dan pembaruan penting.",
+                    );
+                    if (!agree) return;
+
+                    final granted =
+                        await PermissionHelper.requestNotification(context);
+                    if (!granted) {
+                      showSnack(context, "Izin notifikasi ditolak");
+                      return;
+                    }
                   }
                 }
 

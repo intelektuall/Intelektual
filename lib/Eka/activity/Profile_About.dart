@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import '/Eka/model_eka/team_member.dart';
 import '/Eka/model_eka/team_service.dart';
 import '/Eka/model_eka/team_card.dart';
@@ -50,7 +52,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
   }
 
   // ==========================================================
-  // PRE-PERMISSION DIALOG GENERIC
+  // PRE-PERMISSION DIALOG
   // ==========================================================
   Future<bool> _showPermissionReason(
     String title,
@@ -103,17 +105,21 @@ class _ProfileAboutState extends State<ProfileAbout> {
   // WHATSAPP (CONTACT PERMISSION)
   // ==========================================================
   Future<void> _openWhatsApp(String phone) async {
-    final agree = await _showPermissionReason(
-      "Izin Kontak",
-      "Aplikasi membutuhkan izin kontak untuk membuka WhatsApp.",
-    );
-    if (!agree) return;
+    final status = await Permission.contacts.status;
 
-    final granted = await PermissionHelper.requestContacts(context);
-    if (!granted) return;
+    if (!status.isGranted) {
+      final agree = await _showPermissionReason(
+        "Izin Kontak",
+        "Aplikasi membutuhkan izin kontak untuk membuka WhatsApp.",
+      );
+      if (!agree) return;
 
-    final url = 'https://wa.me/$phone';
-    _launchURL(url);
+      final granted =
+          await PermissionHelper.requestContacts(context);
+      if (!granted) return;
+    }
+
+    _launchURL('https://wa.me/$phone');
 
     FirebaseAnalyticsHelper.logEvent(
       name: 'contact_clicked',
@@ -125,17 +131,21 @@ class _ProfileAboutState extends State<ProfileAbout> {
   // CALL PHONE
   // ==========================================================
   Future<void> _callPhoneNumber(String phone) async {
-    final agree = await _showPermissionReason(
-      "Izin Telepon",
-      "Aplikasi membutuhkan izin telepon untuk melakukan panggilan.",
-    );
-    if (!agree) return;
+    final status = await Permission.phone.status;
 
-    final granted = await PermissionHelper.requestCall(context);
-    if (!granted) return;
+    if (!status.isGranted) {
+      final agree = await _showPermissionReason(
+        "Izin Telepon",
+        "Aplikasi membutuhkan izin telepon untuk melakukan panggilan.",
+      );
+      if (!agree) return;
 
-    final url = "tel:$phone";
-    _launchURL(url);
+      final granted =
+          await PermissionHelper.requestCall(context);
+      if (!granted) return;
+    }
+
+    _launchURL("tel:$phone");
 
     FirebaseAnalyticsHelper.logEvent(
       name: 'call_clicked',
@@ -176,8 +186,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
             : isError
                 ? Center(
                     child: Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.error,
                             color: Colors.red, size: 48),
@@ -204,10 +213,8 @@ class _ProfileAboutState extends State<ProfileAbout> {
                       const SizedBox(height: 16),
                       Expanded(
                         child: GridView.builder(
-                          padding:
-                              const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           itemCount: teamMembers.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -217,13 +224,11 @@ class _ProfileAboutState extends State<ProfileAbout> {
                             mainAxisSpacing: 16,
                           ),
                           itemBuilder: (context, index) {
-                            final member =
-                                teamMembers[index];
+                            final member = teamMembers[index];
                             return TeamCard(
                               member: member,
                               onWhatsAppTap: () =>
-                                  _openWhatsApp(
-                                      member.whatsapp),
+                                  _openWhatsApp(member.whatsapp),
                             );
                           },
                         ),
@@ -232,8 +237,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
                       // ================= FOOTER =================
                       Container(
                         width: double.infinity,
-                        padding:
-                            const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: isDarkMode
                               ? Colors.grey[900]
@@ -277,8 +281,7 @@ class _ProfileAboutState extends State<ProfileAbout> {
                                   "Contact Person",
                                   style: TextStyle(
                                     fontSize: 18,
-                                    fontWeight:
-                                        FontWeight.bold,
+                                    fontWeight: FontWeight.bold,
                                     color: accentColor,
                                   ),
                                 ),
@@ -287,36 +290,29 @@ class _ProfileAboutState extends State<ProfileAbout> {
                             const SizedBox(height: 12),
                             Card(
                               elevation: 3,
-                              shape:
-                                  RoundedRectangleBorder(
+                              shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(
-                                        16),
+                                    BorderRadius.circular(16),
                               ),
                               child: Column(
                                 children: [
                                   ListTile(
-                                    leading: const Icon(
-                                        Icons.email,
+                                    leading: const Icon(Icons.email,
                                         color:
                                             Colors.blueAccent),
                                     title: const Text(
                                         "sopansantunteam@gmail.com"),
-                                    onTap: () =>
-                                        _launchURL(
-                                            "mailto:sopansantunteam@gmail.com"),
+                                    onTap: () => _launchURL(
+                                        "mailto:sopansantunteam@gmail.com"),
                                   ),
                                   const Divider(height: 1),
                                   ListTile(
-                                    leading: const Icon(
-                                        Icons.phone,
-                                        color:
-                                            Colors.green),
-                                    title: const Text(
+                                    leading: const Icon(Icons.phone,
+                                        color: Colors.green),
+                                    title:
+                                        const Text("+6289678136633"),
+                                    onTap: () => _callPhoneNumber(
                                         "+6289678136633"),
-                                    onTap: () =>
-                                        _callPhoneNumber(
-                                            "+6289678136633"),
                                   ),
                                 ],
                               ),

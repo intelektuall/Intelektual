@@ -6,6 +6,7 @@ import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:permission_handler/permission_handler.dart';
 
 import '/Eka/provider/settings_provider.dart';
 import '/Eka/activity/Profile_Edit.dart';
@@ -77,24 +78,42 @@ class _MyProfileState extends State<MyProfile> {
         false;
   }
 
-  // ================= PICK IMAGE =================
+  // ================= PICK IMAGE (MODIFIED LOGIC) =================
   Future<void> _pickImage(ImageSource source) async {
     bool granted = false;
 
     if (source == ImageSource.camera) {
-      if (!await _showPermissionReasonDialog(
-        title: "Izin Kamera",
-        message: "Digunakan untuk mengambil foto profil.",
-      )) return;
+      // 🔍 cek status kamera
+      final status = await Permission.camera.status;
 
-      granted = await PermissionHelper.requestCamera(context);
+      if (status.isGranted) {
+        granted = true;
+      } else {
+        final allow = await _showPermissionReasonDialog(
+          title: "Izin Kamera",
+          message: "Aplikasi memerlukan akses kamera untuk mengambil foto profil.",
+        );
+
+        if (!allow) return;
+
+        granted = await PermissionHelper.requestCamera(context);
+      }
     } else {
-      if (!await _showPermissionReasonDialog(
-        title: "Izin Galeri",
-        message: "Digunakan untuk memilih foto profil.",
-      )) return;
+      // 🔍 cek status galeri
+      final status = await Permission.photos.status;
 
-      granted = await PermissionHelper.requestGallery(context);
+      if (status.isGranted) {
+        granted = true;
+      } else {
+        final allow = await _showPermissionReasonDialog(
+          title: "Izin Galeri",
+          message: "Aplikasi memerlukan akses galeri untuk memilih foto profil.",
+        );
+
+        if (!allow) return;
+
+        granted = await PermissionHelper.requestGallery(context);
+      }
     }
 
     if (!granted) {
@@ -252,7 +271,7 @@ class _MyProfileState extends State<MyProfile> {
         actions: [
           IconButton(
             tooltip: "Hapus Iklan",
-            icon: Image.asset('assets/icons/remove_ads.png', width: 28),
+            icon: Image.asset('assets/icons/remove_ads.png', width: 60),
             onPressed: () {
               Navigator.push(
                 context,
@@ -329,12 +348,14 @@ class _MyProfileState extends State<MyProfile> {
               const SizedBox(height: 12),
               buildInfoTile("Pekerjaan", currentData['pekerjaan'] ?? '', sub, text),
               buildInfoTile("Alamat Rumah", currentData['alamatRumah'] ?? '', sub, text),
-              buildInfoTile("Hobi",
-                  (currentData['hobi'] is List)
-                      ? (currentData['hobi'] as List).join(", ")
-                      : currentData['hobi'] ?? '',
-                  sub,
-                  text),
+              buildInfoTile(
+                "Hobi",
+                (currentData['hobi'] is List)
+                    ? (currentData['hobi'] as List).join(", ")
+                    : currentData['hobi'] ?? '',
+                sub,
+                text,
+              ),
               buildInfoTile("Status Pernikahan", currentData['statusPernikahan'] ?? '', sub, text),
               buildInfoTile("Bio", currentData['bio'] ?? '', sub, text),
             ],
