@@ -11,13 +11,42 @@ class ProfileSettings extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.grey,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
     );
+  }
+
+  // ==========================================================
+  // PRE-PERMISSION DIALOG (BARU)
+  // ==========================================================
+  Future<bool> _showPermissionReasonDialog(
+    BuildContext context,
+    String title,
+    String message,
+  ) async {
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text("Batal"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text("Lanjutkan"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override
@@ -26,18 +55,21 @@ class ProfileSettings extends StatelessWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final text = Theme.of(context).textTheme.bodyLarge;
     final surface = dark ? Colors.grey[900] : Colors.white;
-    FirebaseAnalyticsHelper.setCurrentScreen(screenName: "ProfileSettings");
+
+    FirebaseAnalyticsHelper.setCurrentScreen(
+      screenName: "ProfileSettings",
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pengaturan"),
+        title: const Text("Pengaturan"),
         backgroundColor: Colors.blueAccent,
-        leading: BackButton(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
-          // NOTIFIKASI + PERMISSION
+          // ================= NOTIFIKASI =================
           ListTile(
             tileColor: surface,
             shape: RoundedRectangleBorder(
@@ -49,8 +81,19 @@ class ProfileSettings extends StatelessWidget {
               activeColor: Colors.blueAccent,
               onChanged: (val) async {
                 if (val) {
-                  final ok = await PermissionHelper.requestNotification(context);
-                  if (!ok) {
+                  // ---- PRE DIALOG ----
+                  final agree = await _showPermissionReasonDialog(
+                    context,
+                    "Izin Notifikasi",
+                    "Aplikasi membutuhkan izin notifikasi untuk "
+                        "memberikan informasi dan pembaruan penting.",
+                  );
+                  if (!agree) return;
+
+                  // ---- SYSTEM PERMISSION ----
+                  final granted =
+                      await PermissionHelper.requestNotification(context);
+                  if (!granted) {
                     showSnack(context, "Izin notifikasi ditolak");
                     return;
                   }
@@ -64,14 +107,18 @@ class ProfileSettings extends StatelessWidget {
 
                 FirebaseAnalyticsHelper.logEvent(
                   name: "setting_changed",
-                  parameters: {"setting": "notification", "value": val},
+                  parameters: {
+                    "setting": "notification",
+                    "value": val,
+                  },
                 );
               },
             ),
           ),
-          SizedBox(height: 12),
 
-          // MODE LATAR BELAKANG
+          const SizedBox(height: 12),
+
+          // ================= MODE LATAR =================
           ListTile(
             tileColor: surface,
             shape: RoundedRectangleBorder(
@@ -89,19 +136,23 @@ class ProfileSettings extends StatelessWidget {
 
                 FirebaseAnalyticsHelper.logEvent(
                   name: "setting_changed",
-                  parameters: {"setting": "background_mode", "value": mode},
+                  parameters: {
+                    "setting": "background_mode",
+                    "value": mode,
+                  },
                 );
               },
             ),
           ),
-          SizedBox(height: 24),
 
-          // BAHASA
+          const SizedBox(height: 24),
+
+          // ================= BAHASA =================
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text("Bahasa Aplikasi", style: text),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             value: settings.language,
             decoration: InputDecoration(
@@ -111,9 +162,11 @@ class ProfileSettings extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            items: [
-              DropdownMenuItem(value: "Indonesia", child: Text("Indonesia")),
-              DropdownMenuItem(value: "English", child: Text("English")),
+            items: const [
+              DropdownMenuItem(
+                  value: "Indonesia", child: Text("Indonesia")),
+              DropdownMenuItem(
+                  value: "English", child: Text("English")),
             ],
             onChanged: (val) {
               if (val != null) {
@@ -122,7 +175,10 @@ class ProfileSettings extends StatelessWidget {
 
                 FirebaseAnalyticsHelper.logEvent(
                   name: "setting_changed",
-                  parameters: {"setting": "language", "value": val},
+                  parameters: {
+                    "setting": "language",
+                    "value": val,
+                  },
                 );
               }
             },

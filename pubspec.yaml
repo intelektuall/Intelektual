@@ -61,6 +61,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/animations/loading.json
+    - assets/icons/remove_ads.png
   # fonts:
   #   - family: ComicNeue
   #     fonts:
