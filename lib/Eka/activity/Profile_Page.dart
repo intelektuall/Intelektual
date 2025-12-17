@@ -17,6 +17,9 @@ import '/Eka/provider/firebase_helper.dart';
 import '/Eka/provider/permission_helper.dart';
 import '/Periklanan/HalamanHapusIklan.dart';
 
+// ✅ IMPORT LOGIN SCREEN
+import '/Fauzan/LoginPage/login_screen.dart';
+
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
 
@@ -78,56 +81,47 @@ class _MyProfileState extends State<MyProfile> {
         false;
   }
 
-  // ================= PICK IMAGE (MODIFIED LOGIC) =================
+  // ================= PICK IMAGE =================
   Future<void> _pickImage(ImageSource source) async {
     bool granted = false;
 
     if (source == ImageSource.camera) {
-      // 🔍 cek status kamera
       final status = await Permission.camera.status;
-
       if (status.isGranted) {
         granted = true;
       } else {
         final allow = await _showPermissionReasonDialog(
           title: "Izin Kamera",
-          message: "Aplikasi memerlukan akses kamera untuk mengambil foto profil.",
+          message:
+              "Aplikasi memerlukan akses kamera untuk mengambil foto profil.",
         );
-
         if (!allow) return;
-
         granted = await PermissionHelper.requestCamera(context);
       }
     } else {
-      // 🔍 cek status galeri
       final status = await Permission.photos.status;
-
       if (status.isGranted) {
         granted = true;
       } else {
         final allow = await _showPermissionReasonDialog(
           title: "Izin Galeri",
-          message: "Aplikasi memerlukan akses galeri untuk memilih foto profil.",
+          message:
+              "Aplikasi memerlukan akses galeri untuk memilih foto profil.",
         );
-
         if (!allow) return;
-
         granted = await PermissionHelper.requestGallery(context);
       }
     }
 
     if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Akses ditolak")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Akses ditolak")));
       return;
     }
 
     try {
-      final picked = await _picker.pickImage(
-        source: source,
-        imageQuality: 80,
-      );
+      final picked = await _picker.pickImage(source: source, imageQuality: 80);
       if (picked == null) return;
 
       setState(() => _isUploading = true);
@@ -194,9 +188,9 @@ class _MyProfileState extends State<MyProfile> {
   // ================= MENU =================
   void handleMenuSelection(String value) async {
     if (currentData.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Data belum dimuat")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Data belum dimuat")));
       return;
     }
 
@@ -247,7 +241,10 @@ class _MyProfileState extends State<MyProfile> {
         children: [
           Text(label, style: TextStyle(color: labelColor)),
           const SizedBox(height: 4),
-          Text(value.isNotEmpty ? value : "-", style: TextStyle(color: valueColor)),
+          Text(
+            value.isNotEmpty ? value : "-",
+            style: TextStyle(color: valueColor),
+          ),
           const Divider(),
         ],
       ),
@@ -323,7 +320,11 @@ class _MyProfileState extends State<MyProfile> {
                           child: const CircleAvatar(
                             radius: 14,
                             backgroundColor: Colors.blueAccent,
-                            child: Icon(Icons.edit, size: 16, color: Colors.white),
+                            child: Icon(
+                              Icons.edit,
+                              size: 16,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -332,22 +333,51 @@ class _MyProfileState extends State<MyProfile> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(currentData['nama'] ?? '',
-                            style: TextStyle(color: text, fontSize: 20)),
-                        Text(currentData['email'] ?? '',
-                            style: TextStyle(color: sub)),
+                        Text(
+                          currentData['nama'] ?? '',
+                          style: TextStyle(color: text, fontSize: 20),
+                        ),
+                        Text(
+                          currentData['email'] ?? '',
+                          style: TextStyle(color: sub),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              buildInfoTile("Nomor HP", currentData['nomorHP'] ?? '', sub, text),
-              buildInfoTile("Jenis Kelamin", currentData['jenisKelamin'] ?? '', sub, text),
+              buildInfoTile(
+                "Nomor HP",
+                currentData['nomorHP'] ?? '',
+                sub,
+                text,
+              ),
+              buildInfoTile(
+                "Jenis Kelamin",
+                currentData['jenisKelamin'] ?? '',
+                sub,
+                text,
+              ),
               buildInfoTile("Umur", currentData['umur'] ?? '', sub, text),
-              buildInfoTile("TTL", currentData['tempatTanggalLahir'] ?? '', sub, text),
+              buildInfoTile(
+                "TTL",
+                currentData['tempatTanggalLahir'] ?? '',
+                sub,
+                text,
+              ),
               const SizedBox(height: 12),
-              buildInfoTile("Pekerjaan", currentData['pekerjaan'] ?? '', sub, text),
-              buildInfoTile("Alamat Rumah", currentData['alamatRumah'] ?? '', sub, text),
+              buildInfoTile(
+                "Pekerjaan",
+                currentData['pekerjaan'] ?? '',
+                sub,
+                text,
+              ),
+              buildInfoTile(
+                "Alamat Rumah",
+                currentData['alamatRumah'] ?? '',
+                sub,
+                text,
+              ),
               buildInfoTile(
                 "Hobi",
                 (currentData['hobi'] is List)
@@ -356,8 +386,50 @@ class _MyProfileState extends State<MyProfile> {
                 sub,
                 text,
               ),
-              buildInfoTile("Status Pernikahan", currentData['statusPernikahan'] ?? '', sub, text),
+              buildInfoTile(
+                "Status Pernikahan",
+                currentData['statusPernikahan'] ?? '',
+                sub,
+                text,
+              ),
               buildInfoTile("Bio", currentData['bio'] ?? '', sub, text),
+
+              // ================= LOG OUT BUTTON =================
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.logout,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  label: const Text(
+                    "Log Out",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MyLoginAndSignin(),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 30),
             ],
           );
         },
