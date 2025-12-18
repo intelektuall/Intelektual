@@ -29,6 +29,7 @@ dependencies:
   form_builder_validators: ^11.2.0
   get: ^4.6.5
   google_fonts: ^6.1.0
+  google_mobile_ads: ^6.0.0
   google_sign_in: ^6.1.5
   http: ^1.2.0
   image_picker: ^1.1.1
