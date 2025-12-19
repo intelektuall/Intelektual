@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailScreen extends StatefulWidget {
   final String imageUrl;
@@ -26,27 +27,48 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   bool isBookmarked = false;
   bool _isLoading = true;
-  late BannerAd _bannerAd;
+
+  /// 🔑 PREMIUM
+  bool _isPremium = false;
+
+  /// ADS
+  BannerAd? _bannerAd;
   bool _isBannerReady = false;
 
   @override
   void initState() {
     super.initState();
+    _initPage();
+  }
 
-    _loadBannerAd();
-    // Loading palsu
+  Future<void> _initPage() async {
+    await _loadPremiumStatus();
+
+    // hanya load iklan jika belum premium
+    if (!_isPremium) {
+      _loadBannerAd();
+    }
+
+    // loading palsu
     Timer(const Duration(seconds: 1), () {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  Future<void> _loadPremiumStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isPremium = prefs.getBool('is_premium') ?? false;
     });
   }
 
   @override
   void dispose() {
-    if (_isBannerReady) {
-      _bannerAd.dispose();
-    }
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -71,15 +93,15 @@ class _DetailScreenState extends State<DetailScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   "Bagikan ke...",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 GridView.count(
                   crossAxisCount: 4,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   children: shareOptions.map((option) {
                     return GestureDetector(
                       onTap: () {
@@ -93,16 +115,15 @@ class _DetailScreenState extends State<DetailScreen> {
                         ).showSnackBar(SnackBar(content: Text(message)));
                       },
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
                           CircleAvatar(
                             radius: 24,
-                            child: Icon(option['icon'] as IconData, size: 24),
+                            child: Icon(option['icon'] as IconData),
                           ),
-                          SizedBox(height: 6),
+                          const SizedBox(height: 6),
                           Text(
                             option['label'] as String,
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -110,10 +131,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 10),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Tutup"),
+                  child: const Text("Tutup"),
                 ),
               ],
             ),
@@ -129,16 +149,23 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Text(widget.headline),
         backgroundColor: Colors.blueAccent,
+        actions: [
+          if (_isPremium)
+            const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: Icon(Icons.workspace_premium, color: Colors.amber),
+            ),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: _isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
                     padding: EdgeInsets.only(
-                      bottom: _isBannerReady
-                          ? _bannerAd.size.height.toDouble()
+                      bottom: (!_isPremium && _isBannerReady)
+                          ? _bannerAd!.size.height.toDouble()
                           : 0,
                     ),
                     child: Column(
@@ -151,23 +178,22 @@ class _DetailScreenState extends State<DetailScreen> {
                           fit: BoxFit.cover,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 widget.headline,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 'Tanggal: ${DateFormat('dd MMM yyyy').format(widget.date)}',
-                                style: TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: Colors.grey),
                               ),
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -178,9 +204,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                         isBookmarked
                                             ? Icons.bookmark
                                             : Icons.bookmark_border,
-                                        color: isBookmarked
-                                            ? Colors.blueAccent
-                                            : null,
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -192,27 +215,27 @@ class _DetailScreenState extends State<DetailScreen> {
                                   Tooltip(
                                     message: "Share",
                                     child: IconButton(
-                                      icon: Icon(Icons.share),
+                                      icon: const Icon(Icons.share),
                                       onPressed: () =>
                                           _showShareOptions(context),
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: widget.newsbody
                                     .split("\n\n")
                                     .map(
-                                      (paragraph) => Padding(
+                                      (p) => Padding(
                                         padding: const EdgeInsets.only(
-                                          bottom: 12.0,
+                                          bottom: 12,
                                         ),
                                         child: Text(
-                                          paragraph,
-                                          style: TextStyle(fontSize: 16),
+                                          p,
                                           textAlign: TextAlign.justify,
+                                          style: const TextStyle(fontSize: 16),
                                         ),
                                       ),
                                     )
@@ -225,13 +248,14 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                   ),
           ),
-          // 🔻 Banner tetap di bawah
-          if (_isBannerReady)
+
+          /// 🔻 IKLAN HANYA JIKA BELUM PREMIUM
+          if (!_isPremium && _isBannerReady)
             SafeArea(
               child: SizedBox(
-                height: _bannerAd.size.height.toDouble(),
-                width: _bannerAd.size.width.toDouble(),
-                child: AdWidget(ad: _bannerAd),
+                height: _bannerAd!.size.height.toDouble(),
+                width: _bannerAd!.size.width.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
               ),
             ),
         ],
@@ -242,7 +266,7 @@ class _DetailScreenState extends State<DetailScreen> {
   void _loadBannerAd() {
     _bannerAd = BannerAd(
       size: AdSize.banner,
-      adUnitId: "ca-app-pub-3940256099942544/6300978111", // ID TEST
+      adUnitId: "ca-app-pub-3940256099942544/6300978111", // TEST ID
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
@@ -251,14 +275,11 @@ class _DetailScreenState extends State<DetailScreen> {
           });
         },
         onAdFailedToLoad: (ad, error) {
-          setState(() {
-            _isBannerReady = false;
-          });
           ad.dispose();
         },
       ),
     );
 
-    _bannerAd.load();
+    _bannerAd!.load();
   }
 }

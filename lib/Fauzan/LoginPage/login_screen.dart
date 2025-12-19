@@ -139,7 +139,7 @@ class _MyLoginAndSigninState extends State<MyLoginAndSignin> {
           child: Column(
             children: [
               Text(
-                "DeepBlue",
+                "Life Below Water",
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
