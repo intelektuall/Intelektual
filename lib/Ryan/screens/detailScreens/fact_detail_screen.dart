@@ -14,35 +14,61 @@ class FactOceanDetailScreen extends StatelessWidget {
     AnalyticsService(
       FirebaseAnalytics.instance,
     ).logScreenView("FactDetailScreen_${fact.title}");
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = isDark ? Colors.grey[900] : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final appBarColor = isDark ? Colors.blueAccent : Colors.blueAccent;
+    final iconColor = isDark ? Colors.white : Colors.black;
+    final shadowColor = isDark ? Colors.black54 : Colors.black87;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: appBarColor,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: CircleAvatar(
-            backgroundColor: Colors.black.withOpacity(0.3),
+            backgroundColor: backgroundColor,
             child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: Icon(Icons.arrow_back, color: iconColor),
               onPressed: () => Navigator.pop(context),
             ),
           ),
         ),
       ),
+
       body: Stack(
         children: [
-          /// 🔹 Background Laut
+         /// 🔹 Background
           Positioned.fill(
-            child: Image.asset(
-              "assets/images/oceanDetailBackground.jpg",
-              fit: BoxFit.cover,
+            child: Container(
+              color: theme.scaffoldBackgroundColor,
             ),
           ),
 
-          /// 🔹 Overlay gelap agar teks terbaca
+          /// 🔹 Overlay Gradient
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.4)),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: isDark
+                      ? [
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
+                          Colors.black.withOpacity(0.8),
+                        ]
+                      : [
+                          Colors.white.withOpacity(0.2),
+                          Colors.white.withOpacity(0.4),
+                          Colors.white.withOpacity(0.5),
+                        ],
+                ),
+              ),
+            ),
           ),
 
           /// 🔹 Konten Utama
@@ -64,9 +90,9 @@ class FactOceanDetailScreen extends StatelessWidget {
                     style: GoogleFonts.roboto(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: textColor,
                       shadows: [
-                        const Shadow(blurRadius: 6, color: Colors.black87),
+                        Shadow(blurRadius: 6, color: shadowColor),
                       ],
                     ),
                   ),
@@ -80,7 +106,7 @@ class FactOceanDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 15,
                     height: 1.7,
-                    color: Colors.white.withOpacity(0.95),
+                    color: textColor.withOpacity(0.9),
                   ),
                 ),
               ],

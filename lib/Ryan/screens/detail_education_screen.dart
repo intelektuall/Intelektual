@@ -42,6 +42,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
     final coralSpeciesProvider = Provider.of<CoralSpeciesProvider>(context);
     final contentFilterProvider = Provider.of<ContentFilterProvider>(context);
     final filterProvider = Provider.of<FilterProvider>(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final filteredMarineSpecies =
         marineSpeciesProvider.species
@@ -159,20 +160,25 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            "assets/images/oceanDetailBackground.jpg",
-            fit: BoxFit.cover,
+          Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.3),
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.5),
-                ],
+                colors: isDark
+                    ? [
+                        Colors.black87,
+                        Colors.black54,
+                        Colors.black45,
+                      ]
+                    : [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.4),
+                        Colors.white.withOpacity(0.5),
+                      ],
               ),
             ),
           ),
@@ -188,7 +194,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   if (contentFilterProvider.isCategoryActive(
                     CategoryTypes.fauna,
                   )) ...[
-                    sectionTitle("Fauna Laut"),
+                    sectionTitle("Fauna Laut", isDark),
                     buildGrid(
                       filteredMarineSpecies,
                       (item) => MarineSpeciesCard(
@@ -212,7 +218,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   if (contentFilterProvider.isCategoryActive(
                     CategoryTypes.flora,
                   )) ...[
-                    sectionTitle("Flora Laut"),
+                    sectionTitle("Flora Laut", isDark),
                     buildGrid(
                       filteredCoralSpecies,
                       (item) => CoralSpeciesCard(
@@ -234,7 +240,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   if (contentFilterProvider.isCategoryActive(
                     'Fakta Samudra',
                   )) ...[
-                    sectionTitle("Fakta Samudra"),
+                    sectionTitle("Fakta Samudra", isDark),
                     Column(
                       children:
                           filteredFacts
@@ -263,7 +269,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   if (contentFilterProvider.isCategoryActive(
                     'Misteri Samudra',
                   )) ...[
-                    sectionTitle("Misteri Samudra"),
+                    sectionTitle("Misteri Samudra", isDark),
                     Column(
                       children:
                           filteredMysteries
@@ -291,7 +297,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   if (contentFilterProvider.isCategoryActive(
                     'Peran Manusia',
                   )) ...[
-                    sectionTitle("Peran Manusia"),
+                    sectionTitle("Peran Manusia", isDark),
                     Column(
                       children:
                           humanList
@@ -324,23 +330,25 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
     );
   }
 
-  Widget sectionTitle(String title) {
+  Widget sectionTitle(String title, bool isDark) {
+    final textColor = isDark ? Colors.white : Colors.black;
+    final dividerColor = isDark ? Colors.white70 : Colors.black87;
     return Row(
       children: [
-        const Expanded(
-          child: Divider(color: Colors.white70, thickness: 1, endIndent: 10),
+        Expanded(
+          child: Divider(color: dividerColor, thickness: 1, endIndent: 10),
         ),
         Text(
           title,
           style: GoogleFonts.poppins(
-            color: Colors.white,
+            color: textColor,
             fontSize: 24,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.2,
           ),
         ),
-        const Expanded(
-          child: Divider(color: Colors.white70, thickness: 1, indent: 10),
+        Expanded(
+          child: Divider(color: dividerColor, thickness: 1, indent: 10),
         ),
       ],
     );

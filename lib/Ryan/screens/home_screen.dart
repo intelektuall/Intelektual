@@ -30,6 +30,9 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -55,20 +58,25 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            "assets/images/oceanDetailBackground.jpg",
-            fit: BoxFit.cover,
+          Container(
+            color: theme.scaffoldBackgroundColor,
           ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.2),
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.5),
-                ],
+                colors: isDark
+                    ? [
+                        Colors.black.withOpacity(0.3),
+                        Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.8),
+                      ]
+                    : [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.4),
+                        Colors.white.withOpacity(0.5),
+                      ],
               ),
             ),
           ),

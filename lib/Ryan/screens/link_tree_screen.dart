@@ -24,28 +24,37 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     final linkProvider = Provider.of<LinkProvider>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final shadowColor = isDark ? Colors.black54 : Colors.black87;
+
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
           /// 🌊 Background Image
-          Image.asset(
-            "assets/images/oceanBackground2.jpg",
-            fit: BoxFit.cover,
+           Container(
+            color: theme.scaffoldBackgroundColor,
           ),
 
-          /// 🌑 Overlay Transparan
+          /// 🔹 Gradient Overlay
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.3),
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.5),
-                ],
+                colors: isDark
+                    ? [
+                        Colors.black.withOpacity(0.3),
+                        Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.8),
+                      ]
+                    : [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.4),
+                        Colors.white.withOpacity(0.5),
+                      ],
               ),
             ),
           ),
@@ -67,9 +76,9 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                       shape: BoxShape.circle,
                       color: Colors.black.withOpacity(0.3),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : Colors.black,
                       size: 26,
                     ),
                   ),
@@ -77,9 +86,9 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
 
                 /// 🌐 Language Button
                 IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.translate,
-                    color: Colors.white,
+                    color: isDark ? Colors.white : Colors.black,
                     size: 26,
                   ),
                   onPressed: () {
@@ -121,10 +130,10 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                   style: GoogleFonts.fredoka(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color:isDark ? Colors.white : Colors.black,
                     letterSpacing: 1.5,
-                    shadows: const [
-                      Shadow(blurRadius: 8, color: Colors.black45),
+                    shadows: [
+                      Shadow(blurRadius: 8, color: shadowColor),
                     ],
                   ),
                 ),
@@ -139,10 +148,10 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                     style: GoogleFonts.baloo2(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : Colors.black,
                       letterSpacing: 1.0,
-                      shadows: const [
-                        Shadow(blurRadius: 5, color: Colors.black38),
+                      shadows: [
+                        Shadow(blurRadius: 5, color: shadowColor),
                       ],
                     ),
                   ),

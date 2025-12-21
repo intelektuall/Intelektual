@@ -93,26 +93,36 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final appBarColor = isDark ? Colors.blueAccent: Colors.blueAccent;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         body: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(
-              "assets/images/oceanDetailBackground.jpg",
-              fit: BoxFit.cover,
+            Container(
+              color: theme.scaffoldBackgroundColor,
             ),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.3),
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.5),
-                  ],
+                  colors: isDark
+                      ? [
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
+                          Colors.black.withOpacity(0.8),
+                        ]
+                      : [
+                          Colors.white.withOpacity(0.2),
+                          Colors.white.withOpacity(0.4),
+                          Colors.white.withOpacity(0.5),
+                        ],
                 ),
               ),
             ),
@@ -131,16 +141,19 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
                       type: ActionType.pinned,
                       isGrid: isGrid,
                       sorting: sorting,
+                      textColor: textColor,
                     ),
                     _ActionTabContent(
                       type: ActionType.shared,
                       isGrid: isGrid,
                       sorting: sorting,
+                      textColor: textColor,
                     ),
                     _ActionTabContent(
                       type: ActionType.reposted,
                       isGrid: isGrid,
                       sorting: sorting,
+                      textColor: textColor,
                     ),
                   ],
                 ),
@@ -152,7 +165,7 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
               child: Container(
                 padding: const EdgeInsets.only(top: 12, bottom: 4),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
+                  color: appBarColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
@@ -275,10 +288,10 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
                                                     : Colors.white,
                                           ),
                                           const SizedBox(width: 8),
-                                          const Text(
+                                          Text(
                                             'Latest',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: isDark ? Colors.white : Colors.black87,
                                             ),
                                           ),
                                         ],
@@ -293,13 +306,13 @@ class _SavedActionsScreenState extends State<SavedActionsScreen>
                                             color:
                                                 sorting == SortingType.newest
                                                     ? Colors.cyanAccent
-                                                    : Colors.white,
+                                                    :(isDark ? Colors.white : Colors.black87),
                                           ),
                                           const SizedBox(width: 8),
-                                          const Text(
+                                          Text(
                                             'Newest',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color:isDark ? Colors.white : Colors.black87,
                                             ),
                                           ),
                                         ],
@@ -344,11 +357,13 @@ class _ActionTabContent extends StatelessWidget {
   final ActionType type;
   final bool isGrid;
   final SortingType sorting;
+  final Color textColor;
 
   const _ActionTabContent({
     required this.type,
     required this.isGrid,
     required this.sorting,
+    required this.textColor,
   });
 
   List<dynamic> _applySorting(List<dynamic> items) {
@@ -403,10 +418,10 @@ class _ActionTabContent extends StatelessWidget {
     ];
 
     if (allItems.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Belum ada konten disimpan',
-          style: TextStyle(color: Colors.white70),
+          style: TextStyle(color: textColor.withOpacity(0.7)),
         ),
       );
     }
