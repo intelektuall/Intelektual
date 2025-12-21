@@ -7,18 +7,18 @@ import '../services/my_http_helper.dart';
 import '../services/analytics_mixin.dart';
 import 'detail_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class RyanHomeScreen extends StatefulWidget {
+  const RyanHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<RyanHomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AnalyticsScreenTracking{
+class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTracking{
   late Future<List<Ocean>> futureSeaLife;
 
   @override
-  String get screenName => 'HomeScreen';
+  String get screenName => 'RyanHomeScreen';
 
   @override
   void initState() {
