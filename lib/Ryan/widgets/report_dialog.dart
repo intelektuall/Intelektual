@@ -127,7 +127,7 @@ class _ReportDialogState extends State<ReportDialog> {
                               }
                             },
                           );
-                        }),
+                        }).toList(),
 
                         if (isOtherSelected) ...[
                           Padding(
@@ -172,7 +172,7 @@ class _ReportDialogState extends State<ReportDialog> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'This field is required.',
+                                  'This field is required',
                                   style: TextStyle(
                                     color: Colors.redAccent,
                                     fontSize: 12,

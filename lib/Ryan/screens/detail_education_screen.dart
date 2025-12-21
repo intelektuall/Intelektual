@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/Ryan/screens/saved_actions_screen.dart';
-import '/Ryan/widgets/coral_species_card.dart';
+import '../screens/saved_actions_screen.dart';
+import '../widgets/coral_species_card.dart';
 import 'package:provider/provider.dart';
 import '../models/mystery_item.dart';
 import '../providers/marine_species_provider.dart';
@@ -14,7 +14,9 @@ import '../models/category_types.dart';
 import '../widgets/human_action.dart';
 import '../providers/content_filter_provider.dart';
 import '../providers/filter_provider.dart';
+import '../services/analytics_mixin.dart';
 import 'filter_screen.dart';
+// import 'newpage_unlocked.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'detailScreens/marine_species_detail_screen.dart';
 import 'detailScreens/coral_species_detail_screen.dart';
@@ -29,55 +31,68 @@ class DetailEducationScreen extends StatefulWidget {
   State<DetailEducationScreen> createState() => _DetailEducationScreenState();
 }
 
-class _DetailEducationScreenState extends State<DetailEducationScreen> {
+class _DetailEducationScreenState extends State<DetailEducationScreen>
+    with AnalyticsScreenTracking {
+  @override
+  String get screenName => 'DetailEducationScreen';
+
   @override
   Widget build(BuildContext context) {
     final marineSpeciesProvider = Provider.of<MarineSpeciesProvider>(context);
     final coralSpeciesProvider = Provider.of<CoralSpeciesProvider>(context);
     final contentFilterProvider = Provider.of<ContentFilterProvider>(context);
     final filterProvider = Provider.of<FilterProvider>(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final filteredMarineSpecies = marineSpeciesProvider.species.where(
-      (species) {
-        return (contentFilterProvider.isCategoryActive('Fauna Laut') ||
-                !filterProvider.isFilterActive) &&
-            contentFilterProvider.shouldShowOcean(species.ocean) &&
-            contentFilterProvider.shouldShowSubtype(
-              'Fauna Laut',
-              species.subtype,
-            );
-      },
-    ).toList();
+    final filteredMarineSpecies =
+        marineSpeciesProvider.species
+            .where(
+              (species) =>
+                  (contentFilterProvider.isCategoryActive('Fauna Laut') ||
+                      !filterProvider.isFilterActive) &&
+                  contentFilterProvider.shouldShowOcean(species.ocean) &&
+                  contentFilterProvider.shouldShowSubtype(
+                    'Fauna Laut',
+                    species.subtype,
+                  ),
+            )
+            .toList();
 
-    final filteredCoralSpecies = coralSpeciesProvider.species.where(
-      (species) {
-        return (contentFilterProvider.isCategoryActive('Flora Laut') ||
-                !filterProvider.isFilterActive) &&
-            contentFilterProvider.shouldShowOcean(species.ocean) &&
-            contentFilterProvider.shouldShowSubtype(
-              'Flora Laut',
-              species.subtype,
-            );
-      },
-    ).toList();
+    final filteredCoralSpecies =
+        coralSpeciesProvider.species
+            .where(
+              (species) =>
+                  (contentFilterProvider.isCategoryActive('Flora Laut') ||
+                      !filterProvider.isFilterActive) &&
+                  contentFilterProvider.shouldShowOcean(species.ocean) &&
+                  contentFilterProvider.shouldShowSubtype(
+                    'Flora Laut',
+                    species.subtype,
+                  ),
+            )
+            .toList();
 
-    final filteredFacts = factList.where(
-      (fact) =>
-          contentFilterProvider.shouldShowOcean(fact.ocean) &&
-          contentFilterProvider.isCategoryActive('Fakta Samudra'),
-    ).toList();
+    final filteredFacts =
+        factList
+            .where(
+              (fact) =>
+                  contentFilterProvider.shouldShowOcean(fact.ocean) &&
+                  contentFilterProvider.isCategoryActive('Fakta Samudra'),
+            )
+            .toList();
 
-    final filteredMysteries = mysteryList.where(
-      (mystery) =>
-          contentFilterProvider.shouldShowOcean(mystery.ocean) &&
-          contentFilterProvider.isCategoryActive('Misteri Samudra'),
-    ).toList();
+    final filteredMysteries =
+        mysteryList
+            .where(
+              (mystery) =>
+                  contentFilterProvider.shouldShowOcean(mystery.ocean) &&
+                  contentFilterProvider.isCategoryActive('Misteri Samudra'),
+            )
+            .toList();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.black.withOpacity(0.5),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -101,7 +116,7 @@ class _DetailEducationScreenState extends State<DetailEducationScreen> {
                   fontSize: 20,
                   color: Colors.white,
                 ),
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.ellipsis, // Prevent overflow
                 maxLines: 1,
               ),
             ),
@@ -144,25 +159,20 @@ class _DetailEducationScreenState extends State<DetailEducationScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
+          Image.asset(
+            "assets/images/oceanDetailBackground.jpg",
+            fit: BoxFit.cover,
           ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: isDark
-                    ? [
-                        Colors.black87,
-                        Colors.black54,
-                        Colors.black45,
-                      ]
-                    : [
-                        Colors.white.withOpacity(0.2),
-                        Colors.white.withOpacity(0.4),
-                        Colors.white.withOpacity(0.5),
-                      ],
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.5),
+                ],
               ),
             ),
           ),
@@ -174,41 +184,48 @@ class _DetailEducationScreenState extends State<DetailEducationScreen> {
                 children: [
                   const SizedBox(height: 70),
 
+                  // Fauna Laut
                   if (contentFilterProvider.isCategoryActive(
                     CategoryTypes.fauna,
                   )) ...[
-                    sectionTitle("Fauna Laut", isDark),
+                    sectionTitle("Fauna Laut"),
                     buildGrid(
                       filteredMarineSpecies,
                       (item) => MarineSpeciesCard(
-                        species: item,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MarineSpeciesDetailScreen(species: item),
-                          ),
-                        ),
+                        species: item, // langsung passing objek MarineSpecies
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => MarineSpeciesDetailScreen(
+                                      species: item,
+                                    ),
+                              ),
+                            ),
                       ),
                     ),
                     const SizedBox(height: 30),
                   ],
 
+                  // Flora Laut
                   if (contentFilterProvider.isCategoryActive(
                     CategoryTypes.flora,
                   )) ...[
-                    sectionTitle("Flora Laut", isDark),
+                    sectionTitle("Flora Laut"),
                     buildGrid(
                       filteredCoralSpecies,
                       (item) => CoralSpeciesCard(
                         species: item,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CoralSpeciesDetailScreen(species: item),
-                          ),
-                        ),
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        CoralSpeciesDetailScreen(species: item),
+                              ),
+                            ),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -217,72 +234,85 @@ class _DetailEducationScreenState extends State<DetailEducationScreen> {
                   if (contentFilterProvider.isCategoryActive(
                     'Fakta Samudra',
                   )) ...[
-                    sectionTitle("Fakta Samudra", isDark),
+                    sectionTitle("Fakta Samudra"),
                     Column(
-                      children: filteredFacts
-                          .map(
-                            (fact) => FactCard(
-                              title: fact.title,
-                              icon: fact.icon,
-                              description: fact.description,
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      FactOceanDetailScreen(fact: fact),
+                      children:
+                          filteredFacts
+                              .map(
+                                (fact) => FactCard(
+                                  title: fact.title,
+                                  icon: fact.icon,
+                                  description: fact.description,
+                                  onTap:
+                                      () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) =>
+                                                  FactOceanDetailScreen(
+                                                    fact: fact,
+                                                  ),
+                                        ),
+                                      ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                              )
+                              .toList(),
                     ),
                   ],
 
                   if (contentFilterProvider.isCategoryActive(
                     'Misteri Samudra',
                   )) ...[
-                    sectionTitle("Misteri Samudra", isDark),
+                    sectionTitle("Misteri Samudra"),
                     Column(
-                      children: filteredMysteries
-                          .map(
-                            (mystery) => MysteryCard(
-                              title: mystery.title,
-                              icon: mystery.icon,
-                              description: mystery.description,
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MysteryDetailScreen(mystery: mystery),
+                      children:
+                          filteredMysteries
+                              .map(
+                                (mystery) => MysteryCard(
+                                  title: mystery.title,
+                                  icon: mystery.icon,
+                                  description: mystery.description,
+                                  onTap:
+                                      () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => MysteryDetailScreen(
+                                                mystery: mystery,
+                                              ),
+                                        ),
+                                      ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                              )
+                              .toList(),
                     ),
                   ],
 
                   if (contentFilterProvider.isCategoryActive(
                     'Peran Manusia',
                   )) ...[
-                    sectionTitle("Peran Manusia", isDark),
+                    sectionTitle("Peran Manusia"),
                     Column(
-                      children: humanList
-                          .map(
-                            (human) => HumanAction(
-                              title: human.title,
-                              icon: human.icon,
-                              description: human.description,
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      HumanDetailScreen(human: human),
+                      children:
+                          humanList
+                              .map(
+                                (human) => HumanAction(
+                                  title: human.title,
+                                  icon: human.icon,
+                                  description: human.description,
+                                  onTap:
+                                      () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => HumanDetailScreen(
+                                                human: human,
+                                              ),
+                                        ),
+                                      ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                              )
+                              .toList(),
                     ),
                   ],
                 ],
@@ -294,25 +324,23 @@ class _DetailEducationScreenState extends State<DetailEducationScreen> {
     );
   }
 
-  Widget sectionTitle(String title, bool isDark) {
-    final textColor = isDark ? Colors.white : Colors.black;
-    final dividerColor = isDark ? Colors.white70 : Colors.black87;
+  Widget sectionTitle(String title) {
     return Row(
       children: [
-        Expanded(
-          child: Divider(color: dividerColor, thickness: 1, endIndent: 10),
+        const Expanded(
+          child: Divider(color: Colors.white70, thickness: 1, endIndent: 10),
         ),
         Text(
           title,
           style: GoogleFonts.poppins(
-            color: textColor,
+            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.2,
           ),
         ),
-        Expanded(
-          child: Divider(color: dividerColor, thickness: 1, indent: 10),
+        const Expanded(
+          child: Divider(color: Colors.white70, thickness: 1, indent: 10),
         ),
       ],
     );

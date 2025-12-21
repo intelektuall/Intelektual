@@ -216,6 +216,11 @@ import 'Ryan/providers/marine_species_action_provider.dart';
 import 'Ryan/providers/coral_species_action_provider.dart';
 import 'Ryan/providers/cardOverlay/card_overlay_provider.dart';
 import 'Ryan/providers/cardOverlay/cardC_overlay_provider.dart';
+import 'Ryan/providers/locale_provider.dart';
+
+//Services Ryan
+import 'Ryan/services/analytics_service.dart';
+import 'l10n/app_localizations.dart';
 
 // === Halaman lain ===
 import 'Ryan/screens/newpage_unlocked.dart';
@@ -241,6 +246,7 @@ Future<void> main() async {
   final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
     analytics: analytics,
   );
+  final AnalyticsService analyticsService = AnalyticsService(analytics);
 
   // === Tes koneksi Firestore ===
   try {
@@ -282,8 +288,14 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CoralSpeciesActionProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        Provider.value(value: analyticsService),
       ],
-      child: MainApp(analytics: analytics, observer: observer),
+      child: MainApp(
+        analytics: analytics,
+        observer: observer,
+        analyticsService: analyticsService,
+      ),
     ),
   );
   // WidgetsFlutterBinding.ensureInitialized();
@@ -291,10 +303,16 @@ Future<void> main() async {
 }
 
 class MainApp extends StatefulWidget {
+  final AnalyticsService analyticsService;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
 
-  const MainApp({super.key, required this.analytics, required this.observer});
+  const MainApp({
+    super.key,
+    required this.analytics,
+    required this.observer,
+    required this.analyticsService,
+  });
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -326,10 +344,10 @@ class _MainAppState extends State<MainApp> {
       parameters: {'theme': isDark ? 'dark' : 'light'},
     );
 
-    widget.analytics.logEvent(
-      name: 'change_language',
-      parameters: {'language': settings.language},
-    );
+    // widget.analytics.logEvent(
+    //   name: 'change_language',
+    //   parameters: {'language': settings.language},
+    // );
   }
 
   @override
@@ -337,48 +355,68 @@ class _MainAppState extends State<MainApp> {
     final settings = Provider.of<SettingsProvider>(context);
     final isDark = settings.backgroundMode == "Hitam";
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Sopan Santun App",
-      navigatorObservers: [widget.observer],
+    return Consumer<LocaleProvider>(
+      builder: (context, LocaleProvider, _) {
+        return MaterialApp(
+          locale: LocaleProvider.locale,
+           supportedLocales: const [
+            Locale('id'),
+            Locale('en'),
+            Locale('zh'),
+            Locale('es'),
+            Locale('fr'),
+            Locale('hi'),
+            Locale('ru'),
+          ],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          debugShowCheckedModeBanner: false,
+          title: "Sopan Santun App",
+          navigatorObservers: [widget.observer],
 
-      // === Tema terang ===
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueAccent,
-          brightness: Brightness.light,
-        ),
-      ),
+          // === Tema terang ===
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blueAccent,
+              brightness: Brightness.light,
+            ),
+          ),
 
-      // === Tema gelap ===
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: Colors.black,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueAccent,
-          brightness: Brightness.dark,
-        ),
-      ),
+          // === Tema gelap ===
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.black,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blueAccent,
+              brightness: Brightness.dark,
+            ),
+          ),
 
-      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
-      // === Lokalisasi ===
-      locale: settings.language == "Indonesia"
-          ? const Locale('id')
-          : const Locale('en'),
-      supportedLocales: const [Locale('id'), Locale('en')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+          // // === Lokalisasi ===
+          // locale: settings.language == "Indonesia"
+          //     ? const Locale('id')
+          //     : const Locale('en'),
+          // supportedLocales: const [Locale('id'), Locale('en')],
+          // localizationsDelegates: const [
+          //   GlobalMaterialLocalizations.delegate,
+          //   GlobalWidgetsLocalizations.delegate,
+          //   GlobalCupertinoLocalizations.delegate,
+          // ],
 
-      home: const LaunchScreen(),
-      routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
+          home: const LaunchScreen(),
+          routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},
+        );
+      },
     );
   }
 }

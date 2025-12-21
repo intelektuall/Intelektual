@@ -1,22 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../models/sea_life.dart';
+import '../models/seaLifeModel/ocean.dart';
 import '../widgets/sea_life_card.dart';
+import '../services/my_http_helper.dart';
+import '../services/analytics_mixin.dart';
 import 'detail_screen.dart';
 
-class RyanHomeScreen extends StatelessWidget {
-  const RyanHomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with AnalyticsScreenTracking{
+  late Future<List<Ocean>> futureSeaLife;
+
+  @override
+  String get screenName => 'HomeScreen';
+
+  @override
+  void initState() {
+    super.initState();
+    futureSeaLife = HttpHelper().fetchData(
+      'https://68f78975f7fb897c66163a7c.mockapi.io/api/education_sea/seaLifeModel',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: isDark ? Colors.blueAccent : Colors.blueAccent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,31 +55,53 @@ class RyanHomeScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
-            color: theme.scaffoldBackgroundColor,
+          Image.asset(
+            "assets/images/oceanDetailBackground.jpg",
+            fit: BoxFit.cover,
           ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: isDark
-                    ? [
-                        Colors.black.withOpacity(0.3),
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.8),
-                      ]
-                    : [
-                        Colors.white.withOpacity(0.2),
-                        Colors.white.withOpacity(0.4),
-                        Colors.white.withOpacity(0.5),
-                      ],
+                colors: [
+                  Colors.black.withOpacity(0.2),
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.5),
+                ],
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: kToolbarHeight + 32),
-            child: SeaLifeCarousel(seaLifeItems: seaLifeList),
+            child: FutureBuilder<List<Ocean>>(
+              future: futureSeaLife,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Terjadi kesalahan: ${snapshot.error}",
+                      style: const TextStyle(color: Colors.redAccent),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "Tidak ada data samudra tersedia.",
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  );
+                } else {
+                  final seaLifeItems = snapshot.data!;
+                  return SeaLifeCarousel(seaLifeItems: seaLifeItems);
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -71,7 +110,7 @@ class RyanHomeScreen extends StatelessWidget {
 }
 
 class SeaLifeCarousel extends StatelessWidget {
-  final List<SeaLife> seaLifeItems;
+  final List<Ocean> seaLifeItems;
 
   const SeaLifeCarousel({super.key, required this.seaLifeItems});
 
@@ -88,17 +127,18 @@ class SeaLifeCarousel extends StatelessWidget {
         enableInfiniteScroll: true,
         scrollPhysics: const BouncingScrollPhysics(),
       ),
-      items: seaLifeItems.map((seaLife) {
+      items: seaLifeItems.map((ocean) {
         return Builder(
           builder: (BuildContext context) {
             return SeaLifeCard(
-              imagePath: seaLife.imagePath,
-              title: seaLife.name,
+              imagePath: ocean.imagePath,
+              title: ocean.name,
               onTap: () {
+                // Kirim seluruh objek Ocean ke DetailScreen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DetailScreen(seaLife: seaLife),
+                    builder: (context) => DetailScreen(oceanId: ocean.id),
                   ),
                 );
               },

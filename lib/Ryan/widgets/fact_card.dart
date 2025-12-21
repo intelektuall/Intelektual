@@ -27,10 +27,10 @@ class FactCard extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade800,
+              color: Colors.white.withOpacity(0.15),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
@@ -39,7 +39,7 @@ class FactCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.white.withOpacity(0.3),
                   ),
                   padding: const EdgeInsets.all(10),
                   child: Icon(

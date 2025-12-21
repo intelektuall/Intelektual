@@ -1,0 +1,1962 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_zh.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('ru'),
+    Locale('zh')
+  ];
+
+  /// No description provided for @oceanPacific.
+  ///
+  /// In en, this message translates to:
+  /// **'Pacific Ocean'**
+  String get oceanPacific;
+
+  /// No description provided for @oceanAtlantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Atlantic Ocean'**
+  String get oceanAtlantic;
+
+  /// No description provided for @oceanIndian.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian Ocean'**
+  String get oceanIndian;
+
+  /// No description provided for @oceanSouthern.
+  ///
+  /// In en, this message translates to:
+  /// **'Southern Ocean'**
+  String get oceanSouthern;
+
+  /// No description provided for @oceanArctic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic Ocean'**
+  String get oceanArctic;
+
+  /// No description provided for @marineFauna.
+  ///
+  /// In en, this message translates to:
+  /// **'Marine Fauna'**
+  String get marineFauna;
+
+  /// No description provided for @marineFlora.
+  ///
+  /// In en, this message translates to:
+  /// **'Marine Flora'**
+  String get marineFlora;
+
+  /// No description provided for @oceanFacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Ocean Facts'**
+  String get oceanFacts;
+
+  /// No description provided for @oceanMysteries.
+  ///
+  /// In en, this message translates to:
+  /// **'Ocean Mysteries'**
+  String get oceanMysteries;
+
+  /// No description provided for @humanRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Human Role'**
+  String get humanRole;
+
+  /// No description provided for @oceanPacificS.
+  ///
+  /// In en, this message translates to:
+  /// **'Pacific'**
+  String get oceanPacificS;
+
+  /// No description provided for @oceanAtlanticS.
+  ///
+  /// In en, this message translates to:
+  /// **'Atlantic'**
+  String get oceanAtlanticS;
+
+  /// No description provided for @oceanIndianS.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian'**
+  String get oceanIndianS;
+
+  /// No description provided for @oceanArcticS.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic'**
+  String get oceanArcticS;
+
+  /// No description provided for @oceanAntarcticS.
+  ///
+  /// In en, this message translates to:
+  /// **'Antarctic'**
+  String get oceanAntarcticS;
+
+  /// No description provided for @subtypeKelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Kelp'**
+  String get subtypeKelp;
+
+  /// No description provided for @subtypeAlgae.
+  ///
+  /// In en, this message translates to:
+  /// **'Algae'**
+  String get subtypeAlgae;
+
+  /// No description provided for @subtypeSeagrass.
+  ///
+  /// In en, this message translates to:
+  /// **'Seagrass'**
+  String get subtypeSeagrass;
+
+  /// No description provided for @speciesKelpRaksasa.
+  ///
+  /// In en, this message translates to:
+  /// **'Giant Kelp'**
+  String get speciesKelpRaksasa;
+
+  /// No description provided for @speciesSargassum.
+  ///
+  /// In en, this message translates to:
+  /// **'Sargassum'**
+  String get speciesSargassum;
+
+  /// No description provided for @speciesTurtleGrass.
+  ///
+  /// In en, this message translates to:
+  /// **'Turtle Grass'**
+  String get speciesTurtleGrass;
+
+  /// No description provided for @speciesIrishMoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Irish Moss'**
+  String get speciesIrishMoss;
+
+  /// No description provided for @speciesHalophilaOvalis.
+  ///
+  /// In en, this message translates to:
+  /// **'Halophila Ovalis'**
+  String get speciesHalophilaOvalis;
+
+  /// No description provided for @speciesGracilaria.
+  ///
+  /// In en, this message translates to:
+  /// **'Gracilaria'**
+  String get speciesGracilaria;
+
+  /// No description provided for @speciesArcticAlgae.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic Algae'**
+  String get speciesArcticAlgae;
+
+  /// No description provided for @speciesFucusDistichus.
+  ///
+  /// In en, this message translates to:
+  /// **'Fucus Distichus'**
+  String get speciesFucusDistichus;
+
+  /// No description provided for @speciesDurvillaeaAntarctica.
+  ///
+  /// In en, this message translates to:
+  /// **'Durvillaea Antarctica'**
+  String get speciesDurvillaeaAntarctica;
+
+  /// No description provided for @speciesHimantothallusGrandifolius.
+  ///
+  /// In en, this message translates to:
+  /// **'Himantothallus Grandifolius'**
+  String get speciesHimantothallusGrandifolius;
+
+  /// No description provided for @descKelpRaksasa.
+  ///
+  /// In en, this message translates to:
+  /// **'Giant kelp (Macrocystis pyrifera) is the largest type of brown algae in the world and grows to form dense underwater forests in cold, nutrient-rich waters, particularly along the west coasts of North America, South America, Australia, and temperate regions of the Pacific Ocean. Kelp is not a true plant, but rather macroscopic algae, yet is often called \'sea plants\' because their form and function resemble terrestrial vegetation. The structure of giant kelp consists of rhizoids (root-like structures) that attach to rocky substrates, stipes (main stems) that are long and flexible, and fronds (leaf-like structures) that rise upward toward the sea surface. Along the fronds are small air bladders called pneumatocysts, which function as floats to keep the kelp upright and allow it to approach sunlight for photosynthesis. Giant kelp can grow at an astonishing rate—up to 60 cm per day, and under ideal conditions, can reach lengths of 30 to 60 meters, making it one of the fastest-growing marine organisms in the world. Kelp forests are crucial habitats for thousands of marine species, ranging from fish, starfish, anemones, crabs, sea lions, to sea otters. This ecosystem provides shelter, food, and breeding grounds for many marine creatures. One of its most famous inhabitants is the sea otter, which plays a role in maintaining kelp forest balance by eating sea urchins that can damage the kelp base if their populations are unchecked. In addition to its ecological role, giant kelp also has economic and industrial value. Its extract is used in various everyday products, such as cosmetics, toothpaste, ice cream, and pharmaceuticals, thanks to its alginate content, a natural thickening agent extracted from kelp cell walls. However, kelp forests face serious threats. Climate change is causing rising sea temperatures and slowing kelp growth, while more frequent sea storms can damage colony structures. Additionally, pollution, overfishing of sea urchin predators like sea otters, and invasive species also contribute to the decline of kelp forests in many regions. As one of the world\'s most productive and dynamic marine ecosystems, giant kelp plays a vital role in carbon absorption, water quality maintenance, and supporting marine biodiversity. Protecting kelp means also safeguarding the future of the ocean and all life that depends on it.'**
+  String get descKelpRaksasa;
+
+  /// No description provided for @descSargassum.
+  ///
+  /// In en, this message translates to:
+  /// **'Sargassum is a genus of free-floating brown seaweed found on the ocean surface, famous for forming vast mats in the central Atlantic Ocean, particularly in the region known as the Sargasso Sea. Unlike most other seaweeds that attach to the seafloor, Sargassum has small air bladders (pneumatocysts) that allow it to remain buoyant and spread in massive quantities across the open ocean. This marine plant has structures resembling land plants, with pseudo-leaves, pseudo-stems, and pseudo-fruits, although it is not a true plant but rather a type of macroscopic algae from the brown algae group (Phaeophyceae). Sargassum can grow rapidly and spread very widely, forming floating mats or clumps that can extend thousands of kilometers. Sargassum mats create unique and important habitats for many marine species, including fish, sea turtles, crabs, shrimp, and even endemic species like the Sargassum fish found only among this algae. The algae also provide shelter for fish larvae and other young marine organisms, making it a center of biodiversity in the open ocean. However, in recent decades, Sargassum has also become a concern due to frequent large population blooms, especially in the Caribbean, Gulf of Mexico, and West Africa, caused by climate change, nutrient runoff from rivers, and human activities. These Sargassum blooms can accumulate on beaches, decompose, and produce strong sulfur odors, disrupting tourism, fishing, and coastal ecosystems. When decomposing, Sargassum also releases toxic gases like hydrogen sulfide that can affect human health if exposed in large quantities. Nevertheless, Sargassum also has economic potential, such as for bioenergy, organic fertilizer, animal feed, and raw materials for cosmetics or medicines, as long as its management is sustainable. With its dual role—as an important habitat provider in the open ocean and simultaneously as an ecological and social problem in coastal areas—Sargassum reflects the complexity of relationships between seaweeds, environmental changes, and human activities. Monitoring and science-based management efforts are crucial to balance its ecological benefits with its impacts.'**
+  String get descSargassum;
+
+  /// No description provided for @descTurtleGrass.
+  ///
+  /// In en, this message translates to:
+  /// **'Turtle grass (Thalassia testudinum) is one of the true seagrass species living in shallow, warm, clear waters, especially in the Caribbean Sea, Gulf of Mexico, and along tropical coasts from Central America to Florida. This seagrass is named \'turtle grass\' because it is the primary food source for green sea turtles, which heavily rely on it for nutrition. Unlike seaweeds, turtle grass is a true flowering plant with roots, stems, leaves, flowers, and produces seeds. Its roots grow creeping under shallow sand or mud and form a dense system of roots and rhizomes that help stabilize the seabed and prevent erosion. Its leaves are long, flat, ribbon-shaped—usually bright green to dark green—and can grow up to 30 cm or more, forming dense seagrass meadows. Turtle grass plays a crucial role in tropical coastal ecosystems. It provides habitat and breeding grounds for various marine species, such as juvenile fish, shrimp, crabs, starfish, seahorses, and even rare species like dugongs and manatees. Additionally, turtle grass meadows also act as highly efficient carbon sinks, helping mitigate climate change impacts, and maintain seawater clarity by slowing sediment movement. This plant reproduces in two ways: sexually through flowers and seeds, and vegetatively through rhizomes spreading under the seabed. Turtle grass growth is relatively slow, so damage from human activities like boat anchors, sand mining, pollution, and coastal development can take a long time to recover. Due to its vital role in maintaining shallow marine ecosystem health, turtle grass is protected in many countries. Conserving these seagrass meadows not only impacts marine biodiversity but also supports fisheries sustainability, coastal erosion protection, and the quality of life for coastal communities. As a pillar of tropical marine ecosystems, turtle grass is a perfect example of how small marine plants can have a massive impact on overall natural balance.'**
+  String get descTurtleGrass;
+
+  /// No description provided for @descIrishMoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Irish moss, scientifically known as Chondrus crispus, is a type of red algae growing in coastal regions of the North Atlantic Ocean, particularly along the coasts of Ireland, Britain, eastern Canada, and the northeastern United States. Although called \'moss,\' this marine plant is not true moss but macroscopic seaweed belonging to the Rhodophyta group. Irish moss has a lacy, branching form like small fans, with colors varying depending on the environment—from dark purple, reddish-black, olive green, to yellowish-white when dried. This plant grows attached to rocks in the intertidal zone and can survive extreme environments, such as direct sunlight exposure, waves, and fluctuating water temperatures. The main uniqueness of Irish moss is its carrageenan content—a natural gelatinous substance extracted from its cell walls. Carrageenan is widely used in the food and cosmetics industry as a thickener, stabilizer, or emulsifier, and can be found in products like ice cream, plant-based milk, pudding, toothpaste, lotion, and soap. Additionally, Irish moss is also popular in herbal medicine and nutrition, believed to contain various minerals like iodine, iron, magnesium, calcium, potassium, and vitamins A, E, K, as well as antioxidants. Traditionally, Irish moss has been used in Ireland and the Caribbean to make tonic drinks and health soups, especially believed to boost immunity, improve digestion, and aid body recovery. In Caribbean culture, Irish moss is even considered a male stamina-enhancing drink. Irish moss can be harvested naturally from the sea or cultivated in coastal areas, but its management must be sustainable. Careless cutting or overharvesting can damage local populations and micro-ecosystems depending on it, including small marine animals living around this algae. With significant nutritional, economic, and ecological benefits, Irish moss is one of the most valued marine plants, both in the culinary world, natural health, and modern industry. However, due to increasing global demand, it is important to maintain sustainable harvesting practices so this precious algae remains preserved for future generations.'**
+  String get descIrishMoss;
+
+  /// No description provided for @descHalophilaOvalis.
+  ///
+  /// In en, this message translates to:
+  /// **'Halophila ovalis is a type of seagrass that grows in tropical and subtropical shallow waters, including coastal regions of Indonesia, Southeast Asia, Australia, to East Africa. This marine plant belongs to the Hydrocharitaceae family and is one of the most widely distributed seagrass species in the world. Due to its small size and oval leaf shape, this plant is often commonly known as \'dugong grass\' because it is one of the favorite foods for dugongs and sea turtles. Halophila ovalis has the structure of a true plant, with roots, stems (rhizomes), and leaves. Its roots grow beneath sandy or muddy substrates and function to anchor the plant and absorb nutrients. Its leaves grow in pairs, oval-shaped, bright green, and small in size with lengths of about 1–4 cm, making it one of the smallest seagrass species. Its rhizomes creep and form dense colonies that can cover shallow seabeds. This seagrass is ecologically very important because it forms seagrass meadows that serve as habitat, shelter, and food sources for various marine species such as small fish, invertebrates, mollusks, turtles, and dugongs. Additionally, Halophila ovalis plays a major role in stabilizing seabed sediments, filtering seawater, and absorbing carbon, making it important for climate change mitigation and maintaining coastal environmental health. Halophila ovalis can quickly adapt to various substrate types and water salinities, and can reproduce vegetatively through rhizomes as well as generatively through flowers and seeds. Its ability to grow quickly and spread widely makes it ideal for seagrass ecosystem rehabilitation projects in damaged coastal areas. However, despite having good resilience, Halophila ovalis remains vulnerable to various human threats, such as coastal reclamation, pollution, use of destructive fishing gear, and boat activities (anchors). Loss of seagrass meadows due to these activities can greatly impact marine biodiversity and local fishery productivity. With its crucial role in shallow marine ecosystems, Halophila ovalis is a key species in coastal ecosystem conservation. Conservation and rehabilitation efforts of seagrass meadows will be highly beneficial not only for maintaining biodiversity but also for supporting coastal resilience to ongoing environmental changes.'**
+  String get descHalophilaOvalis;
+
+  /// No description provided for @descGracilaria.
+  ///
+  /// In en, this message translates to:
+  /// **'Gracilaria is a genus of red algae (Rhodophyta) widely distributed in tropical and subtropical waters worldwide, including coastal regions of Indonesia. This algae grows attached to hard substrates like rocks, dead corals, or muddy bottoms in relatively calm and shallow waters. Gracilaria has a branching shrub-like form with pink to dark red colors, although its color can change to brownish or greenish depending on environmental conditions. Gracilaria has high ecological and economic value. Ecologically, this algae provides habitat and shelter for various microorganisms and small marine animals like juvenile fish, mollusks, and shrimp. Gracilaria also helps stabilize the aquatic bottom and absorb excess nutrients from the environment, thus playing a role in maintaining seawater quality and preventing eutrophication (wild algae blooms due to nutrient pollution). Economically, Gracilaria is one of the main sources of agar—a gelatinous substance widely used in the food, cosmetics, pharmaceutical, and microbiology industries. Agar is obtained through extraction from Gracilaria cell walls and is used as a thickener, emulsifier, or bacterial growth medium in laboratories. Additionally, Gracilaria is also used as marine animal feed, organic fertilizer, and even bioenergy raw material. Gracilaria is easy to cultivate, and in Indonesia, it is often grown in brackish water ponds or shallow coastal waters. This cultivation has good prospects because it requires no additional feed, grows quickly, and can be harvested in a relatively short time. Gracilaria cultivation is usually done using stake or floating raft methods, depending on location conditions and water type. However, Gracilaria cultivation also faces challenges such as pest and disease attacks, declining water quality due to pollution, and changes in water temperature and salinity due to climate change impacts. Therefore, good and sustainable management is important to maintain production and ecological benefits of this algae. As a high-value marine biological resource, Gracilaria plays an important role in supporting coastal economies, food security, and marine ecosystem conservation, especially if managed sustainably and environmentally friendly.'**
+  String get descGracilaria;
+
+  /// No description provided for @descArcticAlgae.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic algae are groups of algae living in extreme environments in the Arctic region, including on the surface, water column, and sea ice layers. They consist of various types, especially microalgae like diatoms and flagellates, as well as some macroalgae species (such as Melosira arctica) that can survive in very cold temperatures, low light levels, and high salinity. Although small and often invisible, Arctic algae play a key role in polar marine ecosystems as primary producers at the base of the food chain. One characteristic of Arctic algae is their ability to photosynthesize under thick ice layers with very minimal light penetration. They often grow attached to the underside of sea ice or float in the water column during spring and summer when sunlight begins to penetrate the ice surface. Some species like Melosira arctica even form long cylindrical gel-like strands hanging from the ice bottom, becoming important food sources for zooplankton and other microscopic organisms. Arctic algae are crucial because they produce oxygen and organic matter that support the life of zooplankton like krill and copepods, which then become food for fish, seabirds, seals, and whales. So, although small, Arctic algae are the main foundation of the marine food chain in the Arctic. Additionally, they also help absorb carbon dioxide (CO₂) from the atmosphere, thus playing a role in the global carbon cycle. However, climate change significantly affects Arctic algae. Faster and more extensive sea ice melt alters their growth season patterns, disrupting food availability timing for consumers like zooplankton and fish. These changes can disrupt ecosystem synchronization—for example, if algae grow earlier but zooplankton haven\'t developed, food becomes unavailable when needed. Additionally, loss of sea ice habitat also reduces areas where ice algae grow. Overall, Arctic algae are sensitive indicators of environmental changes. Their health and productivity reflect climate and ocean conditions in the Arctic. Protection of sea ice ecosystems and global emission reductions are crucial to maintain the vital role of Arctic algae in supporting the unique and fragile Arctic life network.'**
+  String get descArcticAlgae;
+
+  /// No description provided for @descFucusDistichus.
+  ///
+  /// In en, this message translates to:
+  /// **'Fucus distichus is a species of brown algae (group Phaeophyceae) commonly found in the intertidal zones of rocky shores in cold waters, especially along the coasts of the North Atlantic and North Pacific Oceans, including Arctic regions, Canada, and northern Europe. This algae belongs to the genus Fucus, which is one of the most well-known seaweed types in cold temperate regions. The characteristic feature of Fucus distichus is its body shaped like flat, two-branched ribbons, with flat branches arranged in pairs (distichous)—that\'s the origin of its species name. Its color is usually greenish-brown to dark brown, and it has small air bladders (pneumatocysts) that help keep its body parts buoyant when submerged in seawater. Its length can reach 20 to 40 cm, depending on location and growth conditions. Fucus distichus attaches strongly to rocky substrates using root-like structures called holdfasts, and lives by photosynthesis. Because it lives in tidal areas, this algae must withstand temperature changes, salinity, desiccation during low tide, and UV exposure—making it a very resilient species. It also often grows in groups and forms dense carpets on rocks, providing protection and habitat for various small animals like snails, small crabs, and amphipods. Ecologically, Fucus distichus plays an important role in rocky shore ecosystems. It helps reduce erosion, maintain rock moisture during low tide, and serves as food and shelter for other marine organisms. Because of its sedentary life and ease of observation, this algae is often used as a biological indicator in studies about climate change, marine pollution, and intertidal ecosystem dynamics. Although not as popular as tropical seaweeds in the food industry, Fucus distichus contains bioactive compounds like fucoidan, mannitol, and alginates that have potential for use in pharmaceutical, cosmetic, and organic fertilizer industries. Extracts from the Fucus genus have also been used as natural antioxidants and anti-inflammatories. With its ability to survive in extreme environments and its significant role in supporting coastal biodiversity, Fucus distichus is an important part of healthy and dynamic cold marine ecosystems.'**
+  String get descFucusDistichus;
+
+  /// No description provided for @descDurvillaeaAntarctica.
+  ///
+  /// In en, this message translates to:
+  /// **'Durvillaea antarctica, often known as \'bull kelp\' or \'southern bull kelp,\' is one of the largest and strongest brown algae species in the world and is a typical inhabitant of rocky shores in the southern Pacific Ocean, especially around Chile, southern Argentina, Tasmania, and New Zealand. This algae belongs to the Durvillaeaceae family and is famous for its very strong, flexible body structure that can withstand large waves and extreme ocean currents. Durvillaea antarctica has a large, strong thallus (body) with long ribbon-shaped structures ranging from golden brown to olive green. Its length can exceed 10 meters, and one unique feature is its naturally air-filled tissue structure, allowing this algae to float without separate air bladders (unlike many other brown algae like Macrocystis). This buoyancy allows its body parts to remain at the sea surface, capturing sunlight optimally for photosynthesis. Durvillaea antarctica attaches to rocks using very strong holdfasts, similar to roots, and can survive in high intertidal zones constantly battered by waves. Due to this strength, it often forms a main component of \'wave belts\' that protect coastlines from erosion. When detached from its substrate, this algae can still float and be carried by ocean currents for weeks or even months, often becoming \'natural rafts\' that transport microorganisms, invertebrates, and even fish eggs to new places, playing a role in cross-sea species dispersal. Ecologically, Durvillaea antarctica functions as an important habitat for various marine creatures like mollusks, small crustaceans, and sea anemones. These algae beds also become feeding grounds for seabirds and certain marine mammals. Due to its dominance in hard-to-reach intertidal zones, this algae is an important indicator in studies of marine ecosystem resilience to climate change and wave pressure. Besides its ecological role, Durvillaea antarctica also has economic value. In regions like Chile and New Zealand, this algae is sustainably harvested for food ingredients, fertilizer, and alginate sources—natural thickening agents used in food, cosmetic, and pharmaceutical industries. In some coastal communities, especially in Chile, this algae is also traditionally used as raw material for handicrafts or local consumption. As one of the toughest and most productive macroalgae in the southern ocean, Durvillaea antarctica is not only important for the stability of wave-exposed coastal ecosystems but also reflects the extraordinary adaptation of marine organisms to extreme conditions, while opening opportunities for biotechnology research and marine conservation in sub-Antarctic regions.'**
+  String get descDurvillaeaAntarctica;
+
+  /// No description provided for @descHimantothallusGrandifolius.
+  ///
+  /// In en, this message translates to:
+  /// **'Himantothallus grandifolius is a large brown algae species living in the cold and extreme waters of the Antarctic region. This algae belongs to the Phaeophyceae class (brown algae) and is known as one of the dominant macroalgae in the sublittoral zone (shallow waters below the tidal line) of Antarctic coastal ecosystems, especially around the Antarctic Peninsula and South Shetland Islands. Its presence marks the importance of benthic (seabed) life in the harsh polar region. Himantothallus grandifolius has a large, wide, leaf-like body (thallus) that can grow over 1 meter long. Its body color varies from olive brown to dark brown, and its surface is flexible yet thick, allowing this plant to withstand strong ocean currents, low temperatures, and minimal light. Its body structure consists of broad blades and short rhizomes that function to attach strongly to rocky seabeds and anchor its body from polar waves and currents. This algae plays an important role in Antarctic ecosystems as a primary producer, generating oxygen and providing food and shelter for various marine organisms, such as benthic invertebrates, small fish, and microorganisms. The presence of Himantothallus also creates important microhabitats for marine species unable to survive in open, cold, exposed areas. Himantothallus\'s ability to photosynthesize in very cold waters with limited lighting makes it an important research subject in polar biology and extreme plant physiology. Additionally, it also shows extraordinary adaptation capabilities to extreme conditions like seasonal sea ice, low light levels, and high nutrients, making it a potential biological indicator for monitoring changes in polar marine environments due to climate change. Although not commercially utilized like some other algae, Himantothallus grandifolius has high ecological and scientific value. It reflects how marine life can develop even in Earth\'s harshest environments and the importance of maintaining the integrity of unique and climate-sensitive Antarctic marine ecosystems.'**
+  String get descHimantothallusGrandifolius;
+
+  /// No description provided for @speciesGiantPacificOctopus.
+  ///
+  /// In en, this message translates to:
+  /// **'Giant Pacific Octopus'**
+  String get speciesGiantPacificOctopus;
+
+  /// No description provided for @speciesMantaRay.
+  ///
+  /// In en, this message translates to:
+  /// **'Manta Ray'**
+  String get speciesMantaRay;
+
+  /// No description provided for @speciesGreenSeaTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'Green Sea Turtle'**
+  String get speciesGreenSeaTurtle;
+
+  /// No description provided for @speciesPacificSeahorse.
+  ///
+  /// In en, this message translates to:
+  /// **'Pacific Seahorse'**
+  String get speciesPacificSeahorse;
+
+  /// No description provided for @speciesOrca.
+  ///
+  /// In en, this message translates to:
+  /// **'Orca'**
+  String get speciesOrca;
+
+  /// No description provided for @speciesClownfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Clownfish'**
+  String get speciesClownfish;
+
+  /// No description provided for @speciesGreatWhiteShark.
+  ///
+  /// In en, this message translates to:
+  /// **'Great White Shark'**
+  String get speciesGreatWhiteShark;
+
+  /// No description provided for @speciesAtlanticPuffin.
+  ///
+  /// In en, this message translates to:
+  /// **'Atlantic Puffin'**
+  String get speciesAtlanticPuffin;
+
+  /// No description provided for @speciesLeatherbackTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leatherback Turtle'**
+  String get speciesLeatherbackTurtle;
+
+  /// No description provided for @speciesBluefinTuna.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluefin Tuna'**
+  String get speciesBluefinTuna;
+
+  /// No description provided for @speciesHumpbackWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'Humpback Whale'**
+  String get speciesHumpbackWhale;
+
+  /// No description provided for @speciesPortugueseManOWar.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese Man o\' War'**
+  String get speciesPortugueseManOWar;
+
+  /// No description provided for @speciesDugong.
+  ///
+  /// In en, this message translates to:
+  /// **'Dugong'**
+  String get speciesDugong;
+
+  /// No description provided for @speciesIndianMackerel.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian Mackerel'**
+  String get speciesIndianMackerel;
+
+  /// No description provided for @speciesWhaleShark.
+  ///
+  /// In en, this message translates to:
+  /// **'Whale Shark'**
+  String get speciesWhaleShark;
+
+  /// No description provided for @speciesHawksbillTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hawksbill Turtle'**
+  String get speciesHawksbillTurtle;
+
+  /// No description provided for @speciesIndianOceanBottlenoseDolphin.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian Ocean Bottlenose Dolphin'**
+  String get speciesIndianOceanBottlenoseDolphin;
+
+  /// No description provided for @speciesReefMantaRay.
+  ///
+  /// In en, this message translates to:
+  /// **'Reef Manta Ray'**
+  String get speciesReefMantaRay;
+
+  /// No description provided for @speciesNarwhal.
+  ///
+  /// In en, this message translates to:
+  /// **'Narwhal'**
+  String get speciesNarwhal;
+
+  /// No description provided for @speciesBelugaWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'Beluga Whale'**
+  String get speciesBelugaWhale;
+
+  /// No description provided for @speciesRingedSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringed Seal'**
+  String get speciesRingedSeal;
+
+  /// No description provided for @speciesWalrus.
+  ///
+  /// In en, this message translates to:
+  /// **'Walrus'**
+  String get speciesWalrus;
+
+  /// No description provided for @speciesPolarCod.
+  ///
+  /// In en, this message translates to:
+  /// **'Polar Cod'**
+  String get speciesPolarCod;
+
+  /// No description provided for @speciesArcticJellyfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic Jellyfish'**
+  String get speciesArcticJellyfish;
+
+  /// No description provided for @speciesEmperorPenguin.
+  ///
+  /// In en, this message translates to:
+  /// **'Emperor Penguin'**
+  String get speciesEmperorPenguin;
+
+  /// No description provided for @speciesWeddellSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Weddell Seal'**
+  String get speciesWeddellSeal;
+
+  /// No description provided for @speciesAntarcticToothfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Antarctic Toothfish'**
+  String get speciesAntarcticToothfish;
+
+  /// No description provided for @speciesLeopardSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Leopard Seal'**
+  String get speciesLeopardSeal;
+
+  /// No description provided for @speciesBlueWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue Whale'**
+  String get speciesBlueWhale;
+
+  /// No description provided for @speciesAntarcticKrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Antarctic Krill'**
+  String get speciesAntarcticKrill;
+
+  /// No description provided for @subtypeMollusk.
+  ///
+  /// In en, this message translates to:
+  /// **'Mollusk'**
+  String get subtypeMollusk;
+
+  /// No description provided for @subtypeReptile.
+  ///
+  /// In en, this message translates to:
+  /// **'Reptile'**
+  String get subtypeReptile;
+
+  /// No description provided for @subtypeMarineMammal.
+  ///
+  /// In en, this message translates to:
+  /// **'Marine Mammal'**
+  String get subtypeMarineMammal;
+
+  /// No description provided for @subtypeCnidaria.
+  ///
+  /// In en, this message translates to:
+  /// **'Cnidaria'**
+  String get subtypeCnidaria;
+
+  /// No description provided for @subtypeSeabird.
+  ///
+  /// In en, this message translates to:
+  /// **'Seabird'**
+  String get subtypeSeabird;
+
+  /// No description provided for @subtypeCrustacean.
+  ///
+  /// In en, this message translates to:
+  /// **'Crustacean'**
+  String get subtypeCrustacean;
+
+  /// No description provided for @descGiantPacificOctopus.
+  ///
+  /// In en, this message translates to:
+  /// **'The Giant Pacific Octopus (Enteroctopus dofleini) is the largest octopus species in the world, living in the cold waters of the northern Pacific Ocean, from Japan to the west coast of North America, including Alaska and California. This animal can grow up to 4–5 meters in length and weigh over 50 kilograms, with some individuals recorded at nearly 70–90 kilograms. Despite its large size, its lifespan is relatively short, around three to five years. This octopus lives on the deep seafloor, particularly in rocky areas or sea caves, and is active at night. Its diet includes various marine animals such as crabs, clams, shrimp, small fish, and even other octopuses. Using its sharp beak and venom, it can penetrate the shells of its prey. The Giant Pacific Octopus is also renowned for its high intelligence. It can solve puzzles, open jars, recognize humans, and effectively use camouflage by changing its skin color and texture to blend with the environment. Regarding reproduction, females lay between 20,000 to 100,000 eggs and guard them without eating until they hatch, which takes about six months. After that, the female dies, as does the male shortly after mating—a life cycle known as semelparity. Although not classified as an endangered species, the Giant Pacific Octopus remains vulnerable to the impacts of climate change, marine pollution, and fishing activities. Another interesting fact is that this octopus has three hearts, blue blood due to hemocyanin content, and can regenerate lost arms as well as squeeze through gaps as small as a coin hole thanks to its boneless, soft body.'**
+  String get descGiantPacificOctopus;
+
+  /// No description provided for @descMantaRay.
+  ///
+  /// In en, this message translates to:
+  /// **'Manta ray is one of the largest ray species in the world, belonging to the Mobulidae family and the Mobula genus. This marine animal is known for its wide, wing-like body and elegant movement as it flies through the water. Manta rays are found in tropical and subtropical waters worldwide, especially around coral reefs, open seas, and coastal areas. There are two main species of manta ray: the reef manta ray (Mobula alfredi), which is smaller and lives in coastal waters, and the giant oceanic manta ray (Mobula birostris), which is larger and roams the open ocean. The size of manta rays can be impressive. The largest species can have a body width of up to 7 meters and weigh over 1,300 kilograms. Despite their large size, manta rays are not dangerous to humans because they lack the poisonous stinger found in other rays and are plankton feeders. They filter seawater to capture plankton, small fish, and larvae using their large mouths located at the front of their bodies. Manta rays are often seen swimming in small groups, but they may also swim alone or gather in large numbers during mating season or when feeding. One unique feature of manta rays is their intelligence. Research shows that they have the largest brain among all cartilaginous fish, including sharks. They also exhibit signs of complex social behavior and can recognize themselves in mirrors—an ability that is very rare in the animal kingdom. In terms of reproduction, manta rays are ovoviviparous, meaning the eggs hatch inside the mother\'s body and the young are born fully developed. Unfortunately, manta rays face various threats, including overfishing, especially for their gills which are used in traditional Asian medicine, as well as habitat destruction and marine pollution. Therefore, many countries and conservation organizations now protect this species. Manta rays are listed as vulnerable by the International Union for Conservation of Nature (IUCN). Their beauty, size, and peaceful nature make them one of the most respected icons of marine life, especially among divers and marine enthusiasts.'**
+  String get descMantaRay;
+
+  /// No description provided for @descGreenSeaTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'The green sea turtle (Chelonia mydas) is one of the largest and most well-known sea turtle species in the world. Although called green, the name actually comes from the greenish color of its body fat due to its herbivorous diet, not from the color of its shell. The carapace of the green sea turtle is brownish-black or olive, with a flat, oval shape. This species can be found in tropical and subtropical waters worldwide, including the Atlantic, Pacific, and Indian Oceans, as well as around coral reefs, seagrass beds, and sandy coastlines. Green sea turtles can grow to over 1 meter in length and weigh 150–200 kilograms. Their diet changes as they age. When young, they are omnivorous, eating jellyfish, crustaceans, and algae. However, as adults, they shift to herbivory and primarily consume seagrass and marine algae. This change also affects their digestive system and the color of their body fat, which becomes greener. One of the most remarkable aspects of green sea turtles is their migratory behavior. These turtles can travel thousands of kilometers between feeding and nesting areas. Females return to the beaches where they hatched to lay eggs, a process known as natal homing. They can lay up to 100 eggs in a single nest and do so multiple times in one season. After hatching, the hatchlings rush to the sea, but only a small fraction survive to adulthood due to predators and environmental conditions. Green sea turtles are currently classified as an endangered species by the International Union for Conservation of Nature (IUCN). Their populations continue to decline due to hunting (for both meat and eggs), habitat destruction, marine pollution, and entanglement in fishing gear. Additionally, climate change also affects their survival, particularly because sand temperatures influence the sex of the hatchlings. With their unique body characteristics, remarkable migratory abilities, and important role in maintaining marine ecosystems such as seagrass beds, green sea turtles are one of the most important marine species to protect and conserve.'**
+  String get descGreenSeaTurtle;
+
+  /// No description provided for @descPacificSeahorse.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pacific seahorse (Hippocampus ingens) is the largest seahorse species found in the eastern Pacific Ocean region. This species is distributed from southern California in the United States to the western coast of South America, including Mexico, Panama, Ecuador, and the Galápagos Islands. They inhabit shallow marine habitats such as seagrass forests, coral reefs, and muddy or rocky waters, typically at depths of 1 to 60 meters. The Pacific seahorse has the typical seahorse body shape with a curved neck and long snout. Its size can reach up to 30 cm, making it one of the largest seahorse species in the world. Its body color varies from gray, brown, to red or golden yellow, and can change to match the environment as a form of camouflage to avoid predators. Its body is covered with hard plates and has a strong, coiled tail used to grip marine plants or other structures to avoid being swept away by currents. Unlike most marine animals, the pregnancy role in seahorses is carried by the male. The female deposits eggs into a special pouch in the male\'s abdomen, where they are fertilized and incubated until hatching. In one pregnancy, a male Pacific seahorse can give birth to dozens to hundreds of offspring the size of small needles. This behavior is very unique in the animal world and makes the seahorse a symbol of biological uniqueness. Unfortunately, the Pacific seahorse currently faces serious threats due to illegal trade for traditional medicine, marine habitat destruction, and accidental capture by fishing gear. This species has been classified as Vulnerable by the International Union for Conservation of Nature (IUCN). Conservation efforts such as trade regulation through CITES (Convention on International Trade in Endangered Species) and coastal habitat protection are important to preserve the Pacific seahorse, which is not only unique in form but also important in maintaining marine ecosystem balance.'**
+  String get descPacificSeahorse;
+
+  /// No description provided for @descOrca.
+  ///
+  /// In en, this message translates to:
+  /// **'The orca (Orcinus orca), also known as the killer whale, is the largest marine mammal in the dolphin family (Delphinidae) and one of the ocean\'s apex predators. Although called a killer whale, orcas are not true whales but actually the largest dolphins in the world. This animal is famous for its sleek, powerful body, striking black-and-white coloration, and remarkable intelligence. Orcas are found in almost all oceans worldwide, from the cold waters of the Arctic and Antarctic to tropical seas. They are highly adaptable and can live in various marine environmental conditions. Orcas have body lengths between 5 to 9 meters, with weights reaching 6 tons, depending on sex and population. Females are generally smaller than males, which also have taller, more upright dorsal fins that can reach 1.8 meters. As apex predators, orcas have highly diverse diets that depend on their pod (group). Some pods prey on fish like salmon, while others hunt seals, squid, seabirds, and even large whales like young blue whales. Orcas hunt in coordinated groups using sophisticated strategies, similar to wolves on land. They are known to be highly intelligent, possessing complex communication systems, strong social memory, and even hunting traditions passed down through generations. Regarding reproduction, orcas live in matrilineal groups led by the oldest female. Females begin breeding at around 15 years old and can give birth every 3 to 10 years, with a gestation period of about 17 months. Orcas can live very long lives; females can live over 80 years, while males average 30 to 60 years. Although orcas have no natural predators, they still face threats from human activities, such as marine pollution (especially heavy metal and PCB contamination), disturbance from ships and military sonar, and prey shortages due to overfishing. Orcas were also once targeted for capture for marine parks, though this practice is now heavily criticized due to its negative impact on their welfare. With their combination of physical strength, high social intelligence, and important role in marine ecosystems, orcas are among the most amazing and respected creatures in the ocean.'**
+  String get descOrca;
+
+  /// No description provided for @descClownfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Clownfish (Amphiprioninae) are a type of small marine fish famous for their bright colors and unique relationship with sea anemones. Clownfish have bright orange bodies with three striking white stripes running vertically across the head, body, and tail. These fish live in the warm waters of the Pacific and Indian Oceans, including around the coral reefs of Southeast Asia, Japan, Australia, and the Solomon Islands. Clownfish typically live in pairs or small groups within the protection of sea anemones, which have poisonous tentacles. However, clownfish have a special protective mucus on their skin that makes them immune to the poison. The relationship between clownfish and anemones is symbiotic mutualism: clownfish get protection from predators and food scraps from the anemone, while the anemone gets food from the clownfish\'s leftovers and protection from parasites. In terms of size, clownfish usually grow to about 7 to 12 cm long depending on the species. One of the most famous species is Amphiprion ocellaris, which became iconic in the animated film Finding Nemo. Clownfish are highly territorial and often aggressively guard the area around their anemone. One of the most unique aspects of clownfish is their reproduction and social hierarchy system. All clownfish are born male. In a group, there is only one dominant female, and if that female dies, the largest male will change sex to become female and take over that role. This system is called protandry, meaning a sex change from male to female. Although clownfish are not classified as endangered, they still face threats from coral reef destruction, the ornamental fish trade, and climate change causing anemone bleaching. Therefore, conservation of their natural habitat is important to maintain the balance of the marine ecosystems where they live. With their bright colors, interesting social behavior, and unique symbiotic relationship, clownfish have become one of the most recognized and admired icons of marine life worldwide.'**
+  String get descClownfish;
+
+  /// No description provided for @descGreatWhiteShark.
+  ///
+  /// In en, this message translates to:
+  /// **'The great white shark (Carcharodon carcharias) is one of the world\'s most iconic and feared marine predators. This shark is known for its large size, powerful jaws, and reputation as a highly efficient hunter. Great white sharks are widely distributed in temperate and warm waters worldwide, including the Atlantic, Pacific, and Indian Oceans. They are commonly found near coastlines but can also explore deep open waters. This shark can grow to over 6 meters in length and weigh up to 2,000 kilograms. Its body is torpedo-shaped with a dark blue-gray or grayish back and a white underside—characteristic features that help them camouflage while stalking prey from below. Their main diet includes seals, sea lions, large fish, sea turtles, and even whale carcasses. They also have an extremely keen sense of smell, able to detect a drop of blood in millions of liters of water, and can sense the electrical fields generated by their prey\'s heartbeat through special organs called ampullae of Lorenzini. One of the most fascinating aspects of great white sharks is their hunting ability. They often attack from below at high speed, relying on the element of surprise to incapacitate their prey. The attack is so powerful that large prey can be thrown out of the water in a process called breaching. Although famous for attacks on humans, such incidents are very rare and usually not due to predatory intent but rather curiosity or mistaken identity. Great white sharks are solitary animals with extensive migratory abilities. Some individuals have been recorded traveling from South Africa to Australian waters and back, covering thousands of kilometers. In terms of reproduction, great whites are ovoviviparous, meaning eggs hatch inside the mother\'s body and the young sharks are born alive. Newborn sharks are already independent and quite large, about 1.2–1.5 meters long. Currently, great white sharks are categorized as Vulnerable by the International Union for Conservation of Nature (IUCN), due to overfishing, shark finning, and bycatch by fishermen. They also reproduce slowly, making population recovery difficult. As apex predators, the presence of great white sharks is crucial for maintaining the balance of marine food chains and ecosystems overall.'**
+  String get descGreatWhiteShark;
+
+  /// No description provided for @descAtlanticPuffin.
+  ///
+  /// In en, this message translates to:
+  /// **'The Atlantic puffin (Fratercula arctica) is a small seabird known for its unique and adorable appearance. Often called the clown of the sea or sea parrot, it has a large bright orange beak, white cheeks, and a black-and-white body resembling a tuxedo. The Atlantic puffin is one of three puffin species and the only one found in the North Atlantic region. This bird lives in cold, rocky waters, particularly around the coasts of eastern Canada, Greenland, Iceland, Norway, and the United Kingdom. During breeding season (spring and summer), puffins come to land and nest on steep cliffs or burrows in the ground, often in large colonies. Outside breeding season, they spend almost their entire lives at sea, swimming and diving for food. Atlantic puffins are skilled divers. Using their wings as flippers, they can dive to depths of up to 60 meters to catch small fish like herring and capelin. They can carry several fish at once in their beaks thanks to a special structure that keeps the fish in place even when the beak is open. These birds are small, with body lengths of about 25 cm, weight around 500 grams, and a wingspan of about 50–60 cm. Puffins mate for life and typically produce only one egg per season. Baby puffins (called pufflings) are cared for in the nest for several weeks before venturing out to sea alone. Unfortunately, Atlantic puffin populations face serious threats from climate change, overfishing (which reduces their food supply), marine pollution, and loss of nesting habitat. In some regions like Iceland, puffin numbers have declined drastically. Therefore, puffins are currently classified as Vulnerable by the IUCN. With their adorable faces, interesting social behavior, and remarkable swimming abilities, Atlantic puffins have become symbols of northern marine life and one of the world\'s most beloved seabirds.'**
+  String get descAtlanticPuffin;
+
+  /// No description provided for @descLeatherbackTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'The leatherback turtle (Dermochelys coriacea) is the world\'s largest turtle species and the only one without a hard shell. As a member of the Dermochelyidae family, this turtle differs from other sea turtle species because it has a leathery-textured back covered by a thin layer of bone rather than hard scales. Its dorsal surface is dark with white or gray spots, and its body is more elongated and streamlined. Leatherbacks can grow to over 2 meters in length and weigh more than 600 kilograms, making them the largest living marine reptiles. These turtles are widely distributed throughout tropical to subarctic oceans worldwide and are famous for their extreme migratory abilities. They can travel thousands of kilometers in a single journey, from nesting beaches in tropical regions to feeding areas in cold waters. Unlike other turtles, leatherbacks can survive in very cold waters due to unique thermoregulation mechanisms, including large body size, high metabolism, and a thick layer of fat beneath the skin. Their main food is jellyfish, and thus they play a crucial role in maintaining jellyfish population balance in the oceans. Their life cycle is similar to other sea turtles. Females come ashore to sandy beaches to lay eggs, dig holes with their rear flippers, and deposit about 80–100 eggs in a single nest. After laying eggs, they return to the sea, and the hatchlings emerge about two months later, then make their way to the ocean independently. Unfortunately, leatherback turtles are now classified as critically endangered, mainly due to loss of nesting habitat, marine pollution (particularly plastic waste mistaken for jellyfish), entanglement in fishing gear, and climate change affecting sand temperatures where eggs incubate—a factor that determines the sex of hatchlings. As ancient animals that have existed since the age of dinosaurs, leatherback turtles are not only important symbols in marine conservation but also vital guardians of ecosystems. Global protection efforts through marine conservation areas, fisheries monitoring, and plastic waste reduction are crucial for the survival of this extraordinary species.'**
+  String get descLeatherbackTurtle;
+
+  /// No description provided for @descBluefinTuna.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluefin tuna is one of the largest, fastest, and most powerful fish species in the world. Its scientific name is Thunnus thynnus for Atlantic bluefin tuna, but there are also other species such as Pacific bluefin tuna (Thunnus orientalis) and southern bluefin tuna (Thunnus maccoyii). This fish is known for its large body, sleek and aerodynamic shape, and remarkable swimming ability—they can reach speeds exceeding 70 km/h. Bluefin tuna have a metallic blue body on the back and silver on the belly, which helps them camouflage in the sea. Their size is impressive; Atlantic bluefin tuna, for example, can grow up to 3 meters long and weigh over 600 kilograms. They are apex predators that prey on small fish like sardines, mackerel, and squid. One of the most unique characteristics of bluefin tuna is their ability to regulate body temperature, called regional endothermy. This allows them to maintain warm body temperatures in cold waters, giving them an advantage in hunting and long-distance migration. They are known to migrate thousands of kilometers across oceans from feeding to spawning grounds, such as from the Atlantic Ocean to the Mediterranean Sea or the Gulf of Mexico. Unfortunately, bluefin tuna are severely threatened by overfishing due to high global demand, especially for premium sushi and sashimi. A single bluefin tuna has even sold for millions of dollars at fish auctions in Japan. Due to this exploitation, their populations—particularly Atlantic and southern bluefin—have declined drastically and are now categorized as Endangered by the IUCN. As a species with slow growth and late sexual maturity (around 8 years old), bluefin tuna are highly vulnerable to overfishing. Therefore, various international organizations like ICCAT (International Commission for the Conservation of Atlantic Tunas) regulate catch quotas and habitat protection. Bluefin tuna are important symbols of marine power, speed, and modern conservation challenges. Ensuring their survival means protecting marine ecosystem balance and ensuring the sustainability of global fishery resources.'**
+  String get descBluefinTuna;
+
+  /// No description provided for @descHumpbackWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'The humpback whale (Megaptera novaeangliae) is one of the most recognized and admired baleen whale species in the world, known for its large size, acrobatic behavior, and the beautiful songs of its males. These whales can be found in almost all oceans worldwide, migrating thousands of kilometers between cold polar waters (where they feed) and warm tropical or subtropical waters (where they breed and give birth). Humpback whales have body lengths of about 12 to 16 meters and can weigh 25 to 40 tons. They are easily recognized by the small hump in front of their dorsal fin, very long pectoral fins (which can reach one-third of their body length), and large tail with unique patterns on the underside—used by researchers to visually identify individuals. Their body color is generally blackish-gray with white spots on the belly, fins, or tail. These whales are zooplankton and small fish feeders like anchovies or sardines, which they catch using their baleen filter system inside their mouths. One of the most fascinating hunting techniques of humpback whales is bubble net feeding, where they blow bubbles in a circular pattern to concentrate fish in one area before lunging upward from below to capture them simultaneously. One of the most characteristic behaviors of humpback whales is their ability to jump out of the water (breaching) and slap the water surface with their fins or tail, which is believed to be related to communication, play, or removing parasites from their bodies. Male whales are also known for their complex and melodious songs, which can last 10–20 minutes and be repeated. These songs are likely used to attract mates and show dominance during breeding season. Humpback whales reproduce by giving birth to a single calf after a gestation period of about 11 to 12 months. Newborn calves can be about 4–5 meters long and will nurse for nearly a year. In the past, humpback whales were heavily hunted for oil and meat, causing their populations to decline dramatically. However, since the global whaling ban was implemented, their populations have begun to recover, although they still face threats such as ship collisions, ocean noise pollution, and fishing nets. As large, gentle creatures with complex social behavior, humpback whales are not only important for marine ecosystem balance but also symbols of marine mammal conservation efforts worldwide. They have now become ecotourism attractions (whale watching) that support environmental awareness and marine conservation.'**
+  String get descHumpbackWhale;
+
+  /// No description provided for @descPortugueseManOWar.
+  ///
+  /// In en, this message translates to:
+  /// **'The Portuguese Man o\' War (Physalia physalis) is a unique marine creature often mistaken for a jellyfish, though it is not one. It is actually a colony of four types of polyps (small organisms) that depend on each other and function as one individual, belonging to the siphonophore group. This creature is famous for its striking appearance and very painful sting, which can even be dangerous to humans. The main characteristic of the Portuguese Man o\' War is its sail float, a blue-purple gas-filled sac on the water surface called a pneumatophore. This sac allows the animal to be pushed by wind on the sea surface, like a miniature sailing ship—that\'s the origin of the name Man o\' War, taken from ancient Portuguese warships. Below the surface, long tentacles hang down that can reach 10 to 30 meters, although the average is about 10 meters. These tentacles are equipped with nematocysts, stinging cells used to immobilize prey and defend themselves. This creature lives in warm waters worldwide, especially in the Atlantic, Pacific, and Indian Oceans. It cannot swim and relies only on wind and ocean currents to move. Its diet consists of small fish and plankton, which it stings and then pulls to its digestive polyps. The sting of the Portuguese Man o\' War can cause extreme pain in humans, even when washed ashore or when its tentacles are detached from the body. Reactions in humans can include skin burns, shortness of breath, muscle cramps, and in very rare cases, severe allergic reactions (anaphylaxis). Although frightening, the Portuguese Man o\' War plays an important role in the marine food chain. It also serves as food for some specialized predators like sea turtles (especially leatherback turtles) and certain fish immune to its sting. As a biologically fascinating marine creature, the Portuguese Man o\' War demonstrates how diverse and complex marine life can be. Although beautiful to observe from a distance, this animal should be avoided in the sea or when found washed ashore, as its sting remains active even after death.'**
+  String get descPortugueseManOWar;
+
+  /// No description provided for @descDugong.
+  ///
+  /// In en, this message translates to:
+  /// **'The dugong (Dugong dugon) is a herbivorous marine mammal belonging to the order Sirenia and the only living member of the Dugongidae family. Dugongs are often called sea cows because of their seagrass diet, large bodies, and slow movements. This animal is closely related to manatees, although their habitats and some physical characteristics differ. Dugongs can be found in shallow tropical and subtropical waters, especially in the Indian Ocean and Western Pacific regions, including Indonesia, Australia, the Philippines, and other Southeast Asian areas. They typically live around seagrass beds in bays, lagoons, and calm coastal areas. Their bodies are cylindrical and elongated, gray to brownish-gray in color, with dolphin-like horizontal tail flukes and no dorsal fin. Body length can reach 3 meters and weight up to 400 kilograms. As marine herbivores, dugongs consume various types of seagrass by uprooting plants from the seafloor using their strong upper lips. They spend most of their time feeding and can consume up to 40 kilograms of seagrass per day. This feeding pattern is very important for marine ecosystem health as it helps maintain seagrass growth balance. Dugongs breathe with lungs and must surface regularly to inhale air. Although slow, they can dive to depths of 10 meters and stay underwater for 6–10 minutes before resurfacing. Dugongs have a slow reproductive system; females give birth to only one calf after a gestation period of about 13–15 months, and the calf will nurse for over a year. Due to slow population growth, dugongs are very vulnerable to environmental disturbances. Currently, dugongs are classified as Vulnerable by the IUCN. Their populations continue to decline due to seagrass habitat destruction, collisions with boats, entanglement in fishing nets, and illegal hunting. Climate change and coastal development are also serious threats to their survival. As part of tropical marine heritage, dugongs play an important role in maintaining coastal ecosystem balance. Therefore, conservation efforts through protection of natural habitats, monitoring of human activities in coastal areas, and community education are crucial to ensure the survival of these gentle and charismatic animals.'**
+  String get descDugong;
+
+  /// No description provided for @descIndianMackerel.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian mackerel (Rastrelliger kanagurta) is a very common marine fish species found in tropical and subtropical waters of the Indo-Pacific region. This fish belongs to the Scombridae family, which also includes tuna and mackerel. Indian mackerel has high economic value as it is one of the main food fish in many Asian countries, including Indonesia, India, Thailand, and the Philippines. The characteristic feature of Indian mackerel is its slender, elongated body, with silvery shine on the underside and bluish-green on the upper side, along with dark stripes or spots on its sides. Its body size is medium, generally about 20–30 cm long, though it can grow up to 35 cm. Its tail fin is forked like a V, and its body is covered with fine scales. Indian mackerel live in schools (shoals) in shallow coastal waters, especially in estuaries, bays, and waters with muddy or sandy bottoms. They are pelagic fish, meaning they live in the water column (not on the seafloor) and often migrate following currents and seasons. These fish are very active and known as fast swimmers. In terms of diet, Indian mackerel are planktivorous, mainly feeding on phytoplankton and zooplankton, but sometimes also consuming fish eggs and small larvae. They play an important role in the marine food chain as primary consumers and also as prey for larger predators like tuna, sharks, and seabirds. Indian mackerel reproduce by spawning in open seas, and a single parent can produce thousands of eggs that hatch quickly. Their life cycle is fast, and these fish grow and mature quickly, making them important in capture fisheries. Although their populations are still abundant in many regions, Indian mackerel can be threatened by overfishing, changes in seawater quality, and damage to coastal ecosystems. Sustainable fisheries management is very important to keep this fish stock stable and continuously available for coastal communities. With high economic value, important ecological role, and wide distribution, Indian mackerel is one of the key species in marine ecosystems and coastal food security in Asia.'**
+  String get descIndianMackerel;
+
+  /// No description provided for @descWhaleShark.
+  ///
+  /// In en, this message translates to:
+  /// **'The whale shark (Rhincodon typus) is the world\'s largest fish species and a member of the shark group (not whales), though its name contains whale due to its gigantic size and whale-like filter-feeding method. Despite its enormous size, whale sharks are known as gentle animals harmless to humans. Whale sharks can grow to over 12 meters in length, with some individuals recorded at over 18 meters, weighing 15–20 tons. Their bodies are bluish-gray with unique white spot patterns and light lines that are distinctive to each individual, like fingerprints. Their mouths are very large, can exceed 1 meter in width, and are located at the front of the head (not underneath like most sharks). The main food of whale sharks is plankton, fish eggs, and other small organisms like tiny shrimp and small fish. Although they have over 3,000 small teeth, they are not used for chewing. Whale sharks are filter feeders, filtering food from water by opening their mouths wide while swimming, then filtering food particles through their gill slits. They can filter hundreds of liters of water per hour to obtain food. Whale sharks are found in tropical and warm waters worldwide, including around Indonesia, the Philippines, Australia, and Mexico. They are often seen at the sea surface when feeding and tend to migrate long distances to find feeding and breeding locations. Although much is still unknown about their behavior and reproduction, whale sharks are known to give birth to fully developed young (ovoviviparous), and females can carry hundreds of embryos in their bodies. Currently, whale sharks are classified as Endangered by the IUCN due to various threats such as overfishing, collisions with boats, illegal trade of body parts, and marine habitat destruction. They are also often targets of marine tourism, such as swimming-with-whale-shark attractions, which if not managed wisely can cause stress and behavioral disturbance. With their majestic size, peaceful nature, and role as indicators of ocean health, whale sharks are among the most important and amazing icons of tropical marine conservation in the world.'**
+  String get descWhaleShark;
+
+  /// No description provided for @descHawksbillTurtle.
+  ///
+  /// In en, this message translates to:
+  /// **'The hawksbill turtle (Eretmochelys imbricata) is one of the most recognizable and critically endangered sea turtle species. This turtle is known for its beautiful shell with overlapping scale patterns in golden-brown and black colors, which has made it a primary target for illegal trade to make crafts like combs, eyeglasses, and jewelry—called tortoiseshell. Hawksbills have slender bodies and a sharp, curved beak resembling a hawk\'s beak, which gives them their name. Their size is relatively small compared to other turtle species, with adult body lengths of about 60–90 cm and weights between 45–70 kg. They are widely distributed in tropical and subtropical waters, especially in the Atlantic, Pacific, and Indian Oceans, including Indonesian waters, the Caribbean, and coral reef areas worldwide. The main habitat of hawksbills is coral reefs, where they forage and nest. Unlike other sea turtles, hawksbills have a very specific diet, feeding on sea sponges, jellyfish, and anemones. With their pointed beaks, they can reach into narrow crevices between corals to find food. By controlling sponge populations, hawksbills help maintain coral reef ecosystem balance. Like other sea turtles, hawksbills are reptiles that breathe with lungs and need to surface periodically. They reproduce by laying eggs on secluded sandy beaches at night. Females typically nest every 2–4 years and can lay about 100–200 eggs in a single nest. Hatchlings that emerge immediately head to the sea, but only a small percentage survive to adulthood due to high predation rates and environmental disturbances. Currently, hawksbill turtles are categorized as Critically Endangered by the IUCN. The greatest threats to them include illegal shell trade, destruction of beach and coral reef habitats, egg hunting, entanglement in fishing gear, and climate change affecting sand temperatures and nesting habitats. As symbols of tropical marine beauty and indicators of coral reef health, hawksbill turtles are crucial in global conservation efforts. Protection through law enforcement, marine conservation areas, sustainable tourism management, and community education are key to ensuring the survival of this extraordinary species.'**
+  String get descHawksbillTurtle;
+
+  /// No description provided for @descIndianOceanBottlenoseDolphin.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean bottlenose dolphin (Tursiops aduncus) is one of the most recognized and intelligent dolphin species in the world. They belong to the Delphinidae family and are close relatives of the common bottlenose dolphin (Tursiops truncatus), but differ in body size, habitat, and some physical characteristics. As their name suggests, these dolphins are primarily found in coastal and shallow waters of the Indian Ocean, including along the east coast of Africa, South Asia, and Indonesian waters, northern Australia, and the Red Sea. Indian Ocean bottlenose dolphins have slender, elongated bodies with bluish-gray color on the upper side and lighter on the underside. One characteristic feature is the presence of dark spots on the belly and sides, especially in adult individuals—different from other bottlenose species. Their size is relatively medium, with body lengths of about 2.5 to 2.8 meters and weights between 150 to 230 kilograms. This species lives in groups (pods) that can consist of several to dozens of individuals, depending on environmental conditions and season. They are highly social and often seen swimming, jumping, or playing near boats, making them one of the most frequently observed marine animals by humans. These dolphins are also known for their high intelligence, able to use sonar (echolocation) for navigation and hunting prey like fish, squid, and small crustaceans. Indian Ocean bottlenose dolphins reproduce by giving birth, and females typically give birth to only one calf every 3–6 years after a gestation period of about 12 months. The calf will nurse for over a year and learn many social behaviors from its mother and other pod members. Although not categorized as highly endangered, these dolphins still face serious threats including marine pollution, accidental capture in fishing gear (bycatch), hunting, and disturbance from tourism and boat traffic. Changes in coastal habitats also impact their populations, given their heavy reliance on shallow waters for feeding and breeding. As symbols of intelligence and complex marine social life, Indian Ocean bottlenose dolphins play an important role in marine ecosystems and maritime culture of coastal communities. Conservation of natural habitats, sustainable marine tourism management, and reduction of marine pollution are key to ensuring the survival of this species in the future.'**
+  String get descIndianOceanBottlenoseDolphin;
+
+  /// No description provided for @descReefMantaRay.
+  ///
+  /// In en, this message translates to:
+  /// **'The reef manta ray (Mobula alfredi) is one of the world\'s largest ray species and an exceptionally graceful and intelligent marine creature. This species is found in tropical and subtropical waters, especially around coral reefs in the Indian and Pacific Oceans, including Indonesian waters, the Maldives, Australia, and Hawaii. Although often considered frightening due to their size, reef manta rays are completely harmless as they have no stinger and only feed on plankton. The most striking feature of reef manta rays is their flat, wing-like body shape, with widths reaching up to 5 meters, though average about 3–4 meters. The upper body is blackish-gray with unique fingerprint-like patterns, while the underside is lighter. At the front of their heads are two cephalopod lobes (horn-like projections) that help direct plankton into their mouths while swimming. Reef manta rays are filter feeders, filtering plankton and microscopic organisms from the water as they swim with open mouths. They are often seen flying through water with large, graceful wing movements, and sometimes leap out of the water in behavior not fully understood—possibly for communication, parasite removal, or social behavior. These animals are very social and often gather at cleaning stations, places on coral reefs where small fish like cleaner wrasse remove parasites from their bodies. Reef manta rays also have the largest brain compared to all fish and exhibit intelligent behavior like self-recognition in mirrors, complex navigation, and long-term memory. Reef manta ray reproduction is slow. Females give birth to only one calf every 2–5 years after a pregnancy of about 12–13 months. Baby mantas are born live and can swim immediately. Due to their low reproduction rate, this species is highly vulnerable to environmental disturbance. Currently, reef manta rays are categorized as Vulnerable by the IUCN. Their main threats are overfishing, especially for their gills sold as traditional medicine, habitat destruction, marine pollution, and unregulated marine tourism. As fascinating animals important to marine ecosystems, reef manta rays also have great value in sustainable ecotourism, such as diving and snorkeling activities with rays. Their conservation symbolizes the protection of healthy and sustainable tropical seas.'**
+  String get descReefMantaRay;
+
+  /// No description provided for @descNarwhal.
+  ///
+  /// In en, this message translates to:
+  /// **'The narwhal (Monodon monoceros) is a toothed whale species that lives in Arctic waters and is famous for having a long horn resembling a spear growing from its head. This horn is actually an elongated left canine tooth that grows through the upper lip, spiral-shaped, and can reach 2 to 3 meters in length. Because of this uniqueness, narwhals are often called unicorns of the sea and have inspired many legends and myths since ancient times. Narwhals are part of the toothed whale family and are closely related to belugas. They live around cold waters of Greenland, northern Canada, and Russia, especially in the Arctic Ocean. Male narwhals typically have the horn, though about 15% of females can also have it. The exact function of the horn is not fully understood, but scientists suspect it is used to show dominance, attract mates, or as a sensory tool because it contains millions of sensitive nerve endings. Narwhal bodies are gray with dark spots, and usually become lighter with age. Body length (excluding horn) can reach 4–5 meters, with weight around 800 to 1,600 kilograms. Unlike most other whales, narwhals do not migrate far but follow seasonal patterns around the Arctic, moving from open seas in summer to denser sea ice in winter. Narwhals live in small groups (pods) consisting of several to dozens of individuals. They use sonar (echolocation) to communicate and navigate in dark or ice-filled waters. Their main diet includes fish, squid, and deep-sea shrimp, which they catch while diving to depths over 1,500 meters—one of the deepest known dives among all marine mammals. Narwhals reproduce slowly. Females give birth to one calf every 3–4 years after a gestation period of about 15 months. The calf will nurse for over a year before becoming independent. Although narwhals are not classified as critically endangered, they still face threats from Arctic climate change, sea ice loss, disturbance from human activities (such as oil exploration), and traditional hunting in some Inuit communities. Since this species heavily depends on stable sea ice ecosystems, they are considered important indicators of Arctic environmental health. With their unique appearance and extreme habitat, narwhals have become symbols of polar natural wonders and the importance of protecting fragile marine ecosystems.'**
+  String get descNarwhal;
+
+  /// No description provided for @descBelugaWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'The beluga whale (Delphinapterus leucas) is one of the most recognizable toothed whale species due to its bright white color and seemingly smiling facial expression. Belugas originate from Arctic and sub-Arctic waters and are often called sea canaries because of their ability to produce various loud sounds like whistles, clicks, and chirps. Belugas are medium-sized compared to other whale species, with body lengths of about 4–5 meters and weights reaching 1,200–1,600 kilograms. Unlike most other whales, belugas have flexible necks because their neck vertebrae are not fused, allowing them to turn their heads sideways and upward—a unique ability among cetaceans. Additionally, belugas lack dorsal fins, instead having a ridge on their back that helps them swim under ice. Belugas are social animals living in small groups called pods, which can consist of several to hundreds of individuals. They communicate with each other through sonar (echolocation) and complex vocalizations. Because of their rich vocalizations, belugas are called singing whales and have become important subjects in marine bioacoustic studies. Beluga habitats include cold, icy waters around northern Canada, Alaska, Russia, Greenland, and Norway. They migrate with seasons—often entering rivers and estuaries in summer, while in winter they stay under sea ice, breathing through cracks in the ice. Belugas are opportunistic predators that eat various prey like fish, shrimp, squid, and crabs, depending on location and season. They use sonar to find prey in murky or dark waters. Belugas reproduce slowly; females give birth to one calf every 3–4 years after a gestation period of about 14–15 months. Beluga calves are born dark gray and turn white as they age. Although belugas are not classified as highly endangered globally, some local populations like those in Cook Inlet, Alaska are categorized as Critically Endangered by the IUCN. Their main threats include marine pollution, climate change (especially sea ice melt), boat traffic, industrial activities in northern regions, and traditional hunting in some Arctic communities. With their unique appearance, distinctive sounds, and remarkable social nature, beluga whales have become important symbols of Arctic ecosystems and marine conservation efforts in polar regions. They also play significant roles in Inuit culture and are major attractions in scientific studies of marine mammal communication.'**
+  String get descBelugaWhale;
+
+  /// No description provided for @descRingedSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'The ringed seal (Pusa hispida) is the smallest and most widespread seal species in the Arctic region. They are named ringed because of their pattern of dark spots with white rings all over their body, especially on the back and sides. This characteristic distinguishes them from other seal species and helps them camouflage among ice and snow. Ringed seals have plump, compact bodies suitable for survival in extreme polar environments. Their body length is about 1 to 1.6 meters, and weight ranges from 50–110 kilograms. Upper body color is usually dark gray or brownish, while the underside is lighter. Thick body fat (blubber) helps them maintain body heat in very cold icy waters. This species heavily depends on sea ice as its main habitat for resting, giving birth, and nursing pups. Ringed seals are famous for their ability to dig and maintain breathing holes in sea ice using their strong, curved front claws. They also build dens from snow and ice above ice holes to give birth and protect their young from predators and extreme cold. Ringed seals feed on small fish, crustaceans, and zooplankton, which they catch while diving under ice. They can dive to depths over 100 meters and stay underwater for 15–20 minutes. In Arctic ecosystems, ringed seals are the primary prey of polar bears, and are also hunted by orcas and Arctic foxes. Therefore, they play a crucial role in the Arctic marine food chain. Ringed seals breed once a year, and females typically give birth to one pup after a gestation period of about 9 months. Ringed seal pups are born with thick white fur that will molt as they grow. Although global ringed seal populations are relatively stable, they now face serious threats from climate change, particularly earlier and faster sea ice melt that disrupts their habitat and breeding season. Marine pollution and disturbance from industrial activities in the Arctic are additional threats. As a species highly dependent on sea ice, ringed seals are important indicators of Arctic ecosystem health. Protecting them also means maintaining the balance and survival of various other species in the northern polar circle.'**
+  String get descRingedSeal;
+
+  /// No description provided for @descWalrus.
+  ///
+  /// In en, this message translates to:
+  /// **'The walrus (Odobenus rosmarus) is a large marine mammal living in the northern polar region, particularly around the Arctic Ocean. This animal is easily recognized by its large body, thick wrinkled skin, and two long tusks protruding from its upper jaw. Both males and females have tusks, though male tusks are usually longer and used to show dominance, defend themselves, climb ice floes, and in fights between males during mating season. Walruses have bodies covered with a very thick layer of fat (blubber) to protect them from extreme cold temperatures, and their skin is typically gray or reddish-brown. They have thick whiskers that are very sensitive and used to feel the seafloor while searching for prey like clams, sea snails, and other invertebrates living in shallow waters. Walruses live socially in large groups that can consist of hundreds to thousands of individuals and are known to be very vocal, especially during mating season. They reproduce slowly, with females giving birth to only one calf every two to three years after a gestation period of about 15 to 16 months. Walrus calves nurse for over a year and are highly dependent on their mothers. There are two main subspecies: the Atlantic walrus living around Greenland and northeastern Canada, and the Pacific walrus found in the Bering and Chukchi Seas. Currently, walruses face various threats, primarily due to climate change causing sea ice melt, reducing resting habitats and forcing them to gather on land, which can cause overcrowding and stress. Additionally, industrial activities, marine pollution, and disturbance from boat traffic also worsen the situation. As symbols of strength and resilience in the Arctic environment, protecting walruses is crucial for maintaining the balance of increasingly fragile northern polar ecosystems.'**
+  String get descWalrus;
+
+  /// No description provided for @descPolarCod.
+  ///
+  /// In en, this message translates to:
+  /// **'Polar cod (Boreogadus saida) is a small fish that is very important in Arctic marine ecosystems. Although its body is tiny—with an average length of about 20–30 cm—this fish plays a vital role as a keystone species in the Arctic food chain, being the main food source for various predators like seabirds, seals, beluga whales, and other large fish. Polar cod are widely distributed in northern polar waters, including around Greenland, northern Canada, Russia, and the Barents Sea. They can survive in extremely cold temperatures thanks to natural antifreeze proteins in their blood that prevent ice crystal formation in body tissues. The characteristic feature of polar cod is its slender, silvery body with slight brown or gray color on the back. They live under sea ice and in open waters, depending on age and season. Adult fish tend to live in deeper waters, while larvae and juveniles often stay under ice layers, seeking shelter and food in the form of small plankton. Reproduction usually occurs in winter, and females can produce thousands of eggs that hatch in extreme temperature conditions. Polar cod have remarkable adaptation abilities to frozen, low-light environments. However, they are highly vulnerable to climate change, especially due to sea ice melt and changing water temperatures that can disrupt their habitat and reproductive patterns. Due to their central position in the Arctic food chain, polar cod population decline can significantly impact the survival of many other species. With their irreplaceable role in Arctic ecosystems, polar cod are important indicators of polar marine environmental health. Protecting these small fish also means maintaining stability and survival of larger animals that depend on them in fragile, rapidly changing extreme ecosystems due to global warming.'**
+  String get descPolarCod;
+
+  /// No description provided for @descArcticJellyfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic jellyfish is a general term for several jellyfish species living in cold, frozen waters of the Arctic region. One of the best-known species is Cyanea capillata arctica, or the Arctic subspecies of Lion\'s mane jellyfish, which is one of the world\'s largest jellyfish. Arctic jellyfish have transparent umbrella-shaped bodies with long tentacles that can glow faintly in ocean darkness, creating an amazing yet mysterious impression in icy ocean depths. These jellyfish can survive in very low temperatures because their body structure consists mostly of water and flexible gelatinous tissue. They move slowly through body contractions like pulsations, but more often drift with ocean currents. As filter-feeding predators, Arctic jellyfish eat plankton, fish larvae, and other small organisms using their long, sticky tentacles that contain stinging cells or nematocysts to immobilize prey. Although appearing fragile and simple, Arctic jellyfish play an important role in the polar marine food chain. They become food sources for various fish species, seabirds, and even sea turtles if in more southern regions. Additionally, jellyfish also help recycle energy and nutrients in deep-sea ecosystems with minimal light and extreme cold. Arctic jellyfish serve as biological indicators of marine environmental change. Increasing water temperatures and ice melt due to climate change can affect the distribution, numbers, and reproduction timing of these jellyfish. Some studies show that climate change may cause jellyfish population explosions in some areas, potentially disrupting ecosystem balance. With the grace of their movement and ability to live in frozen seas, Arctic jellyfish reflect both the wonders and fragility of Arctic ecosystems, which now face great pressure from global warming and human disturbance.'**
+  String get descArcticJellyfish;
+
+  /// No description provided for @descEmperorPenguin.
+  ///
+  /// In en, this message translates to:
+  /// **'The emperor penguin (Aptenodytes forsteri) is the largest penguin species and the only one that breeds exclusively on Antarctic land ice. Living in one of Earth\'s most extreme environments, emperor penguins have developed remarkable adaptations to survive temperatures reaching –60°C and winds exceeding 150 km/h. Their large body size—reaching 120 cm and weighing 20–40 kilograms—helps reduce heat loss, and their thick feathers plus thick subcutaneous fat layer provide additional protection against cold. Emperor penguins have a very distinctive appearance, with black back feathers, clean white belly, and yellow-orange patterns on the neck and head sides. They are skilled swimmers and divers, able to dive to depths over 500 meters and stay underwater for 20 minutes to search for fish, krill, and squid—their main food in icy oceans. What makes emperor penguins special is their reproductive pattern. They breed during Antarctic winter, a period when almost all other animals leave the continent. After the female lays one egg, she goes to sea to feed, while the male incubates the egg on his feet for about two months, protecting it with a warm skin fold called a brood pouch. During this time, males don\'t eat at all and survive on body fat reserves. After hatching, the mother returns and feeds the chick with pre-digested food. Chick care alternates between male and female parents. Emperor penguins live in large colonies that can reach thousands of individuals, and they often gather closely forming huddles or dense formations to share warmth amid freezing temperatures. This social behavior is crucial for survival during breeding season. Although their population is still relatively large, emperor penguins now face serious threats from climate change. Faster sea ice melt each year reduces their important breeding habitat and disrupts food availability. Therefore, many scientists warn that if global warming trends continue, emperor penguin populations could decline drastically this century. With their uniqueness in surviving Earth\'s harshest environment, emperor penguins are not only symbols of Antarctic wildlife but also important indicators of threatened polar environmental health.'**
+  String get descEmperorPenguin;
+
+  /// No description provided for @descWeddellSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'The Weddell seal (Leptonychotes weddellii) is a seal species living in the Antarctic region and known as a tough deep-sea diver and the southernmost inhabitant among all marine mammals. This animal lives around dense ice sheets covering frozen oceans, especially in coastal areas and ice bays, where they dig breathing holes in ice to survive under completely covered surfaces. Weddell seal bodies are large and sturdy, reaching about 2.5 to 3 meters in length and weighing up to 600 kilograms. Their body color is silvery-gray with irregular spot patterns that help them camouflage underwater. Their faces are round with large eyes that help them see in low light under ice. One of this species\' main advantages is its deep and long diving ability; they can dive to 600 meters and stay underwater for over 1 hour, making them among the best divers among marine mammals. Weddell seals eat various types of fish, krill, and squid that they catch under ice using natural sonar and sharp vision. They often dig and maintain holes in ice using their strong front teeth to maintain surface access. Unfortunately, teeth worn down from grinding ice can limit their ability to open holes, which can affect survival as they age. This animal breeds in Antarctic spring. Females give birth to one pup on ice sheets after a gestation period of about 11 months, and the pup will nurse for several weeks before learning to swim and dive independently. During this time, mothers are very protective and supply high energy through milk so the pup grows quickly. Weddell seals live in small groups or colonies, but not as dense as other seal species. They are relatively less socially active outside breeding season, spending much time diving or resting on ice. Although they don\'t have many predators, young seals are vulnerable to attacks from orcas and leopard seals. Currently, Weddell seal populations are relatively stable and not classified as endangered, but they still depend on healthy sea ice, making them very vulnerable to long-term climate change impacts. With their extraordinary ability to survive in Earth\'s most extreme environment, Weddell seals have become symbols of life resilience in fragile polar regions.'**
+  String get descWeddellSeal;
+
+  /// No description provided for @descAntarcticToothfish.
+  ///
+  /// In en, this message translates to:
+  /// **'The Antarctic toothfish (Dissostichus mawsoni) is a large fish living in cold, deep waters around the Southern Ocean, particularly near the Antarctic continent. This fish is a top predator in Antarctic deep-sea ecosystems and plays an important role in maintaining food chain balance. Due to its large appearance and sharp teeth, it\'s nicknamed toothfish, though scientifically it belongs to the Nototheniidae family or icefish, typical of polar waters. Antarctic toothfish can grow up to two meters long and weigh over 100 kilograms, making it one of the largest fish species in the Antarctic region. Its body is sturdy, gray to brownish, with elongated dorsal fins and strong jaws to catch prey. One uniqueness of this fish is its ability to live in extremely low temperatures, thanks to natural antifreeze proteins in its blood that prevent ice crystal formation in body tissues. This fish lives in deep waters, at depths of 500 to over 2,000 meters, and moves slowly in dark, cold waters. Its main diet includes small fish, squid, and crustaceans, and being at the top of the food chain, only a few natural predators like orcas and seals can prey on adult toothfish. In recent years, Antarctic toothfish has become a target of high-value commercial fisheries, especially for international markets, where it\'s known as Chilean sea bass in trade. Due to its slow growth and limited reproduction—female breeders only lay eggs after reaching sufficient maturity age—overfishing can quickly disrupt populations. Currently, toothfish fisheries are strictly regulated by CCAMLR (Commission for the Conservation of Antarctic Marine Living Resources) with a strict quota and tracking system to ensure sustainability. Antarctic toothfish is also an important subject in scientific studies of physiological adaptation to extreme temperatures, as well as impacts of climate change and fishery exploitation on deep-sea ecosystems. Due to its important position in Antarctic marine environments, toothfish existence reflects the health and stability of unique and vulnerable polar ecosystems. Careful conservation and management efforts are crucial to ensure this species isn\'t disturbed by human pressure and global environmental changes.'**
+  String get descAntarcticToothfish;
+
+  /// No description provided for @descLeopardSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'The leopard seal (Hydrurga leptonyx) is one of the toughest apex predators in Antarctic ecosystems. This seal gets its name from the dark spots on its body resembling leopard skin, as well as its aggressive behavior and extraordinary hunting ability. Its body is sleek, long, and very powerful, reaching 3 to 4 meters in length and weighing over 500 kilograms, making it one of the largest seal species in the southern polar region. Leopard seals have large heads with wide jaws and sharp reptile-like teeth, allowing them to prey on various animals. Unlike most other seals that eat small fish or crustaceans, leopard seals are true carnivores preying on penguins, seal pups, fish, and krill. They are famous for their ability to capture and kill penguins with fast, deadly hunting techniques, such as ambushing prey from under ice or from open water near shore. Although known as fierce toward prey, leopard seals are calm and agile divers. They can dive to depths over 300 meters and stay underwater for 15 to 30 minutes, using sound and sharp vision to navigate and hunt under ice. They are often found alone, unlike other seal species that live in groups. Leopard seals are solitary species, and their social interactions are usually limited to mating season. Their reproductive cycle begins during Antarctic summer. After a gestation period of about 11 months, females give birth to one pup on ice floes and care for it for the first few weeks before the pup can swim and hunt independently. Leopard seals play an important role in maintaining Antarctic ecosystem balance. As top predators, they help regulate penguin and other seal populations. Although not classified as endangered, they are highly sensitive to climate change, especially because they depend on sea ice as their main habitat for resting, birthing, and hunting. Rapid ice melt due to global warming potentially disrupts their life patterns in the future. Known for their combination of strength, speed, and intelligence, leopard seals are one of the icons of southern polar wildlife. They are important symbols of Antarctica\'s extreme, beautiful, yet highly vulnerable wild world facing human impacts.'**
+  String get descLeopardSeal;
+
+  /// No description provided for @descBlueWhale.
+  ///
+  /// In en, this message translates to:
+  /// **'The blue whale (Balaenoptera musculus) is the largest animal ever to live on Earth, even surpassing dinosaurs in size. Its body length can reach 30 meters, and weight can exceed 180 tons—equivalent to 33 adult elephants. Despite its extraordinary size, the blue whale is a plankton feeder, mainly krill, a type of small shrimp they filter from seawater using baleen (brush-like sheets) in their mouths. In one day, a blue whale can consume over 3.5 tons of krill, especially during feeding season in polar waters. The blue whale\'s body is bluish-gray with characteristic light spots, and when viewed underwater, its body appears blue-greenish—that\'s the origin of its name. Its body shape is long, sleek, and aerodynamic, with a large, flat head and small dorsal fin near the tail. They have large, powerful tails (flukes) used to propel their bodies while swimming. Although appearing slow, blue whales can swim at speeds up to 50 km/h in certain situations. Blue whales are marine mammals, meaning they breathe using lungs and must surface to take air. When exhaling, they release water and air spray that can reach 9 meters high, one of the most striking features visible from afar. This species migrates long distances annually, moving from food-rich polar waters to tropical or subtropical waters to breed and give birth. Gestation lasts about 11 to 12 months, and females give birth to one calf every two to three years. Newborn blue whales are already very large, about 7 meters long and weighing over 2 tons, and will nurse for up to one year with rich-fat milk from their mothers. Although currently protected, blue whales were once on the brink of extinction due to massive whaling in the 20th century. Their populations declined drastically to only a small fraction of their original numbers. Now, although their numbers are slowly increasing, they are still classified as endangered by the IUCN. Their main current threats are collisions with large ships, underwater noise pollution, and climate change affecting krill distribution as their main food. Blue whales are symbols of grandeur and vulnerability in marine life. As the largest creatures on the planet, their existence reminds us of the richness and wonders of ocean nature, and the importance of protecting ocean ecosystems that are home to extraordinary creatures like them.'**
+  String get descBlueWhale;
+
+  /// No description provided for @descAntarcticKrill.
+  ///
+  /// In en, this message translates to:
+  /// **'Antarctic krill (Euphausia superba) is a type of small shrimp living in cold, clean waters around the Antarctic continent. Although their bodies are tiny—usually only 2 to 6 centimeters long—krill are the main foundation of the food chain in Antarctic marine ecosystems. In their enormous numbers, krill become the primary food source for many large marine animals like blue whales, seals, penguins, seabirds, and large fish. In fact, Antarctic krill populations are estimated to reach hundreds of millions of tons, making them one of Earth\'s largest animal biomasses. Krill bodies are transparent with reddish color, and they have large eyes and swimming legs that allow them to move in groups in large formations called swarms. Krill actively swim in water columns and can dive to depths over 200 meters, especially when avoiding predators. At night, they often rise to the sea surface to feed, particularly in summer when ice layers melt and phytoplankton—their main food source—is abundant. Krill life cycles are heavily influenced by seasons. In winter, they can survive by eating sea ice layers containing microscopic algae. Young krill heavily depend on sea ice as shelter and early food source. This is why sea ice melt due to climate change becomes a major threat to krill survival and the entire food chain depending on them. Krill also have unique abilities in replacing their outer body layer (molting), allowing them to grow and also survive during food shortages by shrinking their bodies. This process shows how remarkably krill have adapted to extreme and challenging polar marine environments. Besides being important food for wildlife, krill are also becoming objects of industrial fishery exploitation, mainly for omega-3 supplements, aquaculture feed, and animal food. Although currently monitored by CCAMLR (Commission for the Conservation of Antarctic Marine Living Resources), uncontrolled krill harvesting can disrupt overall Antarctic ecosystem stability. As small organisms supporting large life in the southern polar region, Antarctic krill are important symbols of interconnectedness among all marine creatures. Preserving them means protecting entire ecosystems heavily dependent on their presence in frozen, life-rich oceans.'**
+  String get descAntarcticKrill;
+
+  /// No description provided for @mysteryPacificTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery of the Pacific Ocean'**
+  String get mysteryPacificTitle;
+
+  /// No description provided for @mysteryPacificDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'There are reports of mysterious \'Bloop\' sounds heard from the depths of the Pacific Ocean, their origin remains unknown to this day.'**
+  String get mysteryPacificDescription;
+
+  /// No description provided for @mysteryPacificFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The mysterious sound known as Bloop was first heard in 1997 by the National Oceanic and Atmospheric Administration (NOAA) through a network of hydrophones installed in the Pacific Ocean to monitor undersea seismic activity. This sound had a very low frequency but was strong enough to be detected by sensors more than 5,000 kilometers apart, and its character resembled a biological sound—as if from an unknown giant living creature. Since no known marine animal could produce a sound that powerful, this phenomenon sparked widespread speculation, including theories that it came from a mysterious sea creature, even being linked to legends like Cthulhu. However, after years of research, NOAA scientists concluded that the most likely origin of the Bloop sound was natural geophysical phenomena, particularly the cracking and breaking of giant icebergs (icequakes) in Antarctica underwater, creating sound waves very similar to biological characteristics. This explanation is supported by the sound\'s origin location near glaciers in the South Pacific Ocean region. Although its mystery has largely been solved, the Bloop remains one of the most fascinating examples of how the deep sea, especially vast and deep regions like the Pacific Ocean, still holds phenomena not fully understood by humans. Mysteries like this show how much unexplored knowledge space exists in the ocean depths and how technology and science continue to play crucial roles in uncovering the secrets of the deepest oceans.'**
+  String get mysteryPacificFullContent;
+
+  /// No description provided for @mysteryAtlanticTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery of the Atlantic Ocean'**
+  String get mysteryAtlanticTitle;
+
+  /// No description provided for @mysteryAtlanticDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Bermuda Triangle in the Atlantic Ocean is known as the place where ships and planes disappear mysteriously.'**
+  String get mysteryAtlanticDescription;
+
+  /// No description provided for @mysteryAtlanticFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Bermuda Triangle, located in the western Atlantic Ocean between Miami (Florida), Bermuda, and Puerto Rico, has long been known as a mysterious location due to various reports of ships and planes disappearing suddenly and without a trace. This phenomenon gained popularity in the mid-20th century, especially after the disappearance of Flight 19—a US military aircraft squadron in 1945—which sparked waves of speculation and public attention. Since then, hundreds of incidents have been linked to this area, which some believe to have supernatural powers, magnetic disturbances, or even alien technology or space-time portals. However, based on scientific research, most incidents in the Bermuda Triangle can be explained by natural causes, such as sudden extreme weather, navigation errors, Earth\'s magnetic fields affecting compass instruments, and strong ocean currents like the Gulf Stream that can quickly remove wreckage traces. Additionally, this area is one of the world\'s busiest shipping and flight routes, so it\'s natural that accident rates are higher compared to other areas. Statistical studies show that disappearance rates in the Bermuda Triangle are not significantly higher than in other sea areas when calculated based on traffic volume. Therefore, although the mysterious aura remains strong in popular culture, the scientific community agrees that there is no evidence supporting the existence of strange or extraordinary forces in the Bermuda Triangle, and that incidents there are more reasonably explained through natural, technical, and human factors.'**
+  String get mysteryAtlanticFullContent;
+
+  /// No description provided for @mysteryIndianTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery of the Indian Ocean'**
+  String get mysteryIndianTitle;
+
+  /// No description provided for @mysteryIndianDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The disappearance of Malaysia Airlines Flight MH370 in the Indian Ocean remains the greatest mystery in modern aviation history.'**
+  String get mysteryIndianDescription;
+
+  /// No description provided for @mysteryIndianFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The disappearance of Malaysia Airlines Flight MH370 on March 8, 2014, is one of the greatest mysteries in modern aviation history and remains largely unsolved to this day. The Boeing 777 took off from Kuala Lumpur bound for Beijing carrying 239 people on board but disappeared from civilian radar about an hour after takeoff. Military data showed that the plane mysteriously veered off its original course and headed southwest before allegedly crashing in a remote area of the southern Indian Ocean. The suspected crash site is part of the deepest and most remote seas in the world, with strong ocean currents, extreme depths, and complex underwater conditions, making the search extremely difficult and challenging. An international investigation involving various countries and advanced technology has been conducted, including seafloor scanning using sonar and analysis of satellite data from Inmarsat, indicating that the plane most likely crashed somewhere around the Southern Corridor of the Indian Ocean. Some aircraft debris fragments, such as a flaperon found on Réunion Island and other beaches in the western Indian Ocean region, have been confirmed to be from MH370, but the exact location of the main wreckage remains undiscovered. The exact cause of MH370\'s disappearance is also unknown because without the black box and main wreckage, investigators can only speculate based on limited data, including possible human intervention or complex system failures. This mystery not only leaves grief for the victims\' families but also sparks widespread debate about aviation safety, data transparency, and the limitations of aircraft tracking technology in vast ocean areas like the Indian Ocean. This event highlights how many of the world\'s ocean areas remain not fully accessible to technology and human knowledge, while also serving as a reminder of the importance of international cooperation in facing global tragedies.'**
+  String get mysteryIndianFullContent;
+
+  /// No description provided for @mysteryArcticTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery of the Arctic Ocean'**
+  String get mysteryArcticTitle;
+
+  /// No description provided for @mysteryArcticDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Strange discoveries like blue-colored ice and unusual underwater formations make the Arctic Ocean full of puzzles.'**
+  String get mysteryArcticDescription;
+
+  /// No description provided for @mysteryArcticFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arctic Ocean indeed holds many unique natural puzzles that continue to be studied to this day. One of the most striking phenomena is bright blue ice often found in the North Pole region. This blue color appears because Arctic ice can form very densely without many air bubbles, allowing only blue light wavelengths to penetrate and be reflected back. The older and denser the ice, the deeper the blue color. This is very different from ordinary white ice that contains many air bubbles and reflects almost all light. This phenomenon is not only beautiful but also provides important information about the age, structure, and stability of sea ice in polar regions. In addition, the Arctic Ocean floor also holds unusual underwater formations, including seamounts, deep trenches, and active tectonic plate rifts like the Lomonosov Ridge and Mendeleev Ridge. Some of these formations were only detected in the 21st century thanks to advanced sonar mapping and deep-sea expeditions. The existence of these formations raises scientific questions about their geological origins and the potential for mineral reserves and extreme life around them. Some areas even show undersea methane activity, where methane gas bubbles emerge from the seafloor and indicate the potential for significant impact on climate change if released on a large scale. The combination of extreme environments, complex underwater terrain, and minimal exploration makes the Arctic Ocean one of the most mysterious regions on the planet. These conditions make every new scientific discovery in the region—whether unusual ice formations, extreme microbial life, or ancient geological structures—an important clue in understanding Earth\'s dynamics and its impact on global climate change. Amid melting ice due to global warming, the mysteries hidden in the Arctic are becoming increasingly important to uncover, both for science and the future of our planet\'s environment.'**
+  String get mysteryArcticFullContent;
+
+  /// No description provided for @mysterySouthernTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery of the Southern Ocean'**
+  String get mysterySouthernTitle;
+
+  /// No description provided for @mysterySouthernDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Ships exploring the treacherous waters of the Southern Ocean often report extreme weather phenomena that cannot be explained.'**
+  String get mysterySouthernDescription;
+
+  /// No description provided for @mysterySouthernFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Southern Ocean, surrounding the Antarctic continent, is known as one of the most extreme and dangerous sea regions in the world. Ships traversing these waters, whether for scientific expeditions or commercial voyages, often report extremely fierce weather phenomena that cannot always be accurately predicted. Weather in the Southern Ocean can change within minutes—from clear skies to blizzards accompanied by hurricane-force winds and giant waves. This is due to the fact that this ocean is not bounded by large landmasses, allowing winds and ocean currents to circulate unimpeded around Antarctica, creating a highly dynamic weather system. One of the most famous phenomena is the Roaring Forties, Furious Fifties, and Screaming Sixties—terms describing the incredible wind power occurring at latitudes 40°, 50°, and 60° south. These winds produce ocean waves that can reach heights of over 20 meters and create sea storms that can disable ships in a short time. Additionally, the emergence of ice fog, hail, and cold currents carrying sea ice chunks or icebergs make navigation in this region increasingly risky. In some cases, sailors report phenomena like freak waves or anomalous waves that appear suddenly and are much higher than normal surrounding waves—an event that remains a topic of oceanographic research to this day. Due to the remote, inaccessible, and meteorologically extreme nature of the Southern Ocean, many weather phenomena occurring there are not fully understood. These conditions make the Southern Ocean both a challenging natural laboratory for scientists and a reminder that there are still many natural forces in the open sea that cannot be fully explained by modern science.'**
+  String get mysterySouthernFullContent;
+
+  /// No description provided for @humanConservationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Marine Conservation'**
+  String get humanConservationTitle;
+
+  /// No description provided for @humanConservationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Humans play an active role in preserving marine habitats through conservation and preservation.'**
+  String get humanConservationDescription;
+
+  /// No description provided for @humanConservationFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Humans play an active role in preserving marine habitats through various conservation and preservation efforts aimed at protecting marine ecosystems from damage caused by human activities and environmental changes. Marine conservation encompasses all actions aimed at maintaining marine biodiversity, preserving ecosystem functions, and ensuring marine resources can be utilized sustainably by present and future generations. These efforts are becoming increasingly important as oceans face serious threats such as overfishing, plastic pollution, oil spills, climate change, and habitat destruction like coral reefs and seagrass beds. One concrete form of marine conservation is the establishment of marine protected areas (MPAs) that restrict or prohibit certain activities in specific marine areas to maintain ecosystem integrity and give species time to recover. Additionally, conservation involves ecosystem rehabilitation, such as coral reef restoration, mangrove planting, and protection of critical habitats like fish spawning grounds and turtle nesting sites. These efforts are not only carried out by governments but also by local communities, non-governmental organizations, scientists, and the general public who are increasingly aware of the importance of ocean conservation. Environmental education and awareness campaigns are also important parts of marine conservation. By increasing public knowledge about the importance of marine ecosystems for human life—from oxygen provision, climate regulation, to food sources—a sense of collective responsibility to protect them will grow. Reducing plastic waste, using environmentally friendly fishing gear, and sustainable fisheries management are examples of concrete preservation actions that can be taken by individuals or groups. Technology also plays a role in strengthening marine conservation through satellite monitoring, ship tracking systems to prevent illegal fishing, and using scientific data in ecosystem-based policymaking. International collaboration is crucial because the ocean is an open ecosystem that crosses national borders, so marine habitat protection requires cooperation between countries and institutions. With all these efforts, marine conservation is not only the responsibility of experts or governments but is part of the shared responsibility of all humanity in maintaining Earth\'s balance. A healthy ocean means sustainable life, as almost all aspects of life—from the air we breathe to the food we eat—depend on the balance and preservation of marine ecosystems.'**
+  String get humanConservationFullContent;
+
+  /// No description provided for @humanPlasticReductionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plastic Waste Reduction'**
+  String get humanPlasticReductionTitle;
+
+  /// No description provided for @humanPlasticReductionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Human efforts to reduce plastic waste to maintain marine ecosystem health.'**
+  String get humanPlasticReductionDescription;
+
+  /// No description provided for @humanPlasticReductionFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Plastic waste reduction is one of the most crucial human efforts in maintaining marine ecosystem health. Plastics, especially single-use types like bags, bottles, and straws, have become a major threat to the marine environment due to their non-biodegradable nature and can persist in the ocean for hundreds of years. Every year, millions of tons of plastic waste enter the ocean from various sources, ranging from household waste, industry, to coastal tourism activities. This waste not only pollutes waters but also endangers marine life as it is often mistaken for food by creatures like turtles, seabirds, and fish. As a result, many marine animals die from choking, poisoning, or digestive system disorders from ingesting plastic. Plastic waste reduction efforts are carried out through various approaches, from government policies to individual behavioral changes. Some countries and cities have implemented bans or restrictions on single-use plastics and encouraged the use of environmentally friendly alternatives like cloth bags, glass containers, or biodegradable materials. In the industrial sector, many companies are switching to recyclable packaging or using recycled materials to reduce new waste. Additionally, global campaigns like the Zero Waste and Plastic Free Ocean movements have increased public awareness about the dangers of plastic and the importance of reducing its use in daily life. Environmental education also plays an important role in shaping new mindsets that are more concerned with sustainability. In schools, communities, and social media, education about plastic\'s impact on the ocean and reduction steps continues to be promoted. Activities like beach cleanups, community-based waste management, and efficient recycling systems are part of solutions involving direct community participation. On the other hand, technological innovation also plays an important role, such as developing automatic waste sorting machines, ocean plastic collection systems, and creating alternative plastics based on algae or starch. These efforts are crucial for keeping marine ecosystems healthy because plastic not only pollutes water but also contributes to microplastics—small particles that can enter the food chain and end up in the human body through seafood consumption. Microplastics have been found in various marine species, from plankton to whales, showing that plastic pollution has broad and long-term impacts. With collective commitment from governments, industry players, communities, and individuals, plastic waste reduction becomes a concrete step in maintaining the balance and sustainability of marine ecosystems. An ocean clean of plastic waste not only provides better life for marine biota but also ensures the sustainability of marine natural resources for present and future generations.'**
+  String get humanPlasticReductionFullContent;
+
+  /// No description provided for @humanEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Education & Campaigns'**
+  String get humanEducationTitle;
+
+  /// No description provided for @humanEducationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Increasing public awareness about the importance of ocean conservation through education and campaigns.'**
+  String get humanEducationDescription;
+
+  /// No description provided for @humanEducationFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Increasing public awareness about the importance of ocean conservation through education and campaigns is a strategic and fundamental step in marine ecosystem preservation efforts. Education plays a role in providing deep understanding about the ocean\'s function as a life support system, food source, climate regulator, and home to millions of species. Through formal education in schools and universities, as well as informal education like seminars, workshops, documentaries, and social media, society is equipped with scientific knowledge about pollution dangers, coral reef damage, climate change, and the importance of marine biodiversity. This environmental education aims to foster care and responsibility from an early age, so that young generations grow with awareness that the ocean must be protected and preserved. Meanwhile, environmental campaigns serve as powerful public communication tools to convey important messages widely and touch society emotionally. Campaigns are conducted by governments, non-governmental organizations, environmental communities, to community leaders or influencers with significant public influence. Campaign forms can include beach clean-up movements, single-use plastic reduction, #SaveTheOcean campaigns, World Ocean Day, to mangrove planting initiatives and coral reef restoration. Campaigns often utilize visual power and digital media to attract attention and build active public engagement. Education and campaigns complement each other: education builds strong understanding, while campaigns drive action. When society has sufficient knowledge, they are more receptive to invitations to participate in conservation activities, change consumption habits that damage the ocean, and encourage pro-environmental policies. These efforts are also important for creating social and political pressure for leaders and policymakers to take ocean protection more seriously. Ultimately, with a combination of deep education and inspiring campaigns, public awareness about the ocean\'s importance can grow widely and have real impact on marine ecosystem sustainability for a more sustainable future.'**
+  String get humanEducationFullContent;
+
+  /// No description provided for @humanCoralRestorationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coral Reef Restoration'**
+  String get humanCoralRestorationTitle;
+
+  /// No description provided for @humanCoralRestorationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Coral reef restoration projects involving communities and scientists.'**
+  String get humanCoralRestorationDescription;
+
+  /// No description provided for @humanCoralRestorationFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Coral reef restoration is a series of active conservation efforts aimed at restoring the condition and ecological function of coral reefs damaged by various pressures, such as coral bleaching, pollution, destructive fishing, and climate change impacts. Coral reefs are marine ecosystems extremely rich in biodiversity and home to about 25% of marine species despite covering less than 1% of the ocean surface. Besides being important habitats, coral reefs also protect coastlines from erosion, support fishermen\'s livelihoods, and are sources of marine tourism. However, in recent decades, more than a third of the world\'s coral reefs have experienced serious degradation. Coral reef restoration projects are part of these recovery efforts and now often involve collaboration between scientists, conservation institutions, governments, and local communities. Such projects typically begin with mapping and monitoring of damaged reef locations, followed by active restoration methods like coral fragment planting, coral gardening, and using artificial structures like metal racks, concrete reefs, or bio rock as growing sites for new coral. Healthy coral fragments are cut from parent colonies, grown in nurseries, then transplanted to prepared locations to regrow and form new colonies. In some cases, modern techniques like printing heat-resistant coral DNA or engineering coral microbiomes are also being developed to increase coral resilience against rising sea temperatures. One important aspect of successful coral reef restoration is local community participation. Fishing communities, divers, and coastal residents are often directly involved in coral planting, ecosystem monitoring, and ocean protection campaigns. This approach not only builds a sense of ownership but also ensures local communities understand the long-term value of maintaining healthy coral reefs, including economic benefits from sustainable fisheries and ecotourism. In many places, community involvement even becomes the key to success because they possess invaluable local knowledge and can contribute to long-term maintenance. Coral reef restoration is also supported by policies and regulations, such as establishing marine protected areas (MPAs), banning destructive fishing gear like bombs and cyanide, and monitoring coastal development that damages ecosystems. Cross-sector collaboration—between marine scientists, government agencies, environmental organizations, and the private sector—is crucial in integrating scientific data with policies and on-ground actions. Although coral reef restoration is a long process requiring significant cost and effort, the results are invaluable. Successfully restored reefs can become productive habitats again, provide food sources, and strengthen coastal community resilience against natural disasters like large waves or storms. Amid global climate change threats, coral reef restoration is not just about repairing what is damaged but also about building resilience and sustainability for the future of oceans and humans who depend on them.'**
+  String get humanCoralRestorationFullContent;
+
+  /// No description provided for @factIndianOceanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian Ocean'**
+  String get factIndianOceanTitle;
+
+  /// No description provided for @factIndianOceanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The world\'s third largest ocean playing a crucial role in the global climate system.'**
+  String get factIndianOceanDescription;
+
+  /// No description provided for @factIndianOceanFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean is the world\'s third largest ocean after the Pacific and Atlantic Oceans, covering about 20% of Earth\'s total water surface. This ocean is located between Asia in the north, Africa in the west, Australia in the east, and bounded by the Southern Ocean in the south. Its area is approximately 70 million square kilometers, making it a vital sea route connecting the Middle East, South Asia, Southeast Asia, and East Africa. The Indian Ocean plays an important role in the global climate system, especially due to monsoon phenomena affecting weather in surrounding regions like India, Indonesia, and East Africa. Within it are several large seas like the Arabian Sea, Bay of Bengal, and Gulf of Oman. This ocean also holds enormous natural wealth, from fishery resources to undersea oil and gas reserves. Its biodiversity is very high, including coral reefs, whales, turtles, sharks, and various tropical fish species. Several islands and archipelagic countries like Maldives, Sri Lanka, and Madagascar depend on the Indian Ocean for economy, fisheries, and tourism. However, this region also faces serious challenges like climate change, sea level rise, marine pollution, and geopolitical conflicts due to strategic interests of major countries. As an ocean dense with shipping traffic and rich in life, the Indian Ocean holds important roles not only ecologically but also economically and geostrategically in the global order.'**
+  String get factIndianOceanFullContent;
+
+  /// No description provided for @factAtlanticOceanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Atlantic Ocean'**
+  String get factAtlanticOceanTitle;
+
+  /// No description provided for @factAtlanticOceanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The ocean separating the Americas from Europe and Africa, famous for its Gulf Stream.'**
+  String get factAtlanticOceanDescription;
+
+  /// No description provided for @factAtlanticOceanFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Atlantic Ocean is the world\'s second largest ocean after the Pacific Ocean, stretching from the Arctic Ocean in the north to the Southern Ocean in the south, and flanked by the Americas in the west and Europe and Africa in the east. Its area reaches about 85 million square kilometers, and it is a major shipping route connecting countries on both sides of the ocean, making it very important in world trade history, including in the exploration and colonial eras. This ocean is also where large ocean currents like the Gulf Stream meet, influencing European and North American climates. On the Atlantic Ocean floor lies the Mid-Atlantic Ridge, an undersea mountain range that is evidence of active geological processes involving tectonic plate separation. The Atlantic Ocean has rich biodiversity, including whales, dolphins, cod, and various plankton species supporting marine food chains. This ocean is also home to various natural phenomena, like Atlantic storms and tropical cyclones that can greatly impact coastal areas. Besides biological wealth, the Atlantic also contains important economic resources like petroleum, natural gas, and fisheries. However, like other oceans, the Atlantic Ocean faces serious environmental challenges due to climate change, plastic pollution, and overfishing threatening its ecosystem sustainability. As an ocean with major roles in world history, climate, and economy, the Atlantic Ocean remains a very vital sea region for humanity\'s future.'**
+  String get factAtlanticOceanFullContent;
+
+  /// No description provided for @factPacificOceanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pacific Ocean'**
+  String get factPacificOceanTitle;
+
+  /// No description provided for @factPacificOceanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The world\'s largest and deepest ocean, covering more than 63 million square miles or about one-third of Earth\'s surface.'**
+  String get factPacificOceanDescription;
+
+  /// No description provided for @factPacificOceanFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pacific Ocean is the world\'s largest and deepest ocean, covering more than 63 million square miles or about one-third of Earth\'s surface, stretching from Asia and Australia in the west to the Americas in the east. This ocean is not only geographically vast but also ecologically and geologically rich, containing the Mariana Trench—the deepest point in Earth\'s oceans at over 11,000 meters deep. Along its edges lies the Pacific Ring of Fire, an active seismic zone where earthquakes and volcanic eruptions frequently occur. The Pacific Ocean encompasses thousands of tropical islands and archipelagic countries like Indonesia, Philippines, Japan, Papua New Guinea, to small nations in Oceania, making it home to diverse cultures and unique marine ecological systems. Large ocean currents like the Kuroshio Current and Pacific Equatorial Current influence global climate and are important parts of the world\'s thermohaline circulation system. This ocean is also an important region in international trade, energy exploration, and food sources from the fisheries sector. However, the Pacific is also a global focus due to serious environmental issues like coral bleaching, plastic waste accumulation in the Great Pacific Garbage Patch, and climate change impacts on small islands threatened with submergence. As the world\'s largest, deepest, and most complex ocean, the Pacific Ocean plays vital roles in climate dynamics, biodiversity, maritime economy, and the planet\'s overall balance.'**
+  String get factPacificOceanFullContent;
+
+  /// No description provided for @factArcticOceanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Arctic Ocean'**
+  String get factArcticOceanTitle;
+
+  /// No description provided for @factArcticOceanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The smallest and shallowest ocean, located around the North Pole and covered with ice year-round.'**
+  String get factArcticOceanDescription;
+
+  /// No description provided for @factArcticOceanFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arctic Ocean is the smallest and shallowest among the world\'s five oceans, located around the North Pole and surrounded by continents like Europe, Asia, and North America. Most of its surface is covered by sea ice year-round, although this ice area continues to shrink drastically due to global warming. Although small compared to other oceans, the Arctic plays an important role in maintaining global climate balance because its sea ice helps reflect solar radiation and regulate Earth\'s temperature. This ocean is also home to various species highly adapted to extreme conditions, like polar bears, walruses, beluga whales, and ice plankton that form the base of polar marine food chains. Beneath its sea surface lie large reserves of oil and natural gas targeted for exploration, while also raising environmental damage concerns. Additionally, the Arctic Ocean is becoming an increasingly strategic shipping route as melting ice opens new shorter sea routes between Asia and Europe. However, this region is also highly vulnerable to climate change impacts, microplastic pollution, and ecosystem disturbances from increasing human activities. With all its limitations, the Arctic Ocean remains a crucial area for global science, geopolitics, and environmental conservation.'**
+  String get factArcticOceanFullContent;
+
+  /// No description provided for @factSouthernOceanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Southern Ocean'**
+  String get factSouthernOceanTitle;
+
+  /// No description provided for @factSouthernOceanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The ocean surrounding Antarctica, playing an important role in regulating global climate.'**
+  String get factSouthernOceanDescription;
+
+  /// No description provided for @factSouthernOceanFullContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The Southern Ocean, also known as the Antarctic Ocean, is the newest officially internationally recognized ocean surrounding the Antarctic continent, extending from the Antarctic coast to around latitude 60° south. Although not the largest, the Southern Ocean plays a very important role in the global climate system due to its strong currents, the Antarctic Circumpolar Current, which connects and balances all other major oceans. This ocean also functions as a major carbon dioxide absorber and stores about 60% of the world\'s very cold seawater, making it a central regulator of Earth\'s temperature. This region is a unique habitat for various polar marine species, including blue whales, Weddell seals, Antarctic krill, and emperor penguins, all highly dependent on seasonal sea ice. Its extreme and harsh seas also serve as a global scientific research field, both for climate studies, oceanography, and deep-sea biodiversity. However, the Southern Ocean ecosystem now faces great pressure from global warming, sea ice melt, and resource exploitation like krill and fish. With its remote and relatively pristine nature, the Southern Ocean becomes one of the most important marine areas to protect for maintaining Earth\'s overall ecological balance.'**
+  String get factSouthernOceanFullContent;
+
+  /// No description provided for @pacificOceanGeneralDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pacific Ocean is also known as the peaceful sea. Meanwhile, the name Pacific itself comes from the Spanish Pacifio which means calm. The Pacific Ocean is the largest body of water in the world. It is said to be the largest in the world because the Pacific Ocean covers about one third of the Earth\'s surface. If measured and calculated, the area of the Pacific Ocean reaches 179.7 square kilometers or 69.4 square miles. The length of the Pacific Ocean reaches 15,500 kilometers or 9,600. This ocean stretches from the Bering Sea in the Arctic to the ice boundary in the Ross Sea, South Antarctica. In addition, the Pacific Ocean also stretches from Indonesia to the coast of Colombia. The western boundary of the Pacific Ocean is usually placed in the Strait of Malacca. No wonder why the Pacific Ocean is the largest or widest ocean in the world compared to other oceans.'**
+  String get pacificOceanGeneralDescription;
+
+  /// No description provided for @pacificOceanLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pacific Ocean is the ocean that has the largest area on Earth and is the king of oceans. The Pacific Ocean is very wide and deep, so its existence covers various regions. Astronomically, the Pacific Ocean reaches its greatest east-west width at about 5° North Latitude which stretches about 19,800 km from Indonesia to the coast of Colombia. Some information about the location of the Pacific Ocean is already known previously. Some state that the area of the Pacific Ocean reaches 1/3 of the Earth\'s surface area. Because the Pacific Ocean covers almost 1/3 of the Earth\'s area, there are many countries that are located or border the Pacific Ocean.'**
+  String get pacificOceanLocation;
+
+  /// No description provided for @pacificOceanCharacteristics.
+  ///
+  /// In en, this message translates to:
+  /// **'The oceans in the world consist of several numbers. Each of these oceans has its own characteristics. This is also the same with the Pacific Ocean. The Pacific Ocean has its own uniqueness that is only owned by the Pacific Ocean. Some characteristics of the Pacific Ocean include the following:'**
+  String get pacificOceanCharacteristics;
+
+  /// No description provided for @pacificOceanCharacteristic1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'It is the widest ocean in the world'**
+  String get pacificOceanCharacteristic1Title;
+
+  /// No description provided for @pacificOceanCharacteristic1Description.
+  ///
+  /// In en, this message translates to:
+  /// **'The size of the Pacific Ocean is much larger than other oceans in the world, such as the Atlantic, Arctic and also Indian. The size of the Pacific Ocean even reaches 1/3 of the Earth\'s surface area.'**
+  String get pacificOceanCharacteristic1Description;
+
+  /// No description provided for @pacificOceanCharacteristic2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Has the deepest trench in the world'**
+  String get pacificOceanCharacteristic2Title;
+
+  /// No description provided for @pacificOceanCharacteristic2Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you know that there is a lowest point in the world? And the location of the lowest point in the world is in the ocean trench. There are several ocean trenches, and the deepest trench is in the Pacific Ocean region. The deepest trench in the world is the Mariana Trench which has a depth of 10,911 meters from sea level.'**
+  String get pacificOceanCharacteristic2Description;
+
+  /// No description provided for @arcticOceanGeneralDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arctic Ocean is the smallest and shallowest ocean compared to other oceans in the world on planet Earth. In addition, this ocean is the ocean that has the lowest surface temperature compared to other oceans because of its location surrounding the North Pole. The Arctic Ocean is also called the frozen ocean in the past, because its entire surface is covered with ice all year round. This ocean has an area of 14.056 million km² which is equivalent to 1.5 times the area of the United States or about 8% of the area of the Pacific Ocean. Meanwhile, the coastline length is about 45,389 km and the average depth reaches 1,300 meters (3,406 feet) with the deepest point about 5,450 meters (17,880 feet) located in the Eurasian Basin. The Arctic Ocean began to be known since an American named Robert Peary set foot at the North Pole on April 6, 1909. The indigenous people who inhabit the area around the Arctic Ocean are the Eskimo tribe who have settled at the North Pole since 4000 years ago. The Eskimo tribe are raw meat eaters. The Arctic Ocean is recognized and established as an ocean by the International Hydrographic Organization (IHO), although other oceanographers state that the Arctic Ocean is not included in the ocean classification, but only as the Arctic Mediterranean Sea or the Arctic Sea which is part of the Mediterranean Sea that joins the Atlantic Ocean. There is the Lomonosov Ridge on the bottom of the Arctic Ocean which divides the seabed basin in the North Pole into two regions, namely the Eurasian Basin which has a depth of about 4,000–5,450 meters, and the American (Hyperborean) Basin which has a depth of about 4,000 meters. Some marine species in the Arctic Ocean are threatened with extinction, because this region has a fragile ecosystem and is slow to recover when there is damage. Marine species that are threatened with extinction are walruses and whales. Meanwhile, species that are abundant in the waters of the North Pole are lion\'s mane jellyfish. The Arctic Ocean also has relatively little underwater plant life, but not for phytoplankton. Phytoplankton is an important part of the sea and most of it is in the North Pole. Phytoplankton photosynthesizes during summer because of the sunlight that comes out during the day and night. Conversely in winter, phytoplankton struggle to get enough light for photosynthesis and survive.'**
+  String get arcticOceanGeneralDescription;
+
+  /// No description provided for @arcticOceanLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arctic Ocean is located in the northern hemisphere and entirely surrounds the North Pole. The location of the Arctic Ocean is on the continent of Asia, the continent of Europe and the northern part of North America. The astronomical location of the Arctic Ocean is at 90°00\' North Latitude and 0°00\' East Longitude. The Arctic Ocean is directly connected to the Pacific Ocean through the Bering Strait, and connected to the Atlantic Ocean through the Greenland Sea and the Labrador Sea. The Arctic Ocean region is almost surrounded by land and borders several regions, namely North Asia, North America, Greenland, and the Scandinavian Peninsula or Northern Europe. Several seas located in the Arctic Ocean region include Baffin Bay, Barents Sea, Beaufort Sea, Chukchi Sea, East Siberian Sea, Greenland Sea, Hudson Bay, Hudson Strait, Kara Sea, Laptev Sea, and White Sea.'**
+  String get arcticOceanLocation;
+
+  /// No description provided for @arcticOceanCharacteristics.
+  ///
+  /// In en, this message translates to:
+  /// **'The oceans in the world consist of several numbers. Each of these oceans has its own characteristics. This is also the same with the Arctic Ocean. The Arctic Ocean has its own uniqueness that is only owned by the Arctic Ocean. Some characteristics of the Arctic Ocean include the following:'**
+  String get arcticOceanCharacteristics;
+
+  /// No description provided for @arcticOceanCharacteristic1.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arctic Ocean is the smallest and shallowest ocean in the world.'**
+  String get arcticOceanCharacteristic1;
+
+  /// No description provided for @arcticOceanCharacteristic2.
+  ///
+  /// In en, this message translates to:
+  /// **'Its surface is always covered with ice, both in winter and throughout the year.'**
+  String get arcticOceanCharacteristic2;
+
+  /// No description provided for @arcticOceanCharacteristic3.
+  ///
+  /// In en, this message translates to:
+  /// **'The salinity and surface temperature always change depending on the season and the amount of ice melting covering it.'**
+  String get arcticOceanCharacteristic3;
+
+  /// No description provided for @arcticOceanCharacteristic4.
+  ///
+  /// In en, this message translates to:
+  /// **'The ocean with the lowest salinity in the world is caused by low evaporation and limited water outflow from this ocean region to its southern region with fresh water entering the Arctic Ocean in large quantities.'**
+  String get arcticOceanCharacteristic4;
+
+  /// No description provided for @arcticOceanCharacteristic5.
+  ///
+  /// In en, this message translates to:
+  /// **'There is the Eurasian Basin which has a depth of about 4,000 – 5,450 meters.'**
+  String get arcticOceanCharacteristic5;
+
+  /// No description provided for @arcticOceanCharacteristic6.
+  ///
+  /// In en, this message translates to:
+  /// **'The lowest point is in the Eurasian Basin which reaches 5,450 meters.'**
+  String get arcticOceanCharacteristic6;
+
+  /// No description provided for @arcticOceanCharacteristic7.
+  ///
+  /// In en, this message translates to:
+  /// **'The seabed shape of the Arctic Ocean is very varied, having faultblock–ridge (like hills), plains of the abyssal zone (like perforated areas), deep seas and basins.'**
+  String get arcticOceanCharacteristic7;
+
+  /// No description provided for @arcticOceanCharacteristic8.
+  ///
+  /// In en, this message translates to:
+  /// **'Has a polar climate throughout the year with an average temperature of -2°C.'**
+  String get arcticOceanCharacteristic8;
+
+  /// No description provided for @arcticOceanCharacteristic9.
+  ///
+  /// In en, this message translates to:
+  /// **'Winter in the Arctic Ocean is characterized by cold, dark, stable weather and clear skies.'**
+  String get arcticOceanCharacteristic9;
+
+  /// No description provided for @arcticOceanCharacteristic10.
+  ///
+  /// In en, this message translates to:
+  /// **'Summer is characterized by sunlight, humid conditions, foggy and weak whirlwinds with rain and snow.'**
+  String get arcticOceanCharacteristic10;
+
+  /// No description provided for @indianOceanGeneralDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean is the third largest ocean in the world. The name Indian is taken from the name of the country, India. The Indian Ocean in Sanskrit is called Ratnakara which means mine of gems. This ocean has 20% of the Earth\'s water surface or about 68.556 million km². The Indian Ocean has a coastline of 66,526 km with an average depth of 3,890 m. The deepest point of the Indian Ocean is located in the Java Trench, south of Java Island with a depth reaching 7,725 m. The Indian Ocean also has a water volume estimated at about 292,131,000 km³. There are five large ocean ridges in the Indian Ocean that are centered at one point, namely the Southwest Indian Ridge, Southeast Indian Ridge, Sicilia Ridge, Eastern Nikety Ridge, and Chagos-Lachandive Ridge. The Indian Ocean, which serves as a world transportation route, is the estuary for several rivers, such as the Ganges River, Zambezi River, Shatt al-Arab River, Brahmaputra River, Ayeyarwady River and Indus River. Several international ports are also located in the Indian Ocean region, such as Calcutta in India, Chennai in Madras, India, Colombo in Sri Lanka, Durban in South Africa, Jakarta in Indonesia, Karachi in Pakistan, Fremantle in Australia, Mumbai in Bombay, India and Richards Bay in South Africa.'**
+  String get indianOceanGeneralDescription;
+
+  /// No description provided for @indianOceanLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Astronomically, the location of the Indian Ocean is separated from the Atlantic Ocean by 20° East Longitude, and from the Pacific Ocean by 147° East Longitude. The ocean, which is the hottest sea in the world, consists of several collections of water regions, such as the Andaman Sea, Great Australian Bight, Arabian Sea, Bay of Bengal, Gulf of Aden, Persian Gulf, Gulf of Oman, Mozambique Channel, Strait of Malacca and Red Sea. The boundaries of the Indian Ocean region include:'**
+  String get indianOceanLocation;
+
+  /// No description provided for @indianOceanLocationPoint1.
+  ///
+  /// In en, this message translates to:
+  /// **'To the north is the South Asia region'**
+  String get indianOceanLocationPoint1;
+
+  /// No description provided for @indianOceanLocationPoint2.
+  ///
+  /// In en, this message translates to:
+  /// **'To the south is the Antarctic continent'**
+  String get indianOceanLocationPoint2;
+
+  /// No description provided for @indianOceanLocationPoint3.
+  ///
+  /// In en, this message translates to:
+  /// **'To the west are the Arabian Peninsula and the African continent'**
+  String get indianOceanLocationPoint3;
+
+  /// No description provided for @indianOceanLocationPoint4.
+  ///
+  /// In en, this message translates to:
+  /// **'To the east are the Malay Peninsula, Sumatra Island, Java, Lesser Sunda Islands, and the Australian continent'**
+  String get indianOceanLocationPoint4;
+
+  /// No description provided for @indianOceanCharacteristics.
+  ///
+  /// In en, this message translates to:
+  /// **'Each ocean in the world has its own characteristics that are the hallmark of that ocean. Like the Pacific Ocean which has several characteristics, the Indian Ocean also has several characteristics that distinguish it from other oceans. The following are some characteristics of the Indian Ocean:'**
+  String get indianOceanCharacteristics;
+
+  /// No description provided for @indianOceanCharacteristic1.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean is the only ocean whose territory is located in the eastern hemisphere.'**
+  String get indianOceanCharacteristic1;
+
+  /// No description provided for @indianOceanCharacteristic2.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean is flanked by three continents, namely the African continent, the Asian continent, the Australian continent and the South Pole.'**
+  String get indianOceanCharacteristic2;
+
+  /// No description provided for @indianOceanCharacteristic3.
+  ///
+  /// In en, this message translates to:
+  /// **'The depth of the sea in the Indian Ocean region is estimated to be approximately ±3,960 m and the average salinity is 34.72%.'**
+  String get indianOceanCharacteristic3;
+
+  /// No description provided for @indianOceanCharacteristic4.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean has large currents and high waves.'**
+  String get indianOceanCharacteristic4;
+
+  /// No description provided for @indianOceanCharacteristic5.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean has few islands, in the western part there is Madagascar Island, in the east there are Sumatra, Java, and Nusa Tenggara islands and in the north there are Ceylon Island (Sri Lanka) and Maldives.'**
+  String get indianOceanCharacteristic5;
+
+  /// No description provided for @indianOceanCharacteristic6.
+  ///
+  /// In en, this message translates to:
+  /// **'Large storms rarely occur in the Indian Ocean, unlike the Pacific Ocean and Atlantic Ocean which are often hit by large storms.'**
+  String get indianOceanCharacteristic6;
+
+  /// No description provided for @indianOceanCharacteristic7.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indian Ocean is the only ocean whose northern boundary does not touch the Arctic Circle line because it is blocked by the Asian continent.'**
+  String get indianOceanCharacteristic7;
+
+  /// No description provided for @indianOceanCharacteristic8.
+  ///
+  /// In en, this message translates to:
+  /// **'The Indo-Australian Plate which is the center of subduction of the Asian continent is located at the bottom of the northern Indian Ocean, causing this region to become an unstable area.'**
+  String get indianOceanCharacteristic8;
+
+  /// No description provided for @indianOceanCharacteristic9.
+  ///
+  /// In en, this message translates to:
+  /// **'The monsoon winds in the Indian Ocean are beneficial for sailors in their voyages, so the distance traveled can be further.'**
+  String get indianOceanCharacteristic9;
+
+  /// No description provided for @indianOceanCharacteristic10.
+  ///
+  /// In en, this message translates to:
+  /// **'Many sea basins or depressions are found in the Indian Ocean, such as the Madagascar Basin, Mascarena Basin, and Croze Basin.'**
+  String get indianOceanCharacteristic10;
+
+  /// No description provided for @indianOceanCharacteristic11.
+  ///
+  /// In en, this message translates to:
+  /// **'Large waves in the Indian Ocean often cause flooding disasters in Sri Lanka and the Maldives.'**
+  String get indianOceanCharacteristic11;
+
+  /// No description provided for @atlanticOceanGeneralDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Atlantic Ocean is one of the oceans on Earth besides the Pacific, Indian, Arctic, and Antarctic oceans. Actually, the name Atlantic itself comes from Greek mythology, which means sea of atlas. If the Pacific Ocean is the largest in the world, then the second rank is occupied by the Atlantic Ocean. The size of the Atlantic Ocean covers 1/5 of the Earth\'s surface area or 20% of the Earth\'s surface area. If calculated, the area of the Atlantic Ocean is 106,450,000 square kilometers. Then if the surrounding seas are not counted, the area is 82,362,000 square kilometers. The width of the Atlantic Ocean varies greatly, from 2,848 km (between Brazil and Liberia) to 4,830 km (between the United States and northern Africa). While the volume of the Atlantic Ocean if the surrounding seas are not counted is 323,600,000 km³. This symbolizes that the amount of area flowing into the Atlantic Ocean is four times greater than the Pacific Ocean or Indian Ocean. The shape of the Atlantic Ocean is like the letter S that stretches from the northern hemisphere to the southern hemisphere. As for the depth of the Atlantic Ocean itself, the average is 3,332 m (if together with the surrounding seas), and without the surrounding seas is 3,926 m. The deepest point in this ocean is in a very famous trench. The deepest trench in the Atlantic Ocean is the Puerto Rico Trench.'**
+  String get atlanticOceanGeneralDescription;
+
+  /// No description provided for @atlanticOceanLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'The Atlantic Ocean is a body of water located between Africa, Europe, the Southern Ocean and the American continent. Astronomically, the Atlantic Ocean is located at geographic coordinates 0.00 N and 25.00 W. The boundary between the Atlantic Ocean and the Indian Ocean to the east is bounded at the point 20 degrees East Longitude (E). And the boundary between the Atlantic Ocean and the Arctic Ocean is the line from the Greenland region to Svalbard which is north of Norway. The Atlantic Ocean is a unique ocean because this ocean has an irregular coastline which is bounded by various bays and seas. Some of the seas that border the Atlantic Ocean are:'**
+  String get atlanticOceanLocation;
+
+  /// No description provided for @atlanticOceanLocationPoint1.
+  ///
+  /// In en, this message translates to:
+  /// **'Caribbean Sea'**
+  String get atlanticOceanLocationPoint1;
+
+  /// No description provided for @atlanticOceanLocationPoint2.
+  ///
+  /// In en, this message translates to:
+  /// **'Gulf of St. Lawrence'**
+  String get atlanticOceanLocationPoint2;
+
+  /// No description provided for @atlanticOceanLocationPoint3.
+  ///
+  /// In en, this message translates to:
+  /// **'Gulf of Mexico'**
+  String get atlanticOceanLocationPoint3;
+
+  /// No description provided for @atlanticOceanLocationPoint4.
+  ///
+  /// In en, this message translates to:
+  /// **'Mediterranean Sea'**
+  String get atlanticOceanLocationPoint4;
+
+  /// No description provided for @atlanticOceanLocationPoint5.
+  ///
+  /// In en, this message translates to:
+  /// **'Black Sea'**
+  String get atlanticOceanLocationPoint5;
+
+  /// No description provided for @atlanticOceanLocationPoint6.
+  ///
+  /// In en, this message translates to:
+  /// **'Baltic Sea'**
+  String get atlanticOceanLocationPoint6;
+
+  /// No description provided for @atlanticOceanLocationPoint7.
+  ///
+  /// In en, this message translates to:
+  /// **'North Sea'**
+  String get atlanticOceanLocationPoint7;
+
+  /// No description provided for @atlanticOceanLocationPoint8.
+  ///
+  /// In en, this message translates to:
+  /// **'Norwegian-Greenland Sea'**
+  String get atlanticOceanLocationPoint8;
+
+  /// No description provided for @atlanticOceanCharacteristics.
+  ///
+  /// In en, this message translates to:
+  /// **'In general, the oceans on Earth look the same between one and another. However, these different oceans actually have their own characteristics. Likewise with the Atlantic Ocean. The Atlantic Ocean has characteristics that make this ocean different from other oceans. Some characteristics of the Atlantic Ocean include the following:'**
+  String get atlanticOceanCharacteristics;
+
+  /// No description provided for @atlanticOceanCharacteristic1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Its shape is winding like the letter S'**
+  String get atlanticOceanCharacteristic1Title;
+
+  /// No description provided for @atlanticOceanCharacteristic1Description.
+  ///
+  /// In en, this message translates to:
+  /// **'One of the unique characteristics or facts of the Atlantic Ocean is its winding shape resembling the letter S. Because of this, the Atlantic Ocean also has an irregular coastline that is only bounded by various bays and seas.'**
+  String get atlanticOceanCharacteristic1Description;
+
+  /// No description provided for @atlanticOceanCharacteristic2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tropical storms often occur'**
+  String get atlanticOceanCharacteristic2Title;
+
+  /// No description provided for @atlanticOceanCharacteristic2Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Another characteristic of the Atlantic Ocean is the frequent occurrence of tropical storms. These tropical storms develop around the coastal area of Africa near Cape Verde, and then move westward toward the Caribbean Sea (this occurs from May to December).'**
+  String get atlanticOceanCharacteristic2Description;
+
+  /// No description provided for @atlanticOceanCharacteristic3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Storm winds often occur'**
+  String get atlanticOceanCharacteristic3Title;
+
+  /// No description provided for @atlanticOceanCharacteristic3Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Besides tropical storms, another frequent event is storm winds. Storm winds usually occur in the North Atlantic during winter in the north which makes ocean crossings more difficult and dangerous.'**
+  String get atlanticOceanCharacteristic3Description;
+
+  /// No description provided for @atlanticOceanCharacteristic4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Most of its territory is in the western longitude region'**
+  String get atlanticOceanCharacteristic4Title;
+
+  /// No description provided for @atlanticOceanCharacteristic4Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Another characteristic of the Atlantic Ocean is that most of its territory is in the western longitude region, so this ocean is in the western hemisphere. Those are some characteristics or unique facts about the Atlantic Ocean. Because of these characteristics, things like this are not found in other oceans.'**
+  String get atlanticOceanCharacteristic4Description;
+
+  /// No description provided for @southernOceanGeneralDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The boundaries and names for oceans and seas are agreed internationally when the International Hydrographic Bureau, predecessor of IHO, held the First International Conference on July 24, 1919. IHO then published it in Limits of Oceans and Seas, the first edition was in 1928. Since the first edition, the boundary of the Southern Ocean has been moving further south; since 1953, it has been removed from official publications and left to local hydrographic offices to determine their own boundaries. IHO included the ocean and its definition as waters south of 60 degrees south latitude in its 2000 revision, but this has not been formally adopted, due to ongoing deadlock over some content, such as the naming dispute over the Sea of Japan. The 2000 IHO definition, however, was circulated in a draft edition in 2002, and is used by some within IHO and by some other organizations such as the CIA World Factbook and Merriam-Webster. The Australian government considers the Southern Ocean to be just south of Australia. The National Geographic Foundation officially recognized this ocean in June 2021. Previously, it described it in a different font type from the world\'s other oceans; instead, it shows the Pacific, Atlantic, and Indian Oceans extending to Antarctica on both printed and online maps. Map publishers who use the term Southern Ocean on their maps include Hema Maps and GeoNova.'**
+  String get southernOceanGeneralDescription;
+
+  /// No description provided for @southernOceanGeography.
+  ///
+  /// In en, this message translates to:
+  /// **'The Southern Ocean is geologically the youngest ocean, and was formed when Antarctica and South America separated which then opened the Drake Passage about 30 million years ago. This continental separation allowed the formation of the Antarctic Circumpolar Current. With a northern boundary at 60°S, the Southern Ocean differs from other oceans in that its largest boundary, the northern boundary, does not border land (as happened in the first edition of Limits of Oceans and Seas). Instead, the northern boundary of this ocean is with the Atlantic, Indian, and Pacific Oceans. One reason for considering it a separate ocean comes from the fact that most of the water in the Southern Ocean differs from the water in other oceans. Water entering around the Southern Ocean circulates quite rapidly due to the Antarctic Circumpolar Current that circulates around Antarctica. Water in the southern Southern Ocean, for example, New Zealand, resembles water in the southern Southern Ocean of South America more than water in the Pacific Ocean. The Southern Ocean has a depth between 4,000 and 5,000 m (13,000 and 16,000 ft) over most of its area with only limited shallow water areas. The greatest depth of 7,236 m (23,740 ft) of the Southern Ocean occurs at the southern end of the South Sandwich Trench, at 60°00\'S, 024°W. The Antarctic continental shelf generally appears narrow and extraordinarily deep, with its edge at depths up to 800 m (2,600 ft), compared to the global average of 133 m (436 ft). In line with the influence of the solar seasons, Antarctic ice floes fluctuate from an average minimum of 2.6 million square kilometers (1.0×10^6 sq mi) in March to about 1.88 million km² (0.725×10^6 sq mi) in September, an increase in area of more than seven times.'**
+  String get southernOceanGeography;
+
+  /// No description provided for @southernOceanSubdivisions.
+  ///
+  /// In en, this message translates to:
+  /// **'Ocean subdivisions are geographical features such as seas, straits, bays, and channels. There are many subdivisions of the Southern Ocean defined in the never-approved 2002 fourth edition draft of the IHO publication Limits of Oceans and Seas. Some of these such as the Russian-proposed Cosmonauts Sea in 2002, Cooperation Sea, and Somov Sea (mid-1950s Russian polar explorer) are not included in the 1953 IHO document that is still in effect today, as their names mostly originate from 1962 onwards. Leading geographic authorities and atlases do not use these last three names, including the 10th edition 2014 World Atlas from the United States National Geographic Foundation and the 12th edition 2014 British Times Atlas of the World, but Soviet and Russian issued maps do. In clockwise order these include (with sector):'**
+  String get southernOceanSubdivisions;
+
+  /// No description provided for @southernOceanSubdivision1.
+  ///
+  /// In en, this message translates to:
+  /// **'Weddell Sea (57°18\'W – 12°16\'E)'**
+  String get southernOceanSubdivision1;
+
+  /// No description provided for @southernOceanSubdivision2.
+  ///
+  /// In en, this message translates to:
+  /// **'King Haakon VII Sea (20°W – 45°E)'**
+  String get southernOceanSubdivision2;
+
+  /// No description provided for @southernOceanSubdivision3.
+  ///
+  /// In en, this message translates to:
+  /// **'Lazarev Sea (0° – 14°E)'**
+  String get southernOceanSubdivision3;
+
+  /// No description provided for @southernOceanSubdivision4.
+  ///
+  /// In en, this message translates to:
+  /// **'Riiser-Larsen Sea (14° – 30°E)'**
+  String get southernOceanSubdivision4;
+
+  /// No description provided for @southernOceanSubdivision5.
+  ///
+  /// In en, this message translates to:
+  /// **'Cosmonauts Sea (30° – 50°E)'**
+  String get southernOceanSubdivision5;
+
+  /// No description provided for @southernOceanSubdivision6.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooperation Sea (59°34\' – 85°E)'**
+  String get southernOceanSubdivision6;
+
+  /// No description provided for @southernOceanSubdivision7.
+  ///
+  /// In en, this message translates to:
+  /// **'Davis Sea (82° – 96°E)'**
+  String get southernOceanSubdivision7;
+
+  /// No description provided for @southernOceanSubdivision8.
+  ///
+  /// In en, this message translates to:
+  /// **'Mawson Sea (95°45\' – 113°E)'**
+  String get southernOceanSubdivision8;
+
+  /// No description provided for @southernOceanSubdivision9.
+  ///
+  /// In en, this message translates to:
+  /// **'Dumont D\'Urville Sea (140°E)'**
+  String get southernOceanSubdivision9;
+
+  /// No description provided for @southernOceanSubdivision10.
+  ///
+  /// In en, this message translates to:
+  /// **'Somov Sea (150° – 170°E)'**
+  String get southernOceanSubdivision10;
+
+  /// No description provided for @southernOceanSubdivision11.
+  ///
+  /// In en, this message translates to:
+  /// **'Ross Sea (166°E – 155°W)'**
+  String get southernOceanSubdivision11;
+
+  /// No description provided for @southernOceanSubdivision12.
+  ///
+  /// In en, this message translates to:
+  /// **'Amundsen Sea (102°20′ – 126°W)'**
+  String get southernOceanSubdivision12;
+
+  /// No description provided for @southernOceanSubdivision13.
+  ///
+  /// In en, this message translates to:
+  /// **'Bellingshausen Sea (57°18\' – 102°20\'W)'**
+  String get southernOceanSubdivision13;
+
+  /// No description provided for @southernOceanSubdivision14.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the Drake Strait (54° – 68°W)'**
+  String get southernOceanSubdivision14;
+
+  /// No description provided for @southernOceanSubdivision15.
+  ///
+  /// In en, this message translates to:
+  /// **'Bransfield Strait (54° – 62°W)'**
+  String get southernOceanSubdivision15;
+
+  /// No description provided for @southernOceanSubdivision16.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the Scotia Sea (26°30\' – 65°W)'**
+  String get southernOceanSubdivision16;
+
+  /// No description provided for @generalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'General Description'**
+  String get generalDescription;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @characteristics.
+  ///
+  /// In en, this message translates to:
+  /// **'Characteristics'**
+  String get characteristics;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Life Below Water'**
+  String get appTitle;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! Let\'s explore the mysteries of underwater life with us'**
+  String get welcomeMessage;
+
+  /// No description provided for @viewMode.
+  ///
+  /// In en, this message translates to:
+  /// **'View Mode'**
+  String get viewMode;
+
+  /// No description provided for @contentCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Content Category'**
+  String get contentCategory;
+
+  /// No description provided for @selectOcean.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Ocean'**
+  String get selectOcean;
+
+  /// No description provided for @floraFaunaType.
+  ///
+  /// In en, this message translates to:
+  /// **'Flora & Fauna Type'**
+  String get floraFaunaType;
+
+  /// No description provided for @faunaSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Fauna Species'**
+  String get faunaSpecies;
+
+  /// No description provided for @selectMarineFauna.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Marine Fauna'**
+  String get selectMarineFauna;
+
+  /// No description provided for @floraSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Flora Species'**
+  String get floraSpecies;
+
+  /// No description provided for @selectMarineFlora.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Marine Flora'**
+  String get selectMarineFlora;
+
+  /// No description provided for @applyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filter'**
+  String get applyFilter;
+
+  /// No description provided for @resetFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Filter'**
+  String get resetFilter;
+
+  /// No description provided for @gridView.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid View'**
+  String get gridView;
+
+  /// No description provided for @listView.
+  ///
+  /// In en, this message translates to:
+  /// **'List View'**
+  String get listView;
+
+  /// No description provided for @latest.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get latest;
+
+  /// No description provided for @newest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get newest;
+
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
+  /// No description provided for @reposted.
+  ///
+  /// In en, this message translates to:
+  /// **'Reposted'**
+  String get reposted;
+
+  /// No description provided for @shared.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared'**
+  String get shared;
+
+  /// No description provided for @unmarkedForLaterViewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmarked for later viewing'**
+  String get unmarkedForLaterViewing;
+
+  /// No description provided for @speciesTakenOffRepostList.
+  ///
+  /// In en, this message translates to:
+  /// **'Species taken off your repost list'**
+  String get speciesTakenOffRepostList;
+
+  /// No description provided for @removedFromSharedList.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from shared list'**
+  String get removedFromSharedList;
+
+  /// No description provided for @noContentSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'No content saved yet'**
+  String get noContentSaved;
+
+  /// No description provided for @likeRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Like removed'**
+  String get likeRemoved;
+
+  /// No description provided for @youLikedThisSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'You liked this species'**
+  String get youLikedThisSpecies;
+
+  /// No description provided for @whatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get whatsapp;
+
+  /// No description provided for @sharedViaWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via WhatsApp'**
+  String get sharedViaWhatsapp;
+
+  /// No description provided for @instagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram'**
+  String get instagram;
+
+  /// No description provided for @sharedViaInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via Instagram'**
+  String get sharedViaInstagram;
+
+  /// No description provided for @gmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Gmail'**
+  String get gmail;
+
+  /// No description provided for @sharedViaGmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via Gmail'**
+  String get sharedViaGmail;
+
+  /// No description provided for @x.
+  ///
+  /// In en, this message translates to:
+  /// **'X'**
+  String get x;
+
+  /// No description provided for @sharedViaX.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via X'**
+  String get sharedViaX;
+
+  /// No description provided for @telegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get telegram;
+
+  /// No description provided for @sharedViaTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via Telegram'**
+  String get sharedViaTelegram;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @sharedViaMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via Message'**
+  String get sharedViaMessage;
+
+  /// No description provided for @discord.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord'**
+  String get discord;
+
+  /// No description provided for @line.
+  ///
+  /// In en, this message translates to:
+  /// **'LINE'**
+  String get line;
+
+  /// No description provided for @sharedViaLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via LINE'**
+  String get sharedViaLine;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @linkCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied to clipboard'**
+  String get linkCopiedToClipboard;
+
+  /// No description provided for @pdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get pdf;
+
+  /// No description provided for @pdfSuccessfullyCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF successfully created'**
+  String get pdfSuccessfullyCreated;
+
+  /// No description provided for @print.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get print;
+
+  /// No description provided for @sendingToPrinter.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending to printer...'**
+  String get sendingToPrinter;
+
+  /// No description provided for @cloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud'**
+  String get cloud;
+
+  /// No description provided for @infoSuccessfullyDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Info successfully downloaded'**
+  String get infoSuccessfullyDownloaded;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @addedToPrivateNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to private notes'**
+  String get addedToPrivateNotes;
+
+  /// No description provided for @comments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get comments;
+
+  /// No description provided for @writeYourThoughts.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your thoughts...'**
+  String get writeYourThoughts;
+
+  /// No description provided for @pleaseEnterYourComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your comment'**
+  String get pleaseEnterYourComment;
+
+  /// No description provided for @hideComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide comments'**
+  String get hideComments;
+
+  /// No description provided for @showComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Show comments'**
+  String get showComments;
+
+  /// No description provided for @post.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get post;
+
+  /// No description provided for @noCommentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet'**
+  String get noCommentsYet;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @repost.
+  ///
+  /// In en, this message translates to:
+  /// **'Repost'**
+  String get repost;
+
+  /// No description provided for @comment.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get comment;
+
+  /// No description provided for @tapOrbitIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the orbit icon to save, comment, report, and more'**
+  String get tapOrbitIcon;
+
+  /// No description provided for @understand.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand'**
+  String get understand;
+
+  /// No description provided for @reportSpecies.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Species'**
+  String get reportSpecies;
+
+  /// No description provided for @inappropriateContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Inappropriate Content'**
+  String get inappropriateContent;
+
+  /// No description provided for @incorrectInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Information'**
+  String get incorrectInformation;
+
+  /// No description provided for @offensiveOrAbusive.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive or Abusive'**
+  String get offensiveOrAbusive;
+
+  /// No description provided for @spamOrMisleading.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam or Misleading'**
+  String get spamOrMisleading;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @pleaseSpecifyYourReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please specify your reason'**
+  String get pleaseSpecifyYourReason;
+
+  /// No description provided for @thisFieldIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get thisFieldIsRequired;
+
+  /// No description provided for @submitReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Report'**
+  String get submitReport;
+
+  /// No description provided for @errorGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred: {error}'**
+  String errorGeneral(Object error);
+
+  /// No description provided for @emptyOceanData.
+  ///
+  /// In en, this message translates to:
+  /// **'No ocean data available.'**
+  String get emptyOceanData;
+
+  /// No description provided for @learnUnderwaterLife.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn About Underwater Life'**
+  String get learnUnderwaterLife;
+
+  /// No description provided for @learnMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn More'**
+  String get learnMore;
+}
+
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) => <String>['en', 'es', 'fr', 'hi', 'id', 'ru', 'zh'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
+    case 'hi': return AppLocalizationsHi();
+    case 'id': return AppLocalizationsId();
+    case 'ru': return AppLocalizationsRu();
+    case 'zh': return AppLocalizationsZh();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
+  );
+}

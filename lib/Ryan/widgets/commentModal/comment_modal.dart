@@ -236,7 +236,7 @@ class _CommentModalState extends State<CommentModal> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      'No comments yet.',
+                      'No comments yet',
                       style: TextStyle(color: Colors.white54),
                     ),
                   )

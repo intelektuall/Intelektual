@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'link_text_key.dart';
 
 class LinkItem {
-  final String title;
+  final LinkTextKey title;
   final IconData icon;
-  final String buttonText;
+  final LinkTextKey buttonText;
 
   LinkItem({required this.title, required this.icon, required this.buttonText});
 }

@@ -1,6 +1,8 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/marine_species.dart';
+import '../../services/analytics_service.dart';
 
 class MarineSpeciesDetailScreen extends StatelessWidget {
   final MarineSpecies species;
@@ -9,73 +11,56 @@ class MarineSpeciesDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final textColor = isDark ? Colors.white : Colors.black;
-    final appBarColor = isDark ? Colors.blueAccent : Colors.blueAccent;
-    final iconColor = isDark ? Colors.white : Colors.black;
-    final shadowColor = isDark ? Colors.black54 : Colors.black87;
-    final boxShadowColor = isDark ? Colors.black54 : Colors.black38;
-
+    AnalyticsService(
+      FirebaseAnalytics.instance,
+    ).logScreenView("MarineSpeciesDetailScreen_${species.name}");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: Colors.black.withOpacity(0.5),
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: iconColor),
-            onPressed: () => Navigator.pop(context),
+          child: CircleAvatar(
+            backgroundColor: Colors.black.withOpacity(0.3),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ),
       ),
+
       body: Stack(
         children: [
-          /// 🔹 Background with Theme Color
+          /// 🔹 Background Gambar Laut
           Positioned.fill(
-            child: Container(
-              color: theme.scaffoldBackgroundColor,
+            child: Image.asset(
+              "assets/images/oceanDetailBackground.jpg",
+              fit: BoxFit.cover,
             ),
           ),
 
-          /// 🔹 Gradient Overlay
+          /// 🔹 Overlay Gelap Agar Tulisan Terbaca
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: isDark
-                      ? [
-                          Colors.black.withOpacity(0.3),
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.8),
-                        ]
-                      : [
-                          Colors.white.withOpacity(0.2),
-                          Colors.white.withOpacity(0.4),
-                          Colors.white.withOpacity(0.5),
-                        ],
-                ),
-              ),
+              color: Colors.black.withOpacity(0.3),
             ),
           ),
 
-          /// 🔹 Main Content
+          /// 🔹 Konten
           SingleChildScrollView(
-            padding: const EdgeInsets.only(
-                top: 100, left: 16, right: 16, bottom: 40),
+            padding: const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 📌 Species Image
+                /// 📌 Gambar Utama
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: boxShadowColor,
+                        color: Colors.black38,
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -93,34 +78,29 @@ class MarineSpeciesDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                /// 📌 Species Name
+                /// 📌 Nama Spesies
                 Center(
                   child: Text(
                     species.name,
                     style: GoogleFonts.roboto(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: textColor,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 6,
-                          color: shadowColor,
-                        ),
-                      ],
+                      color: Colors.white,
+                      shadows: [const Shadow(blurRadius: 6, color: Colors.black87)],
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                /// 📌 Species Description
+                /// 📌 Deskripsi Spesies
                 Text(
                   species.description,
                   textAlign: TextAlign.justify,
                   style: GoogleFonts.poppins(
                     fontSize: 15,
                     height: 1.6,
-                    color: textColor.withOpacity(0.9),
+                    color: Colors.white.withOpacity(0.9),
                   ),
                 ),
 
@@ -132,4 +112,5 @@ class MarineSpeciesDetailScreen extends StatelessWidget {
       ),
     );
   }
+
 }

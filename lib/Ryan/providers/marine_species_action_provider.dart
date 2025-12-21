@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/marine_species.dart';
 import '../models/comment_data.dart';
+import '../database/marine_species_db_helper.dart';
 
 class MarineSpeciesActionProvider with ChangeNotifier {
   final List<MarineSpecies> _liked = [];
@@ -13,6 +14,8 @@ class MarineSpeciesActionProvider with ChangeNotifier {
   // Komentar disimpan berdasarkan species.name sebagai key
   final Map<String, List<CommentData>> _commentTexts = {};
 
+  final _dbHelper = MarineSpeciesDBHelper.instance;
+
   List<MarineSpecies> get liked => _liked;
   List<MarineSpecies> get pinned => _pinned;
   List<MarineSpecies> get shared => _shared;
@@ -20,14 +23,58 @@ class MarineSpeciesActionProvider with ChangeNotifier {
   List<MarineSpecies> get reposted => _reposted;
   List<MarineSpecies> get reported => _reported;
 
+  //LOAD DATA DARI DATABASE
+  Future<void> loadActions() async {
+    final likedData = await _dbHelper.getActions('like');
+    final pinnedData = await _dbHelper.getActions('pin');
+    final sharedData = await _dbHelper.getActions('share');
+
+    _liked
+      ..clear()
+      ..addAll(likedData.map((e) => MarineSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+
+    _pinned
+      ..clear()
+      ..addAll(pinnedData.map((e) => MarineSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+
+    _shared
+      ..clear()
+      ..addAll(sharedData.map((e) => MarineSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+    notifyListeners();
+  }
+
+
   // ---------- LIKE ----------
-  void toggleLike(MarineSpecies species) {
+  Future<void> toggleLike(MarineSpecies species) async {
     if (_liked.contains(species)) {
       _liked.remove(species);
+      await _dbHelper.deleteAction(species.name, 'like');
       if (species.likeCount > 0) species.likeCount--;
     } else {
       _liked.add(species);
       species.likeCount++;
+      await _dbHelper.insertAction(species, 'like');
     }
     notifyListeners();
   }
@@ -35,34 +82,33 @@ class MarineSpeciesActionProvider with ChangeNotifier {
   bool isLiked(MarineSpecies species) => _liked.contains(species);
 
   // ---------- PIN ----------
-  void pin(MarineSpecies species) {
-    if (!_pinned.contains(species)) {
+  Future<void> togglePin(MarineSpecies species) async {
+    if (_pinned.contains(species)) {
+      _pinned.remove(species);
+      await _dbHelper.deleteAction(species.name, 'pin');
+    } else {
       _pinned.add(species);
-      notifyListeners();
+      await _dbHelper.insertAction(species, 'pin');
     }
-  }
-
-  void unpin(MarineSpecies species) {
-    _pinned.remove(species);
     notifyListeners();
   }
 
   bool isPinned(MarineSpecies species) => _pinned.contains(species);
 
   // ---------- SHARE ----------
-  void share(MarineSpecies species) {
-    if (!_shared.contains(species)) {
+  Future<void> toggleShare(MarineSpecies species) async {
+    if (_shared.contains(species)) {
+      _shared.remove(species);
+      await _dbHelper.deleteAction(species.name, 'share');
+    } else {
       _shared.add(species);
-      notifyListeners();
+      await _dbHelper.insertAction(species, 'share');
     }
-  }
-
-  void unshare(MarineSpecies species) {
-    _shared.remove(species);
     notifyListeners();
   }
 
   bool isShared(MarineSpecies species) => _shared.contains(species);
+
 
   // ---------- COMMENT ----------
   Future<void> addComment(MarineSpecies species, String commentText, String username) async {
@@ -138,4 +184,13 @@ class MarineSpeciesActionProvider with ChangeNotifier {
   }
 
   bool isReported(MarineSpecies species) => _reported.contains(species);
+
+  //CLEAR ALL
+  Future<void> clearAll() async {
+    await _dbHelper.clearAll();
+    _liked.clear();
+    _pinned.clear();
+    _shared.clear();
+    notifyListeners();
+  }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/link_item.dart';
+import '../models/link_text_key.dart';
 
 class LinkProvider with ChangeNotifier {
   final List<LinkItem> _links = [
     LinkItem(
-      title: "Pelajari Kehidupan Bawah Laut",
+      title: LinkTextKey.learnOceanTitle,
       icon: Icons.explore,
-      buttonText: "Pelajari Selengkapnya",
+      buttonText: LinkTextKey.learnMore,
     ),
   ];
 

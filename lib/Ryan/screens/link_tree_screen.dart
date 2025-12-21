@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import '/Ryan/screens/detail_education_screen.dart';
+import '../screens/detail_education_screen.dart';
+import '../services/analytics_mixin.dart';
 import 'package:provider/provider.dart';
 import '../providers/link_provider.dart';
 import '../widgets/link_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../l10n/app_localizations.dart';
+import '../widgets/language_selector_sheet.dart';
 
 class LinkTreeScreen extends StatefulWidget {
   const LinkTreeScreen({super.key});
@@ -12,65 +15,92 @@ class LinkTreeScreen extends StatefulWidget {
   State<LinkTreeScreen> createState() => _LinkTreeScreenState();
 }
 
-class _LinkTreeScreenState extends State<LinkTreeScreen> {
+class _LinkTreeScreenState extends State<LinkTreeScreen>
+    with AnalyticsScreenTracking {
+  @override
+  String get screenName => 'LinkTreeScreen';
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final linkProvider = Provider.of<LinkProvider>(context);
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          /// 🔹 Background
-          Container(
-            color: theme.scaffoldBackgroundColor,
+          /// 🌊 Background Image
+          Image.asset(
+            "assets/images/oceanBackground2.jpg",
+            fit: BoxFit.cover,
           ),
 
-          /// 🔹 Gradient Overlay
+          /// 🌑 Overlay Transparan
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: isDark
-                    ? [
-                        Colors.black.withOpacity(0.3),
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.8),
-                      ]
-                    : [
-                        Colors.white.withOpacity(0.2),
-                        Colors.white.withOpacity(0.4),
-                        Colors.white.withOpacity(0.5),
-                      ],
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.5),
+                ],
               ),
             ),
           ),
 
-          /// 🔹 Back Button
+          /// 🔝 Top Actions (Back + Language)
           Positioned(
             top: 40,
             left: 20,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black.withOpacity(0.3),
+            right: 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// ⬅ Back Button
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: isDark ? Colors.white : Colors.black,
-                  size: 26,
+
+                /// 🌐 Language Button
+                IconButton(
+                  icon: const Icon(
+                    Icons.translate,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(24),
+                        ),
+                      ),
+                      builder: (_) => const LanguageSelectorSheet(),
+                    );
+                  },
                 ),
-              ),
+              ],
             ),
           ),
 
-          /// 🔹 Main Content
+          /// 📦 Konten Utama
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -84,35 +114,42 @@ class _LinkTreeScreenState extends State<LinkTreeScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                /// 🔸 Title
+                /// 🏷 Title (Localized)
                 Text(
-                  "Life Below Water",
+                  t.appTitle,
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.fredoka(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
-                    color: isDark ? Colors.white : Colors.black,
+                    color: Colors.white,
                     letterSpacing: 1.5,
+                    shadows: const [
+                      Shadow(blurRadius: 8, color: Colors.black45),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                /// 🔸 Greeting
+                /// 👋 Greeting (Localized)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Text(
-                    "Halo! Yuk, jelajahi misteri kehidupan bawah laut bersama kami",
+                    t.welcomeMessage,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.baloo2(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white70 : Colors.black,
+                      color: Colors.white,
                       letterSpacing: 1.0,
+                      shadows: const [
+                        Shadow(blurRadius: 5, color: Colors.black38),
+                      ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 30),
 
-                /// 🔸 Link Buttons
+                /// 🔗 Navigation Cards
                 ...linkProvider.links.map(
                   (item) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),

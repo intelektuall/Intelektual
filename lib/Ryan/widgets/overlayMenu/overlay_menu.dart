@@ -1,11 +1,14 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import '../../models/marine_species.dart';
 import '../../providers/marine_species_action_provider.dart';
+import '../../services/analytics_service.dart';
 import '../customSnackbar/custom_snackbar.dart';
 import '../customSnackbar/customC_snackbar.dart';
 import '../bottomSheets/share_options_bottom_sheet.dart';
@@ -46,12 +49,14 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  late AnalyticsService _analytics;
 
   bool _showTutorialOverlay = false; // <== TAMBAH INI
 
   @override
   void initState() {
     super.initState();
+    _analytics = AnalyticsService(FirebaseAnalytics.instance);
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -63,7 +68,8 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
     _controller.forward();
 
     // Cek apakah tutorial sudah pernah ditampilkan
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _analytics.logOverlayOpened('MarineSpeciesOverlayMenu');
       _checkFirstTime();
     });
   }
@@ -232,7 +238,7 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
-                                    fontWeight: FontWeight.bold
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const SizedBox(height: 24),
@@ -300,7 +306,7 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
 
     final bool isActive = _isActive(item.label, provider);
     final IconData displayIcon = isActive ? item.activeIcon : item.icon;
-    final Color bgColor = isActive ? Colors.blueAccent.shade100 : Colors.white;
+    final Color bgColor = isActive ? Colors.blue.shade100 : Colors.white;
     final Color iconColor = isActive ? Colors.blueAccent : Colors.black;
 
     return Positioned(
@@ -310,8 +316,13 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
         mainAxisSize: MainAxisSize.min,
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (item.label == 'Share') {
+                await _analytics.logShare(
+                  name: widget.species.name,
+                  method: 'Species Share',
+                  category: widget.species.category,
+                );
                 Future.delayed(const Duration(milliseconds: 100), () async {
                   widget.onDismiss();
 
@@ -335,14 +346,27 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
 
               switch (item.label) {
                 case 'Save':
-                  provider.pin(widget.species);
-                  showCustomSnackbar(
-                    context,
-                    message: 'Species tucked safely in your collection',
-                    onUndo: () => provider.unpin(widget.species),
+                  provider.togglePin(widget.species);
+                  await _analytics.logPin(
+                    name: widget.species.name,
+                    category: widget.species.category,
+                    subtype: widget.species.subtype,
                   );
+                  Future.microtask(() {
+                    if (!mounted) return;
+                    showCustomSnackbar(
+                      context,
+                      message: 'Species tucked safely in your collection',
+                      onUndo: () => provider.togglePin(widget.species),
+                    );
+                  });
                   break;
                 case 'Report':
+                  await _analytics.logReport(
+                    name: widget.species.name,
+                    category: widget.species.category,
+                    reason: 'user_report',
+                  );
                   showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -360,6 +384,11 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                   break;
                 case 'Repost':
                   provider.repost(widget.species);
+                  await _analytics.logRepost(
+                    name: widget.species.name,
+                    category: widget.species.category,
+                    method: 'Species Repost',
+                  );
                   showCustomSnackbar(
                     context,
                     message: 'Reposted! Added to your items',
@@ -367,6 +396,11 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                   );
                   break;
                 case 'Comment':
+                  await _analytics.logComment(
+                    name: widget.species.name,
+                    content: 'Opened comment modal',
+                    category: widget.species.category,
+                  );
                   widget.onDismiss();
                   Future.microtask(() {
                     if (!context.mounted) return;

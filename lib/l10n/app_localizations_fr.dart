@@ -1,0 +1,921 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for French (`fr`).
+class AppLocalizationsFr extends AppLocalizations {
+  AppLocalizationsFr([String locale = 'fr']) : super(locale);
+
+  @override
+  String get oceanPacific => 'Océan Pacifique';
+
+  @override
+  String get oceanAtlantic => 'Océan Atlantique';
+
+  @override
+  String get oceanIndian => 'Océan Indien';
+
+  @override
+  String get oceanSouthern => 'Océan Austral';
+
+  @override
+  String get oceanArctic => 'Océan Arctique';
+
+  @override
+  String get marineFauna => 'Faune Marine';
+
+  @override
+  String get marineFlora => 'Flore Marine';
+
+  @override
+  String get oceanFacts => 'Faits sur Océan';
+
+  @override
+  String get oceanMysteries => 'Mystères de Océan';
+
+  @override
+  String get humanRole => 'Rôle de Homme';
+
+  @override
+  String get oceanPacificS => 'Pacifique';
+
+  @override
+  String get oceanAtlanticS => 'Atlantique';
+
+  @override
+  String get oceanIndianS => 'Indien';
+
+  @override
+  String get oceanArcticS => 'Arctique';
+
+  @override
+  String get oceanAntarcticS => 'Antarctique';
+
+  @override
+  String get subtypeKelp => 'Varech';
+
+  @override
+  String get subtypeAlgae => 'Algue';
+
+  @override
+  String get subtypeSeagrass => 'Herbier marin';
+
+  @override
+  String get speciesKelpRaksasa => 'Varech Géant';
+
+  @override
+  String get speciesSargassum => 'Sargasse';
+
+  @override
+  String get speciesTurtleGrass => 'Herbe à Tortue';
+
+  @override
+  String get speciesIrishMoss => 'Mousse d Irlande';
+
+  @override
+  String get speciesHalophilaOvalis => 'Halophila Ovalis';
+
+  @override
+  String get speciesGracilaria => 'Gracilaria';
+
+  @override
+  String get speciesArcticAlgae => 'Algues Arctiques';
+
+  @override
+  String get speciesFucusDistichus => 'Fucus Distichus';
+
+  @override
+  String get speciesDurvillaeaAntarctica => 'Durvillaea Antarctica';
+
+  @override
+  String get speciesHimantothallusGrandifolius => 'Himantothallus Grandifolius';
+
+  @override
+  String get descKelpRaksasa => 'Le varech géant (Macrocystis pyrifera) est le plus grand type d algues brunes au monde et forme des forêts sous-marines très denses dans les eaux froides et riches en nutriments, en particulier le long des côtes ouest de Amérique du Nord, de Amérique du Sud, de Australie et des régions tempérées de océan Pacifique. Le varech n est pas une véritable plante, mais plutôt une algue macroscopique, souvent appelée « plante marine » car sa forme et sa fonction ressemblent à la végétation terrestre. La structure du varech géant se compose de rhizoïdes (structures semblables à des racines) qui s attachent aux substrats rocheux, de stipes (tiges principales) longues et flexibles, et de frondes (structures en forme de feuilles) qui s élèvent vers la surface de la mer. Le long des frondes se trouvent de petites vessies d air appelées pneumatocystes, qui servent de flotteurs pour maintenir le varech droit et lui permettre d approcher la lumière du soleil pour la photosynthèse. Le varech géant peut croître à une vitesse incroyable — jusqu à 60 cm par jour, et dans des conditions idéales, peut atteindre 30 à 60 mètres de long, ce qui en fait un des organismes marins à la croissance la plus rapide au monde. Les forêts de varech sont des habitats cruciaux pour des milliers d espèces marines, allant des poissons, étoiles de mer, anémones, crabes, lions de mer, aux loutres de mer. Cet écosystème fournit un abri, de la nourriture et des zones de reproduction pour de nombreuses créatures marines. un de ses habitants les plus célèbres est la loutre de mer, qui joue un rôle dans le maintien de équilibre de la forêt de varech en mangeant les oursins qui peuvent endommager la base de écosystème de varech si leur population n est pas contrôlée. En plus de son rôle écologique, le varech géant a également une valeur économique et industrielle. Son extrait est utilisé dans divers produits quotidiens, tels que les cosmétiques, le dentifrice, la crème glacée et les produits pharmaceutiques, grâce à sa teneur en alginate, un agent épaississant naturel extrait des parois cellulaires du varech. Cependant, les forêts de varech sont confrontées à de sérieuses menaces. Le changement climatique entraîne une augmentation de la température de la mer et ralentit la croissance du varech, tandis que les tempêtes marines plus fréquentes peuvent endommager les structures des colonies. De plus, la pollution, la surpêche des prédateurs d oursins comme les loutres de mer et les espèces envahissantes contribuent également au déclin des forêts de varech dans de nombreuses régions. En tant que un des écosystèmes marins les plus productifs et dynamiques du monde, le varech géant joue un rôle vital dans absorption du carbone, le maintien de la qualité de eau et le soutien de la biodiversité marine. Protéger le varech, c est aussi préserver avenir de océan et de toute la vie qui en dépend.';
+
+  @override
+  String get descSargassum => 'Le sargasse est un genre d algues brunes flottant librement à la surface de océan, célèbre pour former de vastes tapis dans Atlantique central, en particulier dans la région connue sous le nom de mer des Sargasses. Contrairement à la plupart des autres algues marines qui s attachent au fond marin, le sargasse possède de petites vessies d air (pneumatocystes) qui lui permettent de rester flottant et de se répandre en quantités massives dans océan ouvert. Cette plante marine a des structures ressemblant à des plantes terrestres, avec des pseudo-feuilles, des pseudo-tiges et des pseudo-fruits, bien qu il ne s agisse pas d une véritable plante mais plutôt d un type d algues macroscopiques du groupe des algues brunes (Phaeophyceae). Le sargasse peut croître rapidement et se répandre très largement, formant des tapis ou des amas flottants pouvant s étendre sur des milliers de kilomètres. Les tapis de sargasse créent des habitats uniques et importants pour de nombreuses espèces marines, y compris des poissons, des tortues marines, des crabes, des crevettes et même des espèces endémiques comme le poisson-sargasse trouvé uniquement parmi ces algues. Ces algues fournissent également un abri pour les larves de poissons et d autres jeunes organismes marins, en faisant un centre de biodiversité dans océan ouvert. Cependant, au cours des dernières décennies, le sargasse est également devenu une préoccupation en raison de fréquentes proliférations massives, en particulier dans les Caraïbes, le golfe du Mexique et Afrique de Ouest, causées par le changement climatique, le ruissellement des nutriments des rivières et les activités humaines. Ces proliférations de sargasse peuvent s accumuler sur les plages, se décomposer et produire de fortes odeurs de soufre, perturbant le tourisme, la pêche et les écosystèmes côtiers. En se décomposant, le sargasse libère également des gaz toxiques comme le sulfure d hydrogène qui peuvent affecter la santé humaine en cas d exposition importante. Néanmoins, le sargasse a également un potentiel économique, par exemple comme bioénergie, engrais organique, alimentation animale et matière première pour les cosmétiques ou les médicaments, à condition que sa gestion soit durable. Avec son double rôle—en tant que fournisseur d habitat important en haute mer et simultanément comme problème écologique et social dans les zones côtières—le sargasse reflète la complexité des relations entre les algues marines, les changements environnementaux et les activités humaines. Les efforts de surveillance et de gestion fondés sur la science sont cruciaux pour équilibrer ses avantages écologiques avec ses impacts.';
+
+  @override
+  String get descTurtleGrass => 'herbe à tortue (Thalassia testudinum) est une des véritables espèces d herbiers marins vivant dans les eaux peu profondes, chaudes et claires, en particulier dans la mer des Caraïbes, le golfe du Mexique et le long des côtes tropicales de Amérique centrale à la Floride. Cet herbier marin est nommé « herbe à tortue » car il est la principale source de nourriture pour les tortues vertes (Chelonia mydas), qui en dépendent largement pour leur nutrition. Contrairement aux algues marines, herbe à tortue est une véritable plante à fleurs avec des racines, des tiges, des feuilles, des fleurs et produit des graines. Ses racines poussent en rampant sous le sable ou la boue marine peu profonde et forment un système dense de racines et de rhizomes qui aident à stabiliser les fonds marins et à prévenir érosion. Ses feuilles sont longues, plates, en forme de ruban—généralement vert clair à vert foncé—et peuvent atteindre 30 cm ou plus, formant des prairies d herbiers marins denses. herbe à tortue joue un rôle crucial dans les écosystèmes côtiers tropicaux. Elle fournit un habitat et des zones de reproduction pour diverses espèces marines, telles que les jeunes poissons, les crevettes, les crabes, les étoiles de mer, les hippocampes et même des espèces rares comme les dugongs et les lamantins. De plus, les prairies d herbe à tortue agissent également comme des puits de carbone très efficaces, aidant à atténuer les impacts du changement climatique et à maintenir la clarté de eau de mer en ralentissant le mouvement des sédiments. Cette plante se reproduit de deux manières : sexuellement par les fleurs et les graines, et végétativement par les rhizomes qui se propagent sous les fonds marins. La croissance de herbe à tortue est relativement lente, donc les dommages causés par les activités humaines comme les ancres de bateaux, extraction de sable, la pollution et le développement côtier peuvent prendre beaucoup de temps à se rétablir. En raison de son rôle vital dans le maintien de la santé des écosystèmes marins peu profonds, herbe à tortue est protégée dans de nombreux pays. La conservation de ces prairies d herbiers marins a non seulement un impact sur la biodiversité marine, mais soutient également la durabilité des pêcheries, la protection des côtes contre érosion et la qualité de vie des communautés côtières. En tant que pilier des écosystèmes marins tropicaux, herbe à tortue est un exemple parfait de la façon dont les petites plantes marines peuvent avoir un impact massif sur équilibre naturel global.';
+
+  @override
+  String get descIrishMoss => 'La mousse d Irlande, scientifiquement connue sous le nom de Chondrus crispus, est un type d algue rouge qui pousse dans les régions côtières de Atlantique Nord, en particulier le long des côtes de Irlande, de la Grande-Bretagne, de est du Canada et du nord-est des États-Unis. Bien qu appelée « mousse », cette plante marine n est pas une véritable mousse, mais une algue marine macroscopique appartenant au groupe des Rhodophyta. La mousse d Irlande a une forme dentelée et ramifiée comme de petits éventails, avec des couleurs variant selon environnement—du violet foncé, rouge noirâtre, vert olive, au blanc jaunâtre une fois séchée. Cette plante pousse attachée aux rochers dans la zone intertidale et peut survivre dans des environnements extrêmes, comme exposition directe au soleil, les vagues et les températures de eau fluctuantes. unicité principale de la mousse d Irlande est sa teneur en carraghénane—une substance gélatineuse naturelle extraite de ses parois cellulaires. Le carraghénane est largement utilisé dans industrie alimentaire et cosmétique comme épaississant, stabilisant ou émulsifiant, et peut être trouvé dans des produits comme la crème glacée, le lait végétal, le pudding, le dentifrice, la lotion et le savon. De plus, la mousse d Irlande est également populaire en phytothérapie et en nutrition, car on pense qu elle contient divers minéraux comme iode, le fer, le magnésium, le calcium, le potassium et les vitamines A, E, K, ainsi que des antioxydants. Traditionnellement, la mousse d Irlande a été utilisée en Irlande et dans les Caraïbes pour faire des boissons toniques et des soupes santé, surtout parce qu on croit qu elle renforce immunité, améliore la digestion et aide à la récupération du corps. Dans la culture caribéenne, la mousse d Irlande est même considérée comme une boisson augmentant endurance masculine. La mousse d Irlande peut être récoltée naturellement de la mer ou cultivée dans les zones côtières, mais sa gestion doit être durable. Une coupe imprudente ou une surexploitation peut endommager les populations locales et les micro-écosystèmes qui en dépendent, y compris les petits animaux marins vivant autour de ces algues. Avec des avantages nutritionnels, économiques et écologiques significatifs, la mousse d Irlande est une des plantes marines les plus valorisées, à la fois dans le monde culinaire, la santé naturelle et industrie moderne. Cependant, en raison de la demande mondiale croissante, il est important de maintenir des pratiques de récolte durables pour que cette algue précieuse reste préservée pour les générations futures.';
+
+  @override
+  String get descHalophilaOvalis => 'Halophila ovalis est un type d herbier marin qui pousse dans les eaux peu profondes tropicales et subtropicales, y compris les régions côtières de Indonésie, de Asie du Sud-Est, de Australie et de Afrique de Est. Cette plante marine appartient à la famille des Hydrocharitaceae et est une des espèces d herbiers marins les plus largement distribuées dans le monde. En raison de sa petite taille et de la forme ovale de ses feuilles, cette plante est souvent communément appelée « herbe à dugong », car elle est un des aliments préférés des dugongs et des tortues marines. Halophila ovalis a la structure d une vraie plante, avec des racines, des tiges (rhizomes) et des feuilles. Ses racines poussent sous les substrats sableux ou boueux et servent à ancrer la plante et à absorber les nutriments. Ses feuilles poussent par paires, de forme ovale, vert vif et de petite taille avec des longueurs d environ 1 à 4 cm, ce qui en fait une des plus petites espèces d herbiers marins. Ses rhizomes rampent et forment des colonies denses qui peuvent couvrir les fonds marins peu profonds. Cet herbier marin est écologiquement très important car il forme des prairies d herbiers marins qui servent d habitat, d abri et de sources de nourriture pour diverses espèces marines telles que les petits poissons, les invertébrés, les mollusques, les tortues et les dugongs. De plus, Halophila ovalis joue un rôle majeur dans la stabilisation des sédiments des fonds marins, la filtration de eau de mer et absorption du carbone, ce qui la rend importante pour atténuation du changement climatique et le maintien de la santé de environnement côtier. Halophila ovalis peut s adapter rapidement à divers types de substrats et de salinités de eau, et peut se reproduire végétativement par les rhizomes ainsi que générativement par les fleurs et les graines. Sa capacité à croître rapidement et à se répandre largement la rend idéale pour les projets de réhabilitation des écosystèmes d herbiers marins dans les zones côtières endommagées. Cependant, malgré sa bonne résilience, Halophila ovalis reste vulnérable à diverses menaces humaines, telles que la remise en état des côtes, la pollution, utilisation d engins de pêche destructeurs et les activités de bateaux (ancres). La perte de prairies d herbiers marins due à ces activités peut grandement impacter la biodiversité marine et la productivité des pêcheries locales. Avec son rôle crucial dans les écosystèmes marins peu profonds, Halophila ovalis est une espèce clé dans la conservation des écosystèmes côtiers. Les efforts de conservation et de réhabilitation des prairies d herbiers marins seront très bénéfiques non seulement pour maintenir la biodiversité, mais aussi pour soutenir la résilience côtière face aux changements environnementaux en cours.';
+
+  @override
+  String get descGracilaria => 'Gracilaria est un genre d algues rouges (Rhodophyta) largement distribué dans les eaux tropicales et subtropicales du monde entier, y compris les régions côtières de Indonésie. Ces algues poussent attachées à des substrats durs comme les rochers, les coraux morts ou les fonds boueux dans des eaux relativement calmes et peu profondes. Gracilaria a une forme ramifiée semblable à un arbuste avec des couleurs rose à rouge foncé, bien que sa couleur puisse devenir brunâtre ou verdâtre selon les conditions environnementales. Gracilaria a une grande valeur écologique et économique. Écologiquement, ces algues fournissent un habitat et un abri à divers micro-organismes et petits animaux marins comme les jeunes poissons, les mollusques et les crevettes. Gracilaria aide également à stabiliser le fond aquatique et à absorber les nutriments excessifs de environnement, jouant ainsi un rôle dans le maintien de la qualité de eau de mer et la prévention de eutrophisation (prolifération d algues sauvages due à la pollution par les nutriments). Économiquement, Gracilaria est une des principales sources d agar-agar—une substance gélatineuse largement utilisée dans les industries alimentaire, cosmétique, pharmaceutique et microbiologique. agar est obtenu par extraction des parois cellulaires de Gracilaria et est utilisé comme épaississant, émulsifiant ou milieu de croissance bactérienne dans les laboratoires. De plus, Gracilaria est également utilisée comme aliment pour animaux marins, engrais organique et même matière première pour la bioénergie. Gracilaria est facile à cultiver, et en Indonésie, elle est souvent cultivée dans des étangs d eau saumâtre ou des eaux côtières peu profondes. Cette culture a de bonnes perspectives car elle ne nécessite pas d alimentation supplémentaire, pousse rapidement et peut être récoltée en relativement peu de temps. La culture de Gracilaria se fait généralement par des méthodes de piquetage ou de radeaux flottants, selon les conditions du site et le type d eau. Cependant, la culture de Gracilaria est également confrontée à des défis tels que les attaques de parasites et de maladies, la détérioration de la qualité de eau due à la pollution, et les changements de température et de salinité de eau dus aux impacts du changement climatique. Par conséquent, une gestion bonne et durable est importante pour maintenir la production et les avantages écologiques de ces algues. En tant que ressource biologique marine de grande valeur, Gracilaria joue un rôle important dans le soutien des économies côtières, la sécurité alimentaire et la conservation des écosystèmes marins, surtout si elle est gérée de manière durable et respectueuse de environnement.';
+
+  @override
+  String get descArcticAlgae => 'Les algues arctiques sont des groupes d algues vivant dans des environnements extrêmes de la région arctique, y compris à la surface, dans la colonne d eau et dans les couches de glace de mer. Elles se composent de divers types, en particulier de microalgues comme les diatomées et les flagellés, ainsi que de certaines espèces de macroalgues (telles que Melosira arctica) qui peuvent survivre à des températures très froides, à de faibles niveaux de lumière et à une salinité élevée. Bien que petites et souvent invisibles, les algues arctiques jouent un rôle clé dans les écosystèmes marins polaires en tant que producteurs primaires à la base de la chaîne alimentaire. Une caractéristique des algues arctiques est leur capacité à photosynthétiser sous des couches de glace épaisses avec une pénétration de lumière très minimale. Elles poussent souvent attachées à la face inférieure de la glace de mer ou flottent dans la colonne d eau pendant le printemps et été lorsque la lumière du soleil commence à pénétrer la surface de la glace. Certaines espèces comme Melosira arctica forment même de longues chaînes cylindriques ressemblant à du gel suspendues au bas de la glace, devenant d importantes sources de nourriture pour le zooplancton et d autres organismes microscopiques. Les algues arctiques sont cruciales car elles produisent de oxygène et de la matière organique qui soutiennent la vie du zooplancton comme le krill et les copépodes, qui deviennent ensuite de la nourriture pour les poissons, les oiseaux de mer, les phoques et les baleines. Ainsi, bien que petites, les algues arctiques sont le principal fondement de la chaîne alimentaire marine dans Arctique. De plus, elles aident également à absorber le dioxyde de carbone (CO₂) de atmosphère, jouant ainsi un rôle dans le cycle global du carbone. Cependant, le changement climatique affecte considérablement les algues arctiques. La fonte plus rapide et plus étendue de la glace de mer modifie leurs schémas de saison de croissance, perturbant le moment de la disponibilité de la nourriture pour les consommateurs comme le zooplancton et les poissons. Ces changements peuvent perturber la synchronisation des écosystèmes—par exemple, si les algues poussent plus tôt mais que le zooplancton ne s est pas encore développé, la nourriture devient indisponible au moment nécessaire. De plus, la perte d habitat de glace de mer réduit également les zones où poussent les algues de glace. Dans ensemble, les algues arctiques sont des indicateurs sensibles des changements environnementaux. Leur santé et leur productivité reflètent les conditions climatiques et océaniques dans Arctique. La protection des écosystèmes de glace de mer et la réduction des émissions mondiales sont cruciales pour maintenir le rôle vital des algues arctiques dans le soutien du réseau de vie arctique unique et fragile.';
+
+  @override
+  String get descFucusDistichus => 'Fucus distichus est une espèce d algues brunes (groupe Phaeophyceae) communément trouvée dans les zones intertidales des rivages rocheux dans les eaux froides, en particulier le long des côtes de Atlantique Nord et du Pacifique Nord, y compris les régions arctiques, le Canada et le nord de Europe. Ces algues appartiennent au genre Fucus, qui est un des types d algues marines les plus connus dans les régions tempérées froides. La caractéristique de Fucus distichus est son corps en forme de rubans plats à deux branches, avec des branches plates disposées par paires (distiques)—c est origine de son nom d espèce. Sa couleur est généralement brun verdâtre à brun foncé, et elle a de petites vessies d air (pneumatocystes) qui aident à maintenir ses parties corporelles flottantes lorsqu elles sont submergées dans eau de mer. Sa longueur peut atteindre 20 à 40 cm, selon emplacement et les conditions de croissance. Fucus distichus s attache fortement aux substrats rocheux en utilisant des structures semblables à des racines appelées crampons, et vit par photosynthèse. Parce qu elle vit dans les zones de marée, ces algues doivent résister aux changements de température, à la salinité, à la dessiccation pendant la marée basse et à exposition aux UV—ce qui en fait une espèce très résiliente. Elle pousse également souvent en groupes et forme des tapis denses sur les rochers, fournissant une protection et un habitat à divers petits animaux comme les escargots, les petits crabes et les amphipodes. Écologiquement, Fucus distichus joue un rôle important dans les écosystèmes des rivages rocheux. Elle aide à réduire érosion, à maintenir humidité des rochers pendant la marée basse et sert de nourriture et d abri pour d autres organismes marins. En raison de sa vie sédentaire et de sa facilité d observation, ces algues sont souvent utilisées comme indicateur biologique dans les études sur le changement climatique, la pollution marine et la dynamique des écosystèmes intertidaux. Bien que moins populaire que les algues marines tropicales dans industrie alimentaire, Fucus distichus contient des composés bioactifs comme le fucoïdane, le mannitol et les alginates qui ont un potentiel d utilisation dans les industries pharmaceutique, cosmétique et des engrais organiques. Les extraits du genre Fucus ont également été utilisés comme antioxydants et anti-inflammatoires naturels. Avec sa capacité à survivre dans des environnements extrêmes et son rôle important dans le soutien de la biodiversité côtière, Fucus distichus est une partie importante des écosystèmes marins froids sains et dynamiques.';
+
+  @override
+  String get descDurvillaeaAntarctica => 'Durvillaea antarctica, souvent connue sous le nom de « varech taureau » ou « varech taureau du sud », est une des plus grandes et plus fortes espèces d algues brunes au monde et est un habitant typique des rivages rocheux du sud de océan Pacifique, en particulier autour du Chili, du sud de Argentine, de la Tasmanie et de la Nouvelle-Zélande. Ces algues appartiennent à la famille des Durvillaeaceae et sont célèbres pour leur structure corporelle très forte et flexible qui peut résister aux grosses vagues et aux courants océaniques extrêmes. Durvillaea antarctica a un thalle (corps) grand et fort avec des structures en forme de ruban long allant du brun doré au vert olive. Sa longueur peut dépasser 10 mètres, et une caractéristique unique est sa structure tissulaire naturellement remplie d air, permettant à ces algues de flotter sans vessies d air séparées (contrairement à de nombreuses autres algues brunes comme Macrocystis). Cette flottabilité permet à ses parties corporelles de rester à la surface de la mer, captant la lumière du soleil de manière optimale pour la photosynthèse. Durvillaea antarctica s attache aux rochers en utilisant des crampons très forts, similaires à des racines, et peut survivre dans les zones intertidales élevées constamment battues par les vagues. En raison de cette force, elle forme souvent un composant principal des « ceintures de vagues » qui protègent les littoraux contre érosion. Lorsqu elle se détache de son substrat, ces algues peuvent encore flotter et être transportées par les courants océaniques pendant des semaines ou même des mois, devenant souvent des « radeaux naturels » qui transportent des micro-organismes, des invertébrés et même des œufs de poissons vers de nouveaux endroits, jouant un rôle dans la dispersion des espèces à travers les mers. Écologiquement, Durvillaea antarctica fonctionne comme un habitat important pour diverses créatures marines comme les mollusques, les petits crustacés et les anémones de mer. Ces lits d algues deviennent également des zones d alimentation pour les oiseards de mer et certains mammifères marins. En raison de sa dominance dans les zones intertidales difficiles d accès, ces algues sont un indicateur important dans les études de résilience des écosystèmes marins au changement climatique et à la pression des vagues. Outre son rôle écologique, Durvillaea antarctica a également une valeur économique. Dans des régions comme le Chili et la Nouvelle-Zélande, ces algues sont récoltées de manière durable pour les ingrédients alimentaires, les engrais et les sources d alginate—des agents épaississants naturels utilisés dans les industries alimentaire, cosmétique et pharmaceutique. Dans certaines communautés côtières, en particulier au Chili, ces algues sont également traditionnellement utilisées comme matière première pour artisanat ou la consommation locale. En tant que une des macroalgues les plus résistantes et productives de océan sud, Durvillaea antarctica n est pas seulement importante pour la stabilité des écosystèmes côtiers exposés aux vagues, mais reflète également adaptation extraordinaire des organismes marins aux conditions extrêmes, tout en ouvrant des opportunités pour la recherche en biotechnologie et la conservation marine dans les régions sub-antarctiques.';
+
+  @override
+  String get descHimantothallusGrandifolius => 'Himantothallus grandifolius est une grande espèce d algues brunes vivant dans les eaux froides et extrêmes de la région antarctique. Ces algues appartiennent à la classe des Phaeophyceae (algues brunes) et sont connues comme une des macroalgues dominantes dans la zone sublittorale (eaux peu profondes en dessous de la ligne de marée) des écosystèmes côtiers antarctiques, en particulier autour de la péninsule Antarctique et des îles Shetland du Sud. Sa présence marque importance de la vie benthique (fond marin) dans la région polaire dure. Himantothallus grandifolius a un corps (thalle) grand, large et semblable à une feuille qui peut dépasser 1 mètre de long. La couleur de son corps varie du brun olive au brun foncé, et sa surface est flexible mais épaisse, permettant à cette plante de résister aux forts courants océaniques, aux basses températures et à un minimum de lumière. Sa structure corporelle consiste en lames larges et rhizomes courts qui servent à s attacher fortement aux fonds marins rocheux et à ancrer son corps contre les vagues et courants polaires. Ces algues jouent un rôle important dans les écosystèmes antarctiques en tant que producteur primaire, générant de oxygène et fournissant de la nourriture et un abri à divers organismes marins, tels que les invertébrés benthiques, les petits poissons et les micro-organismes. La présence d Himantothallus crée également des microhabitats importants pour les espèces marines incapables de survivre dans des zones ouvertes, froides et exposées. La capacité d Himantothallus à photosynthétiser dans des eaux très froides avec un éclairage limité en fait un sujet de recherche important en biologie polaire et en physiologie végétale extrême. De plus, elle montre également des capacités d adaptation extraordinaires aux conditions extrêmes comme la glace de mer saisonnière, les faibles niveaux de lumière et les nutriments élevés, en faisant un indicateur biologique potentiel pour surveiller les changements des environnements marins polaires dus au changement climatique. Bien que non commercialement utilisées comme certaines autres algues, Himantothallus grandifolius a une grande valeur écologique et scientifique. Elle reflète comment la vie marine peut se développer même dans les environnements les plus durs de la Terre, et importance de maintenir intégrité des écosystèmes marins antarctiques uniques et sensibles au climat.';
+
+  @override
+  String get speciesGiantPacificOctopus => 'Pieuvre géante du Pacifique';
+
+  @override
+  String get speciesMantaRay => 'Raie Manta';
+
+  @override
+  String get speciesGreenSeaTurtle => 'Tortue verte';
+
+  @override
+  String get speciesPacificSeahorse => 'Hippocampe du Pacifique';
+
+  @override
+  String get speciesOrca => 'Orque';
+
+  @override
+  String get speciesClownfish => 'Poisson-clown';
+
+  @override
+  String get speciesGreatWhiteShark => 'Grand requin blanc';
+
+  @override
+  String get speciesAtlanticPuffin => 'Macareux moine';
+
+  @override
+  String get speciesLeatherbackTurtle => 'Tortue luth';
+
+  @override
+  String get speciesBluefinTuna => 'Thon rouge';
+
+  @override
+  String get speciesHumpbackWhale => 'Baleine à bosse';
+
+  @override
+  String get speciesPortugueseManOWar => 'Galère portugaise';
+
+  @override
+  String get speciesDugong => 'Dugong';
+
+  @override
+  String get speciesIndianMackerel => 'Maquereau indien';
+
+  @override
+  String get speciesWhaleShark => 'Requin-baleine';
+
+  @override
+  String get speciesHawksbillTurtle => 'Tortue imbriquée';
+
+  @override
+  String get speciesIndianOceanBottlenoseDolphin => 'Grand dauphin de océan Indien';
+
+  @override
+  String get speciesReefMantaRay => 'Raie Manta des récifs';
+
+  @override
+  String get speciesNarwhal => 'Narval';
+
+  @override
+  String get speciesBelugaWhale => 'Béluga';
+
+  @override
+  String get speciesRingedSeal => 'Phoque annelé';
+
+  @override
+  String get speciesWalrus => 'Morse';
+
+  @override
+  String get speciesPolarCod => 'Morue polaire';
+
+  @override
+  String get speciesArcticJellyfish => 'Méduse arctique';
+
+  @override
+  String get speciesEmperorPenguin => 'Manchot empereur';
+
+  @override
+  String get speciesWeddellSeal => 'Phoque de Weddell';
+
+  @override
+  String get speciesAntarcticToothfish => 'Légine australe';
+
+  @override
+  String get speciesLeopardSeal => 'Phoque léopard';
+
+  @override
+  String get speciesBlueWhale => 'Baleine bleue';
+
+  @override
+  String get speciesAntarcticKrill => 'Krill antarctique';
+
+  @override
+  String get subtypeMollusk => 'Mollusque';
+
+  @override
+  String get subtypeReptile => 'Reptile marin';
+
+  @override
+  String get subtypeMarineMammal => 'Mammifère marin';
+
+  @override
+  String get subtypeCnidaria => 'Cnidaire';
+
+  @override
+  String get subtypeSeabird => 'Oiseau marin';
+
+  @override
+  String get subtypeCrustacean => 'Crustacé';
+
+  @override
+  String get descGiantPacificOctopus => 'La pieuvre géante du Pacifique (Enteroctopus dofleini) est la plus grande espèce de poulpe au monde, vivant dans les eaux froides du nord de océan Pacifique, du Japon à la côte ouest de Amérique du Nord, y compris Alaska et la Californie. Cet animal peut atteindre une longueur de 4 à 5 mètres avec un poids supérieur à 50 kilogrammes, certains individus enregistrant un poids de près de 70 à 90 kilogrammes. Bien que de grande taille, sa durée de vie est relativement courte, environ trois à cinq ans. Cette pieuvre vive dans les profondeurs marines, principalement dans les zones rocheuses ou les grottes sous-marines, et chasse activement la nuit. Son alimentation comprend divers animaux marins tels que crabes, coquillages, crevettes, petits poissons, et parfois même d autres pieuvres. Grâce à son bec tranchant et à son venin, elle peut percer les coquilles de ses proies. La pieuvre géante du Pacifique est également célèbre pour son intelligence remarquable. Elle est capable de résoudre des énigmes, d ouvrir des bocaux, de reconnaître les humains et d utiliser efficacement le camouflage en changeant la couleur et la texture de sa peau pour se fondre dans environnement. En termes de reproduction, la femelle pond entre 20 000 et 100 000 œufs et les protège sans se nourrir jusqu à leur éclosion, ce qui prend environ six mois. Après cela, elle meurt, tout comme le mâle qui meurt peu après accouplement, un cycle de vie appelé semelparité. Bien que non classée comme espèce menacée, la pieuvre géante du Pacifique reste vulnérable aux impacts du changement climatique, de la pollution marine et des activités de pêche. Un fait intéressant : cette pieuvre possède trois cœurs, un sang bleu en raison de la présence d hémocyanine, et est capable de régénérer ses bras sectionnés et de se faufiler à travers des fentes aussi petites qu un trou de pièce de monnaie grâce à son corps mou dépourvu d os.';
+
+  @override
+  String get descMantaRay => 'La raie Manta (Mobula) est une des plus grandes espèces de raies au monde, appartenant à la famille des Mobulidae et au genre Mobula. Cet animal marin est connu pour son corps large en forme d ailes et ses mouvements gracieux lorsqu il « plane » dans eau. La raie Manta se trouve dans les eaux tropicales et subtropicales du monde entier, principalement autour des récifs coralliens, en haute mer et dans les zones côtières. Il existe deux espèces principales : la raie Manta de récif (Mobula alfredi), plus petite et vivant près des côtes, et la raie Manta océanique géante (Mobula birostris), plus grande et parcourant les océans ouverts. La taille de la raie Manta peut être impressionnante. Les plus grandes espèces peuvent atteindre une largeur de 7 mètres et un poids de plus de 1 300 kilogrammes. Malgré sa taille, la raie Manta n est pas dangereuse pour homme car elle ne possède pas d épines venimeuses comme d autres raies et se nourrit de plancton. Elle filtre eau de mer pour capturer le plancton, les petits poissons et les larves grâce à sa grande bouche située à avant de son corps. Les raies Manta sont souvent observées nageant en petits groupes, mais elles peuvent aussi nager seules ou se rassembler en grands nombres pendant la saison des amours ou lors de la recherche de nourriture. une des particularités de la raie Manta est son intelligence. Des recherches montrent que cet animal possède le plus grand cerveau parmi tous les poissons cartilagineux, y compris les requins. Elles présentent également des signes de comportements sociaux complexes et peuvent reconnaître leur propre reflet dans un miroir — une capacité très rare dans le règne animal. En matière de reproduction, la raie Manta se reproduit de manière ovovivipare, c est-à-dire que les œufs éclosent à intérieur du corps de la mère avant de donner naissance à des petits déjà pleinement développés. Malheureusement, la raie Manta fait face à diverses menaces, notamment la surpêche, principalement pour ses branchies utilisées en médecine traditionnelle asiatique, ainsi que la destruction de son habitat et la pollution marine. C est pourquoi de nombreux pays et organisations de conservation protègent désormais cette espèce. La raie Manta est classée comme espèce vulnérable par Union internationale pour la conservation de la nature (UICN). Sa beauté, sa taille et sa nature pacifique en font une des icônes les plus respectées de la vie marine, notamment pour les plongeurs et les amoureux de la mer.';
+
+  @override
+  String get descGreenSeaTurtle => 'La tortue verte (Chelonia mydas) est une des plus grandes et des plus connues des tortues marines dans le monde. Bien qu on appelle « verte », ce nom vient en réalité de la couleur verdâtre de sa graisse corporelle due à son régime herbivore, et non de la couleur de sa carapace. La carapace de la tortue verte est brun foncé ou olive, avec une forme plate et ovale. Cette espèce se trouve dans toutes les eaux tropicales et subtropicales du monde, y compris les océans Atlantique, Pacifique et Indien, ainsi qu autour des récifs coralliens, des herbiers marins et des côtes sablonneuses. La tortue verte peut atteindre plus d un mètre de long et peser entre 150 et 200 kilogrammes. Son régime alimentaire change avec âge. Jeunes, elles sont omnivores, se nourrissant de méduses, de crustacés et d algues. Adultes, elles deviennent herbivores et consomment principalement des herbiers marins et des algues. Ce changement affecte également leur système digestif et la couleur de leur graisse corporelle, qui devient plus verte. un des aspects les plus remarquables de la tortue verte est son comportement migratoire. Elle peut parcourir des milliers de kilomètres entre ses zones d alimentation et ses lieux de ponte. Les femelles retournent sur les plages où elles sont nées pour pondre, un processus connu sous le nom de « natal homing ». Elles peuvent pondre jusqu à 100 œufs par nid et le faire plusieurs fois en une saison. Après éclosion, les nouveau-nés se précipitent vers la mer, mais seule une petite partie atteint âge adulte en raison des prédateurs et des conditions environnementales. La tortue verte est aujourd hui classée comme espèce menacée par Union internationale pour la conservation de la nature (UICN). Leurs populations continuent de décliner en raison de la chasse (pour leur viande et leurs œufs), de la destruction de leur habitat, de la pollution marine et des prises accidentelles dans les engins de pêche. De plus, le changement climatique affecte leur survie, notamment parce que la température du sable influence le sexe des nouveau-nés. Avec ses caractéristiques corporelles uniques, ses capacités migratoires exceptionnelles et son rôle crucial dans le maintien des écosystèmes marins comme les herbiers, la tortue verte est une des espèces marines les plus importantes à protéger et à conserver.';
+
+  @override
+  String get descPacificSeahorse => 'hippocampe du Pacifique (Hippocampus ingens) est la plus grande espèce d hippocampe trouvée dans la région orientale de océan Pacifique. Cette espèce est répartie du sud de la Californie aux États-Unis jusqu à la côte ouest de Amérique du Sud, y compris le Mexique, Panama, Équateur et les îles Galápagos. Ils vivent dans des habitats marins peu profonds tels que les forêts d algues, les récifs coralliens, et les eaux boueuses ou rocheuses, généralement à des profondeurs de 1 à 60 mètres. hippocampe du Pacifique possède un corps typique des hippocampes avec un cou incurvé et un museau allongé. Sa taille peut atteindre 30 cm, ce qui en fait une des plus grandes espèces d hippocampes au monde. La couleur de son corps varie du gris au brun, jusqu au rouge ou jaune doré, et peut changer pour s adapter à environnement comme camouflage pour éviter les prédateurs. Son corps est recouvert de plaques dures et possède une queue robuste et enroulée, utilisée pour s accrocher aux plantes marines ou autres structures pour éviter d être emporté par les courants. Contrairement à la plupart des animaux marins, le rôle de la gestation chez les hippocampes est assumé par le mâle. La femelle dépose ses œufs dans une poche spéciale sur le ventre du mâle, où ils sont fertilisés et incubés jusqu à éclosion. En une seule gestation, le mâle hippocampe du Pacifique peut donner naissance à des dizaines voire des centaines de petits de la taille d une aiguille. Ce comportement est unique dans le règne animal et fait de hippocampe un symbole de particularité biologique. Malheureusement, hippocampe du Pacifique est aujourd hui gravement menacé par le commerce illégal pour la médecine traditionnelle, la destruction de son habitat marin et les captures accidentelles par les engins de pêche. Cette espèce est classée comme vulnérable (Vulnerable) par Union internationale pour la conservation de la nature (UICN). Les efforts de conservation tels que la régulation du commerce via la CITES (Convention sur le commerce international des espèces menacées) et la protection des habitats côtiers sont essentiels pour préserver hippocampe du Pacifique, non seulement unique par sa forme, mais aussi important pour équilibre des écosystèmes marins.';
+
+  @override
+  String get descOrca => 'orque (Orcinus orca), également connue sous le nom d épaulard, est la plus grande espèce de mammifère marin de la famille des dauphins (Delphinidae) et un des principaux prédateurs de océan. Bien que surnommée « baleine tueuse », orque n est en réalité pas une baleine à proprement parler, mais plutôt le plus grand dauphin du monde. Cet animal est célèbre pour son corps élancé et puissant, ses couleurs noir et blanc contrastées et son intelligence exceptionnelle. Les orques sont réparties dans presque tous les océans du monde, des eaux froides de Arctique et de Antarctique aux mers tropicales. Elles sont très adaptables et peuvent vivre dans diverses conditions marines. Les orques mesurent entre 5 et 9 mètres de long et pèsent jusqu à 6 tonnes, selon le sexe et la population. Les femelles sont généralement plus petites que les mâles, qui ont également une nageoire dorsale plus haute et droite, pouvant atteindre 1,8 mètre. En tant que prédateur au sommet, orque a un régime alimentaire très varié dépendant de son groupe (appelé « pod »). Certains pods se nourrissent principalement de poissons comme le saumon, tandis que d autres chassent les phoques, calmars, oiseaux marins, et même de jeunes baleines comme le rorqual bleu. Les orques chassent en groupe et utilisent des stratégies hautement coordonnées, similaires à celles des loups sur terre. Elles sont connues pour être très intelligentes, possédant un système de communication complexe, une mémoire sociale forte et même des traditions de chasse transmises entre générations. En matière de reproduction, les orques vivent en groupes matrilinéaires dirigés par la femelle la plus âgée. Les femelles commencent à se reproduire vers âge de 15 ans et peuvent donner naissance tous les 3 à 10 ans, avec une période de gestation d environ 17 mois. Les orques peuvent vivre très longtemps ; les femelles peuvent vivre plus de 80 ans, tandis que les mâles vivent en moyenne 30 à 60 ans. Bien que les orques n aient pas de prédateurs naturels, elles font face à des menaces liées aux activités humaines, telles que la pollution marine (notamment la contamination par les métaux lourds et les PCB), les perturbations causées par les navires et les sonars militaires, ainsi que la diminution des proies due à la surpêche. Les orques ont également été capturées pour être exposées dans des parcs marins, une pratique aujourd hui fortement critiquée en raison de son impact négatif sur leur bien-être. Avec sa combinaison de force physique, d intelligence sociale élevée et de rôle crucial dans les écosystèmes marins, orque est une des créatures les plus impressionnantes et respectées de océan.';
+
+  @override
+  String get descClownfish => 'Le poisson-clown (Amphiprioninae) est un petit poisson marin célèbre pour ses couleurs vives et sa relation unique avec les anémones de mer. Le poisson-clown possède un corps orange vif avec trois bandes blanches distinctes traversant verticalement sa tête, son corps et sa queue. Ce poisson vit dans les eaux chaudes de océan Pacifique et de océan Indien, notamment autour des récifs coralliens en Asie du Sud-Est, au Japon, en Australie et jusqu aux îles Salomon. Les poissons-clowns vivent généralement en couple ou en petits groupes à intérieur des anémones de mer, dont les tentacules sont venimeux. Cependant, le poisson-clown possède un mucus protecteur spécial sur sa peau qui le rend immunisé contre ce venin. La relation entre le poisson-clown et anémone est une symbiose mutualiste : le poisson-clown bénéficie d une protection contre les prédateurs et de restes de nourriture de anémone, tandis que anémone reçoit de la nourriture provenant des déchets du poisson-clown et une protection contre les parasites. En termes de taille, le poisson-clown mesure généralement entre 7 et 12 cm, selon espèce. une des espèces les plus célèbres est Amphiprion ocellaris, devenue une icône dans le film d animation Le Monde de Nemo. Le poisson-clown est très territorial et défend souvent agressivement la zone autour de son anémone. une des particularités les plus uniques du poisson-clown est son système de reproduction et sa hiérarchie sociale. Tous les poissons-clowns naissent mâles. Dans un groupe, il n y a qu une femelle dominante, et si celle-ci meurt, le mâle le plus grand change de sexe pour devenir femelle et prendre ce rôle. Ce système est appelé protandrie, c est-à-dire le changement de sexe de mâle à femelle. Bien que le poisson-clown ne soit pas classé comme espèce menacée, il est confronté à des menaces telles que la destruction des récifs coralliens, le commerce des poissons d ornement et le changement climatique qui provoque le blanchissement des anémones. La conservation de leurs habitats naturels est donc essentielle pour maintenir équilibre des écosystèmes marins où ils vivent. Avec ses couleurs vives, son comportement social fascinant et ses relations symbiotiques uniques, le poisson-clown est une des icônes les plus reconnaissables et admirées de la vie marine dans le monde.';
+
+  @override
+  String get descGreatWhiteShark => 'Le grand requin blanc (Carcharodon carcharias) est un des prédateurs marins les plus emblématiques et redoutés au monde. Ce requin est connu pour sa taille imposante, la puissance extraordinaire de ses mâchoires et sa réputation de chasseur extrêmement efficace. Le grand requin blanc est largement répandu dans les eaux tempérées et chaudes du monde entier, y compris les océans Atlantique, Pacifique et Indien. On le trouve généralement près des côtes, mais il peut aussi explorer les eaux profondes du large. Ce requin peut atteindre plus de 6 mètres de long et peser jusqu à 2 000 kilogrammes. Son corps a une forme de torpille, avec un dos gris bleuté ou gris foncé et un ventre blanc — caractéristique qui aide à se camoufler lorsqu il guette ses proies par en dessous. Le régime alimentaire du grand requin blanc comprend principalement des phoques, des otaries, des gros poissons, des tortues marines, et même des carcasses de baleines. Il possède également un odorat très développé, capable de détecter une goutte de sang dans des millions de litres d eau, et peut percevoir les champs électriques générés par les battements cardiaques de ses proies grâce à un organe spécial appelé ampoules de Lorenzini. un des aspects les plus fascinants du grand requin blanc est sa technique de chasse. Il attaque souvent par en dessous à grande vitesse, en s appuyant sur effet de surprise pour immobiliser sa proie. Cette attaque est si puissante que les grosses proies peuvent être projetées hors de eau dans un mouvement appelé « breaching ». Bien qu il soit connu pour ses attaques contre les humains, ces cas sont extrêmement rares et généralement dus à la curiosité ou à une erreur d identification plutôt qu à une intention de se nourrir. Le grand requin blanc est un animal solitaire doté d une grande capacité de migration. Certains individus ont été enregistrés voyageant de Afrique du Sud aux eaux australiennes et retour, parcourant des milliers de kilomètres. En termes de reproduction, le grand requin blanc est ovovivipare, ce qui signifie que les œufs éclosent à intérieur du corps de la mère et que les petits requins naissent vivants. Les nouveau-nés sont déjà indépendants et mesurent environ 1,2 à 1,5 mètre. Actuellement, le grand requin blanc est classé comme espèce vulnérable (Vulnerable) par Union internationale pour la conservation de la nature (UICN), en raison de la surpêche, de la pêche aux ailerons et des prises accessoires (bycatch) par les pêcheurs. Sa reproduction lente rend également difficile le rétablissement rapide des populations. En tant que prédateur au sommet, la présence du grand requin blanc est essentielle pour maintenir équilibre de la chaîne alimentaire marine et des écosystèmes en général.';
+
+  @override
+  String get descAtlanticPuffin => 'Le macareux moine (Fratercula arctica) est un petit oiseau marin connu pour son apparence unique et adorable. Cet oiseau est souvent surnommé « le clown de la mer » ou « le perroquet de la mer » en raison de son gros bec orange vif, de ses joues blanches et de son corps noir et blanc rappelant un smoking. Le macareux moine est une des trois espèces de macareux et la seule que on trouve dans la région de Atlantique Nord. Cet oiseau vit dans les eaux froides et rocheuses, notamment au large des côtes du Canada oriental, du Groenland, de Islande, de la Norvège et du Royaume-Uni. Pendant la saison de reproduction (printemps et été), les macareux viennent à terre et nichent sur des falaises abruptes ou dans des terriers, souvent en grandes colonies. Hors de la saison de reproduction, ils passent presque toute leur vie en haute mer, nageant et plongeant pour se nourrir. Le macareux moine est un plongeur accompli. Grâce à ses ailes qui fonctionnent comme des nageoires, il peut plonger jusqu à 60 mètres de profondeur pour capturer de petits poissons comme le hareng et le capelan. Il peut transporter plusieurs poissons à la fois dans son bec grâce à une structure spéciale qui maintient les poissons en place même lorsque le bec est ouvert. Cet oiseau est de petite taille, avec une longueur d environ 25 cm, un poids d environ 500 grammes et une envergure d environ 50 à 60 cm. Les macareux s accouplent pour la vie et ne produisent généralement qu un seul œuf par saison. Le jeune macareux (appelé puffling) est soigné pendant plusieurs semaines dans le nid avant de partir seul en mer. Malheureusement, la population de macareux moines est confrontée à de graves menaces liées au changement climatique, à la surpêche (qui réduit leurs réserves alimentaires), à la pollution marine et à la perte d habitats de nidification. Dans certaines régions comme Islande, le nombre de macareux a considérablement diminué. Par conséquent, le macareux moine est actuellement classé comme vulnérable (Vulnerable) par UICN. Avec son visage adorable, son comportement social fascinant et ses capacités de nage exceptionnelles, le macareux moine est un symbole de la vie marine nordique et un des oiseaux marins les plus aimés au monde.';
+
+  @override
+  String get descLeatherbackTurtle => 'La tortue luth (Dermochelys coriacea) est la plus grande espèce de tortue marine au monde et la seule à ne pas avoir de carapace dure. En tant que membre de la famille des Dermochelyidae, cette tortue se distingue des autres espèces de tortues marines par une peau dorsale texturée comme du cuir recouverte d une fine couche d os, plutôt que d écailles dures. Sa surface dorsale est sombre avec des taches blanches ou grises, et son corps est plus allongé et aérodynamique. La tortue luth peut atteindre plus de 2 mètres de long et peser plus de 600 kilogrammes, ce qui en fait le plus grand reptile marin encore en vie aujourd hui. Cette tortue est largement répandue dans tous les océans tropicaux à subarctiques du monde et est célèbre pour ses capacités migratoires extrêmes. Elle peut parcourir des milliers de kilomètres en un seul voyage, depuis ses sites de ponte sur les plages tropicales jusqu à ses zones d alimentation dans les eaux froides. Contrairement aux autres tortues marines, la tortue luth peut survivre dans des eaux très froides grâce à un mécanisme unique de thermorégulation, incluant sa grande taille, son métabolisme élevé et une épaisse couche de graisse sous la peau. Son régime alimentaire principal se compose de méduses, ce qui lui confère un rôle crucial dans le contrôle des populations de méduses en mer. Son cycle de vie est similaire à celui des autres tortues marines. La femelle monte sur les plages de sable pour pondre, creuse un nid avec ses pattes arrière et dépose environ 80 à 100 œufs par nid. Après la ponte, elle retourne à la mer, et les nouveau-nés (tortillons) éclosent environ deux mois plus tard, se dirigeant seuls vers océan. Malheureusement, la tortue luth est aujourd hui classée comme espèce en danger critique d extinction, principalement en raison de la perte de ses habitats de nidification, de la pollution marine (en particulier les déchets plastiques qu elle confond avec des méduses), des prises accidentelles dans les engins de pêche et du changement climatique qui affecte la température du sable où les œufs sont incubés — un facteur déterminant pour le sexe des nouveau-nés. En tant qu animal préhistorique existant depuis époque des dinosaures, la tortue luth est non seulement un symbole important de la conservation marine, mais aussi un gardien essentiel des écosystèmes. Les efforts de protection mondiale par le biais d aires marines protégées, de la surveillance des pêches et de la réduction des déchets plastiques sont cruciaux pour assurer la survie de cette espèce extraordinaire.';
+
+  @override
+  String get descBluefinTuna => 'Le thon rouge est une des plus grandes, des plus rapides et des plus puissantes espèces de poissons marins au monde. Son nom scientifique est Thunnus thynnus pour le thon rouge de Atlantique, mais il existe également d autres espèces comme le thon rouge du Pacifique (Thunnus orientalis) et le thon rouge du Sud (Thunnus maccoyii). Ce poisson est connu pour son corps imposant, sa forme élancée et aérodynamique, ainsi que ses capacités de nage exceptionnelles — il peut atteindre des vitesses de plus de 70 km/h. Le thon rouge a un dos bleu métallique et un ventre argenté, ce qui aide à se camoufler dans océan. Sa taille est impressionnante ; le thon rouge de Atlantique, par exemple, peut atteindre 3 mètres de long et peser plus de 600 kilogrammes. C est un prédateur au sommet qui se nourrit de petits poissons comme les sardines, les maquereaux et les calmars. une des caractéristiques les plus uniques du thon rouge est sa capacité à réguler sa température corporelle, un phénomène appelé endothermie régionale. Cela lui permet de maintenir son corps au chaud dans les eaux froides, lui donnant un avantage pour la chasse et les migrations sur de longues distances. Il est connu pour parcourir des milliers de kilomètres à travers les océans, des zones d alimentation aux sites de frai, comme de océan Atlantique à la mer Méditerranée ou au golfe du Mexique. Malheureusement, le thon rouge est gravement menacé par la surpêche (overfishing) en raison de la forte demande sur le marché mondial, notamment pour les sushis et sashimis haut de gamme. Un thon rouge s est même vendu plusieurs millions de dollars aux enchères de poissons au Japon. En raison de cette exploitation, leurs populations — notamment celles de Atlantique et du Sud — ont considérablement diminué et sont aujourd hui classées comme en danger (endangered) par UICN. En tant qu espèce à croissance lente et à maturité sexuelle tardive (environ 8 ans), le thon rouge est très vulnérable à la surpêche. Par conséquent, diverses organisations internationales comme ICCAT (Commission internationale pour la conservation des thonidés de Atlantique) réglementent les quotas de pêche et protègent leurs habitats. Le thon rouge est un symbole important de la puissance océanique, de la vitesse et des défis de conservation modernes. Assurer sa survie signifie protéger équilibre des écosystèmes marins et garantir la durabilité des ressources halieutiques mondiales.';
+
+  @override
+  String get descHumpbackWhale => 'La baleine à bosse (Megaptera novaeangliae) est une des espèces de baleines à fanons les plus connues et admirées au monde en raison de sa grande taille, de ses comportements acrobatiques et des chants caractéristiques et mélodieux des mâles. Cette baleine se trouve dans presque tous les océans du monde, migrant sur des milliers de kilomètres entre les eaux froides des pôles (où elle se nourrit) et les eaux chaudes des régions tropicales ou subtropicales (où elle se reproduit et donne naissance). La baleine à bosse mesure entre 12 et 16 mètres de long et pèse de 25 à 40 tonnes. Elle est facilement reconnaissable à sa petite bosse devant la nageoire dorsale, ses longues nageoires pectorales (pouvant atteindre un tiers de la longueur du corps) et sa large queue avec des motifs uniques sur la face inférieure — utilisés par les chercheurs pour identifier visuellement les individu. Sa couleur est généralement gris noirâtre avec des taches blanches sur le ventre, les nageoires ou la queue. Cette baleine se nourrit de zooplancton et de petits poissons comme les anchois ou les sardines, qu elle capture en utilisant son système de filtration à fanons. une des techniques de chasse les plus fascinantes de la baleine à bosse est la « pêche au filet de bulles », où elle souffle des bulles formant un cercle pour rassembler les poissons en un seul endroit avant de les attraper par en dessous en même temps. un des comportements les plus caractéristiques de la baleine à bosse est sa capacité à sauter hors de eau (breaching) et à frapper la surface avec ses nageoires ou sa queue, ce qui serait lié à la communication, au jeu ou au nettoyage des parasites. Les mâles sont également connus pour leurs chants complexes et mélodieux, qui peuvent durer 10 à 20 minutes et être répétés. Ces chants sont probablement utilisés pour attirer des partenaires et montrer leur dominance pendant la saison des amours. La baleine à bosse se reproduit en donnant naissance à un petit après une gestation d environ 11 à 12 mois. Le nouveau-né mesure environ 4 à 5 mètres et sera allaité pendant près d un an. Autrefois, la baleine à bosse était chassée intensivement pour son huile et sa viande, ce qui a considérablement réduit sa population. Depuis interdiction mondiale de la chasse à la baleine, sa population se rétablit progressivement, bien qu elle soit toujours confrontée à des menaces telles que les collisions avec les navires, la pollution sonore marine et les filets de pêche. En tant que créature imposante mais douce, dotée d un comportement social complexe, la baleine à bosse est non seulement cruciale pour équilibre des écosystèmes marins, mais aussi un symbole des efforts de conservation des mammifères marins dans le monde entier. Elle est désormais une attraction majeure de écotourisme (observation des baleines) qui soutient la sensibilisation et la protection de environnement marin.';
+
+  @override
+  String get descPortugueseManOWar => 'La galère portugaise (Physalia physalis) est une créature marine unique souvent confondue avec une méduse, mais qui n en est en réalité pas une. Il s agit d une colonie de quatre types de polypes (petits organismes) interdépendants fonctionnant comme un seul individu, ce qui la classe dans le groupe des siphonophores. Cette créature est célèbre pour son apparence frappante et sa piqûre extrêmement douloureuse, voire dangereuse pour homme. La caractéristique principale de la galère portugaise est sa « voile » flottante, une poche de gaz de couleur bleu violacé à la surface de eau appelée pneumatophore. Cette poche permet à animal d être poussé par le vent à la surface de la mer, comme un petit voilier — d où son nom « Man o  War », inspiré des anciens navires de guerre portugais. Sous la surface, pendent de longs tentacules pouvant atteindre 10 à 30 mètres, bien que la moyenne soit d environ 10 mètres. Ces tentacules sont équipés de nématocystes, des cellules urticantes utilisées pour paralyser les proies et se défendre. Cette créature vit dans les eaux chaudes du monde entier, notamment dans les océans Atlantique, Pacifique et Indien. Elle ne peut pas nager et dépend uniquement du vent et des courants marins pour se déplacer. Son alimentation comprend de petits poissons et du plancton, qu elle paralyse avant de les tirer vers ses polypes digestifs. La piqûre de la galère portugaise peut causer une douleur intense chez homme, même lorsque animal est échoué sur la plage ou que ses tentacules sont détachés. Les réactions peuvent inclure des brûlures cutanées, des difficultés respiratoires, des crampes musculaires et, dans de rares cas, de graves réactions allergiques (choc anaphylactique). Bien qu effrayante, la galère portugaise joue un rôle important dans la chaîne alimentaire marine. Elle constitue également une proie pour certains prédateurs spécialisés comme les tortues luth et certains poissons immunisés contre ses piqûres. En tant que créature marine biologiquement fascinante, la galère portugaise démontre la diversité et la complexité de la vie marine. Bien que belle à regarder de loin, elle doit être évitée en mer ou lorsqu elle est échouée, car ses piqûres restent actives même après sa mort.';
+
+  @override
+  String get descDugong => 'Le dugong (Dugong dugon) est un mammifère marin herbivore appartenant à ordre des Siréniens, et le seul membre encore vivant de la famille des Dugongidae. Le dugong est souvent appelé « vache marine » en raison de son alimentation à base de plantes marines (comme les herbiers), de son corps imposant et de ses mouvements lents. Il est étroitement apparenté aux lamantins, bien que leur habitat et certaines caractéristiques physiques diffèrent. Le dugong se trouve dans les eaux peu profondes tropicales et subtropicales, notamment dans océan Indien et le Pacifique occidental, y compris en Indonésie, en Australie, aux Philippines et dans d autres régions d Asie du Sud-Est. Il vit généralement autour des herbiers marins dans les baies, les lagunes et les côtes calmes. Son corps est cylindrique et allongé, de couleur grise à brun grisâtre, avec une queue en forme de nageoire de dauphin (horizontale) et sans nageoire dorsale. Il peut atteindre 3 mètres de long et peser jusqu à 400 kilogrammes. En tant qu herbivore marin, le dugong consomme diverses espèces d herbiers marins en arrachant les plantes du fond marin avec sa lèvre supérieure puissante. Il passe une grande partie de son temps à se nourrir et peut consommer jusqu à 40 kilogrammes d herbiers par jour. Ce régime alimentaire est crucial pour la santé des écosystèmes marins, car il aide à maintenir équilibre de la croissance des herbiers. Le dugong respire avec des poumons et doit remonter régulièrement à la surface pour prendre de air. Bien que lent, il peut plonger jusqu à 10 mètres de profondeur et rester sous eau pendant 6 à 10 minutes avant de refaire surface. Le dugong a un système de reproduction lent ; la femelle ne donne naissance qu à un petit après une gestation d environ 13 à 15 mois, et le petit sera allaité pendant plus d un an. En raison de sa croissance démographique lente, le dugong est très vulnérable aux perturbations environnementales. Actuellement, le dugong est classé comme espèce vulnérable (Vulnerable) par UICN. Sa population continue de diminuer en raison de la destruction des herbiers marins, des collisions avec les bateaux, des captures dans les filets de pêche et du braconnage illégal. Le changement climatique et le développement côtier constituent également des menaces sérieuses pour sa survie. En tant que partie du patrimoine marin tropical, le dugong joue un rôle essentiel dans le maintien de équilibre des écosystèmes côtiers. Par conséquent, les efforts de conservation par la protection des habitats naturels, la surveillance des activités humaines côtières et éducation des communautés sont cruciaux pour assurer la survie de cet animal doux et charismatique.';
+
+  @override
+  String get descIndianMackerel => 'Le maquereau indien (Rastrelliger kanagurta) est une espèce de poisson marin très commune dans les eaux tropicales et subtropicales de la région indo-pacifique. Ce poisson appartient à la famille des Scombridae, qui comprend également les thons et les maquereaux. Le maquereau indien a une grande valeur économique car il est un des principaux poissons consommés dans de nombreux pays asiatiques, notamment Indonésie, Inde, la Thaïlande et les Philippines. Les caractéristiques du maquereau indien incluent un corps élancé et allongé, avec un ventre argenté brillant et un dos bleu-vert, ainsi que des rayures ou des taches sombres sur les flancs. Sa taille est moyenne, généralement de 20 à 30 cm de long, mais il peut atteindre 35 cm. Sa queue est fourchue en forme de V et son corps est couvert d écailles fines. Le maquereau indien vit en groupes (bancs) dans les eaux peu profondes près des côtes, notamment dans les estuaires, les baies et les eaux à fond boueux ou sableux. C est un poisson pélagique, vivant dans la colonne d eau (pas au fond) et migrant souvent selon les courants et les saisons. Ce poisson est très actif et connu comme un nageur rapide. En termes d alimentation, le maquereau indien est planctivore, se nourrissant principalement de phytoplancton et de zooplancton, mais consommant parfois des œufs de poisson et de petites larves. Il joue un rôle important dans la chaîne alimentaire marine en tant que consommateur primaire et proie pour des prédateurs plus grands comme les thons, les requins et les oiseards marins. Le maquereau indien se reproduit en pondant des œufs en haute mer, et une femelle peut produire des milliers d œufs qui éclosent rapidement. Son cycle de vie est court, et ce poisson grandit et atteint la maturité rapidement, ce qui en fait une ressource importante pour la pêche. Bien que sa population soit encore abondante dans de nombreuses régions, le maquereau indien peut être menacé par la surpêche (overfishing), la détérioration de la qualité de eau de mer et la destruction des écosystèmes côtiers. Une gestion durable des pêches est essentielle pour maintenir stable le stock de ce poisson et assurer son utilisation continue par les communautés côtières. Avec sa valeur économique élevée, son rôle écologique important et sa large distribution, le maquereau indien est une espèce clé dans les écosystèmes marins et la sécurité alimentaire côtière en Asie.';
+
+  @override
+  String get descWhaleShark => 'Le requin-baleine (Rhincodon typus) est la plus grande espèce de poisson au monde et appartient au groupe des requins (pas des baleines), bien que son nom contienne « baleine » en raison de sa taille gigantesque et de son mode d alimentation similaire à celui des baleines à fanons. Malgré sa taille énorme, le requin-baleine est réputé pour être un animal docile et inoffensif pour homme. Le requin-baleine peut atteindre plus de 12 mètres de long, certains individus enregistrant plus de 18 mètres, avec un poids allant jusqu à 15–20 tonnes. Son corps est gris bleuté avec un motif unique de taches blanches et de rayures claires sur chaque individu, comme des empreintes digitales. Sa bouche est très large, pouvant dépasser 1 mètre, et située à avant de la tête (pas en dessous comme la plupart des requins). Le régime alimentaire principal du requin-baleine se compose de plancton, d œufs de poisson et de petits organismes comme les petites crevettes et poissons. Bien qu il possède plus de 3 000 petites dents, elles ne servent pas à mâcher. Le requin-baleine est un filtreur (filter feeder), filtrant sa nourriture de eau en ouvrant grand sa bouche tout en nageant, puis filtrant les particules alimentaires à travers ses fentes branchiales. Il peut filtrer des centaines de litres d eau par heure pour se nourrir. Le requin-baleine se trouve dans les eaux tropicales et chaudes du monde entier, y compris autour de Indonésie, des Philippines, de Australie et du Mexique. Il est souvent vu près de la surface de la mer lorsqu il se nourrit et a tendance à migrer sur de longues distances pour trouver des sites d alimentation et de reproduction. Bien que beaucoup reste inconnu sur son comportement et sa reproduction, le requin-baleine est connu pour donner naissance à des petits déjà développés (ovovivipare), et une femelle peut porter des centaines d embryons dans son corps. Actuellement, le requin-baleine est classé comme espèce en danger (Endangered) par UICN, en raison de diverses menaces telles que la surpêche, les collisions avec les navires, le commerce illégal de parties de son corps et la destruction de son habitat marin. Il est également souvent ciblé par le tourisme marin, comme les activités de nage avec les requins-baleines, qui, si elles ne sont pas régulées correctement, peuvent causer du stress et perturber son comportement. Avec sa taille majestueuse, sa nature paisible et son rôle d indicateur de la santé marine, le requin-baleine est une des icônes les plus importantes et fascinantes de la conservation marine tropicale dans le monde.';
+
+  @override
+  String get descHawksbillTurtle => 'La tortue imbriquée (Eretmochelys imbricata) est une des espèces de tortues marines les plus reconnaissables et les plus menacées d extinction. Cette tortue est connue pour sa carapace magnifique aux écailles imbriquées de couleur brun doré et noir, ce qui en fait une cible principale du commerce illégal pour la fabrication d objets artisanaux comme des peignes, des lunettes et des bijoux — appelés « écaille de tortue » (tortoiseshell). La tortue imbriquée a un corps élancé et un bec pointu incurvé ressemblant à celui d un aigle, d où son nom. Sa taille est relativement petite par rapport aux autres espèces de tortues marines, avec une longueur adulte d environ 60–90 cm et un poids de 45–70 kg. Elle est largement répandue dans les eaux tropicales et subtropicales, notamment dans océan Atlantique, le Pacifique et océan Indien, y compris les eaux indonésiennes, les Caraïbes et les récifs coralliens du monde. habitat principal de la tortue imbriquée est le récif corallien, où elle se nourrit et pond ses œufs. Contrairement aux autres tortues marines, elle a un régime alimentaire très spécifique, se nourrissant d éponges de mer, de méduses et d anémones. Avec son bec pointu, elle peut atteindre les crevasses étroites des récifs pour trouver de la nourriture. En contrôlant les populations d éponges, la tortue imbriquée contribue à maintenir équilibre des écosystèmes coralliens. Comme les autres tortues marines, la tortue imbriquée respire avec des poumons et doit remonter régulièrement à la surface. Elle se reproduit en pondant sur les plages de sable isolées la nuit. Les femelles pondent généralement tous les 2 à 4 ans et peuvent déposer environ 100 à 200 œufs par nid. Les nouveau-nés se dirigent immédiatement vers la mer, mais seule une petite proportion survit jusqu à âge adulte en raison des prédateurs et des perturbations environnementales. Actuellement, la tortue imbriquée est classée comme « En danger critique d extinction » (Critically Endangered) par UICN. Les principales menaces incluent le commerce illégal de sa carapace, la destruction des habitats côtiers et des récifs coralliens, la collecte de ses œufs, les prises accidentelles dans les engins de pêche et le changement climatique qui affecte la température du sable et les sites de ponte. En tant que symbole de la beauté marine tropicale et indicateur de la santé des récifs coralliens, la tortue imbriquée est essentielle aux efforts de conservation mondiale. La protection par application de la loi, les aires marines protégées, la gestion durable du tourisme et éducation communautaire sont des éléments clés pour assurer la survie de cette espèce extraordinaire.';
+
+  @override
+  String get descIndianOceanBottlenoseDolphin => 'Le grand dauphin de océan Indien (Tursiops aduncus) est une des espèces de dauphins les plus connues et les plus intelligentes au monde. Il appartient à la famille des Delphinidae et est un proche parent du grand dauphin commun (Tursiops truncatus), mais diffère par la taille, habitat et certaines caractéristiques physiques. Comme son nom indique, ce dauphin se trouve principalement dans les eaux côtières et peu profondes de océan Indien, le long des côtes de Afrique de Est, de Asie du Sud et des eaux indonésiennes, du nord de Australie jusqu à la mer Rouge. Le grand dauphin de océan Indien a un corps élancé et allongé, de couleur gris bleuté sur le dos et plus clair sur le ventre. une de ses caractéristiques distinctives est la présence de taches sombres sur le ventre et les flancs, particulièrement chez les adultes — contrairement à d autres espèces de grands dauphins. Sa taille est relativement moyenne, avec une longueur d environ 2,5 à 2,8 mètres et un poids de 150 à 230 kilogrammes. Cette espèce vit en groupes (pods) pouvant compter de quelques individus à plusieurs dizaines, selon les conditions environnementales et la saison. Ils sont très sociables et souvent observés nageant, sautant ou jouant près des bateaux, ce qui en fait un des animaux marins les plus fréquemment observés par homme. Ces dauphins sont également connus pour leur grande intelligence, utilisant écholocation pour naviguer et trouver des proies comme des poissons, des calmars et de petits crustacés. Le grand dauphin de océan Indien se reproduit en donnant naissance, et les femelles ne mettent généralement au monde qu un petit tous les 3–6 ans après une gestation d environ 12 mois. Le jeune dauphin sera allaité pendant plus d un an et apprendra de nombreux comportements sociaux de sa mère et des autres membres du pod. Bien que non classée comme gravement menacée, cette espèce est confrontée à plusieurs menaces sérieuses, notamment la pollution marine, les captures accidentelles dans les engins de pêche (bycatch), la chasse et les perturbations causées par le tourisme et le trafic maritime. Les modifications de habitat côtier affectent également leur population, car ils dépendent fortement des eaux peu profondes pour se nourrir et se reproduire. En tant que symbole de intelligence et de la complexité de la vie sociale marine, le grand dauphin de océan Indien joue un rôle important dans les écosystèmes marins et la culture maritime des communautés côtières. La conservation de leurs habitats naturels, une gestion durable du tourisme marin et la réduction de la pollution marine sont essentielles pour assurer leur survie future.';
+
+  @override
+  String get descReefMantaRay => 'La raie Manta de récif (Mobula alfredi) est une des plus grandes espèces de raies au monde et une créature marine d une grâce et d une intelligence remarquables. Cette espèce se trouve dans les eaux tropicales et subtropicales, principalement autour des récifs coralliens de océan Indien et du Pacifique, y compris en Indonésie, aux Maldives, en Australie et à Hawaï. Bien que souvent perçue comme effrayante en raison de sa taille, la raie Manta de récif est totalement inoffensive, car elle n a pas d ardillon et se nourrit uniquement de plancton. La caractéristique la plus frappante de la raie Manta de récif est son corps plat et large, en forme d aile, pouvant atteindre 5 mètres d envergure, avec une moyenne de 3–4 mètres. Le dessus du corps est noir grisâtre avec un motif unique semblable à une empreinte digitale, tandis que le dessous est plus clair. À avant de la tête se trouvent deux lobes céphaliques (appendices en forme de cornes) qui aident à diriger le plancton vers la bouche lorsqu elle nage. La raie Manta de récif est un filtreur, filtrant le plancton et les organismes microscopiques de eau en nageant la bouche ouverte. On la voit souvent « voler » dans eau avec des mouvements d ailes amples et gracieux, et parfois sauter hors de eau — un comportement dont la fonction n est pas encore entièrement comprise, peut-être pour la communication, élimination des parasites ou des interactions sociales. Cet animal est très social et se rassemble souvent aux « stations de nettoyage », des endroits dans les récifs où de petits poissons comme les labres nettoyeurs éliminent les parasites de son corps. La raie Manta de récif possède également le plus grand cerveau de tous les poissons et montre des comportements intelligents comme la reconnaissance de soi dans un miroir, une navigation complexe et une mémoire à long terme. La reproduction de la raie Manta de récif est lente. Les femelles ne donnent naissance qu à un petit tous les 2–5 ans, après une gestation d environ 12–13 mois. Le bébé manta naît vivant et peut nager immédiatement. En raison de ce faible taux de reproduction, espèce est très vulnérable aux perturbations environnementales. Actuellement, la raie Manta de récif est classée comme vulnérable (Vulnerable) par UICN. Les principales menaces incluent la surpêche, notamment pour ses branchies vendues comme remède traditionnel, ainsi que la destruction de habitat, la pollution marine et les perturbations dues au tourisme marin non régulé. En tant qu animal fascinant et important pour les écosystèmes marins, la raie Manta de récif a également une grande valeur pour écotourisme durable, comme la plongée et le snorkeling avec les raies. Leur conservation est un symbole de la protection des mers tropicales saines et durables.';
+
+  @override
+  String get descNarwhal => 'Le narval (Monodon monoceros) est une espèce de baleine à dents vivant dans les eaux arctiques et célèbre pour sa « corne » longue ressemblant à une lance, qui pousse depuis sa tête. Cette corne est en réalité une canine gauche qui s allonge en spirale et perce la lèvre supérieure, pouvant atteindre 2 à 3 mètres de long. En raison de cette particularité, le narval est souvent appelé « licorne de mer » et a inspiré de nombreuses légendes et mythes depuis des siècles. Le narval fait partie de la famille des baleines à dents (odontocètes) et est étroitement apparenté au béluga. Il vit autour des eaux froides du Groenland, du nord du Canada et de la Russie, principalement dans océan Arctique. Les mâles narvals possèdent généralement cette « corne », bien qu environ 15 % des femelles en aient également une. La fonction exacte de cette défense n est pas entièrement comprise, mais les scientifiques pensent qu elle sert à montrer la dominance, attirer des partenaires ou comme organe sensoriel, car elle contient des millions de terminaisons nerveuses sensibles. Le corps du narval est gris avec des taches sombres, devenant généralement plus clair avec âge. Sa longueur (sans la défense) peut atteindre 4–5 mètres, avec un poids d environ 800 à 1 600 kilogrammes. Contrairement à la plupart des autres baleines, le narval ne migre pas sur de longues distances, mais suit des schémas saisonniers autour de Arctique, passant des eaux ouvertes en été aux zones de glace marine plus dense en hiver. Le narval vit en petits groupes (pods) de quelques individus à plusieurs dizaines. Il utilise écholocation pour communiquer et naviguer dans les eaux sombres ou glacées. Son alimentation comprend principalement des poissons, des calmars et des crevettes des profondeurs marines, qu il capture en plongeant jusqu à plus de 1 500 mètres — une des plongées les plus profondes connues chez les mammifères marins. Le narval se reproduit lentement. Les femelles donnent naissance à un petit tous les 3–4 ans après une gestation d environ 15 mois. Le jeune narval sera allaité pendant plus d un an avant de devenir indépendant. Bien que le narval ne soit pas classé comme gravement menacé, il fait face à des menaces liées au changement climatique arctique, à la perte de glace de mer, aux perturbations causées par les activités humaines (comme exploration pétrolière) et à la chasse traditionnelle dans certaines communautés inuites. Comme cette espèce dépend fortement d un écosystème de glace de mer stable, elle est considérée comme un indicateur important de la santé environnementale de Arctique. Avec son apparence unique et son habitat extrême, le narval est un symbole des merveilles naturelles polaires et de importance de protéger les écosystèmes marins fragiles.';
+
+  @override
+  String get descBelugaWhale => 'Le béluga (Delphinapterus leucas) est une des espèces de baleines à dents les plus reconnaissables en raison de sa couleur blanche éclatante et de son expression faciale semblant « sourire ». Le béluga provient des eaux arctiques et subarctiques, et est souvent surnommé « canari de la mer » pour sa capacité à émettre divers sons aigus comme des sifflements, des clics et des crépitements. Le béluga est de taille moyenne par rapport aux autres espèces de baleines, mesurant environ 4–5 mètres de long et pesant jusqu à 1 200–1 600 kilogrammes. Contrairement à la plupart des autres baleines, le béluga a un cou flexible car ses vertèbres cervicales ne sont pas fusionnées, lui permettant de tourner la tête sur le côté et vers le haut — une capacité unique parmi les cétacés. De plus, le béluga n a pas de nageoire dorsale, mais possède une crête dorsale qui aide à nager sous la glace. Le béluga est un animal social vivant en petits groupes appelés pods, pouvant compter de quelques individus à plusieurs centaines. Ils communiquent entre eux par écholocation et vocalisations complexes. En raison de leur riche répertoire vocal, ils sont surnommés les baleines chanteuses et sont des sujets d étude importants en bioacoustique marine. habitat du béluga comprend les eaux froides et glacées autour du nord du Canada, de Alaska, de la Russie, du Groenland et de la Norvège. Ils migrent selon les saisons — en été, ils entrent souvent dans les rivières et les estuaires, tandis qu en hiver, ils restent sous la banquise, respirant à travers les fissures dans la glace. Le béluga est un prédateur opportuniste se nourrissant de diverses proies comme des poissons, des crevettes, des calmars et des crabes, selon emplacement et la saison. Il utilise écholocation pour trouver des proies dans les eaux troubles ou sombres. Le béluga se reproduit lentement ; les femelles donnent naissance à un petit tous les 3–4 ans, après une gestation d environ 14–15 mois. Le bébé béluga naît gris foncé et blanchit avec âge. Bien que le béluga ne soit pas classé comme espèce gravement menacée à échelle mondiale, certaines populations locales comme celle de la baie Cook, en Alaska, sont classées en danger critique d extinction (Critically Endangered) par UICN. Les principales menaces incluent la pollution marine, le changement climatique (notamment la fonte de la glace de mer), le trafic maritime, les activités industrielles dans les régions nordiques et la chasse traditionnelle dans certaines communautés arctiques. Avec son apparence unique, ses sons caractéristiques et sa nature sociale exceptionnelle, le béluga est un symbole important des écosystèmes arctiques et des efforts de conservation marine dans les régions polaires. Il joue également un rôle majeur dans la culture des peuples inuits et est une attraction majeure pour les études scientifiques sur la communication des mammifères marins.';
+
+  @override
+  String get descRingedSeal => 'Le phoque annelé (Pusa hispida) est la plus petite et la plus largement répandue des espèces de phoques dans la région arctique. Il est nommé « annelé » en raison du motif de taches sombres avec des anneaux blancs sur tout son corps, particulièrement sur le dos et les flancs. Cette caractéristique le distingue des autres espèces de phoques et aide à se camoufler parmi la glace et la neige. Le phoque annelé a un corps trapu et compact adapté à la survie dans environnement polaire extrême. Sa longueur est d environ 1 à 1,6 mètre, et son poids varie de 50 à 110 kilogrammes. La couleur du dos est généralement gris foncé ou brunâtre, tandis que le ventre est plus clair. Une épaisse couche de graisse (lard) aide à retenir la chaleur corporelle dans les eaux glaciales. Cette espèce dépend fortement de la glace de mer comme habitat principal pour se reposer, mettre bas et allaiter ses petits. Le phoque annelé est célèbre pour sa capacité à creuser et entretenir des trous de respiration dans la glace de mer en utilisant ses griffes antérieures fortes et courbées. Il construit également des « tanières » de neige et de glace au-dessus des trous de glace pour mettre bas et protéger ses petits des prédateurs et du froid extrême. Le phoque annelé se nourrit de petits poissons, de crustacés et de zooplancton, qu il capture en plongant sous la glace. Il peut plonger à plus de 100 mètres de profondeur et rester sous eau pendant 15–20 minutes. Dans écosystème arctique, le phoque annelé est la proie principale de ours polaire, et est également chassé par les orques et les renards arctiques. Il joue donc un rôle crucial dans la chaîne alimentaire marine arctique. Le phoque annelé se reproduit une fois par an, et les femelles donnent généralement naissance à un petit (appelé blanchon) après une gestation d environ 9 mois. Le jeune phoque annelé naît avec une fourrure blanche épaisse qui muera avec la croissance. Bien que la population mondiale du phoque annelé soit relativement stable, elle fait face à des menaces sérieuses liées au changement climatique, notamment la fonte précoce et accélérée de la glace de mer, qui perturbe son habitat et sa saison de reproduction. La pollution marine et les perturbations causées par les activités industrielles dans Arctique sont également des menaces supplémentaires. En tant qu espèce fortement dépendante de la glace de mer, le phoque annelé est un indicateur important de la santé de écosystème arctique. Le protéger signifie également préserver équilibre et la survie de nombreuses autres espèces dans la région circumpolaire nord.';
+
+  @override
+  String get descWalrus => 'Le morse (Odobenus rosmarus) est un grand mammifère marin vivant dans la région polaire arctique, en particulier autour de océan Arctique. Cet animal est très reconnaissable à son corps imposant, sa peau épaisse et ridée, et ses deux longues défenses qui dépassent de sa mâchoire supérieure. Les mâles et les femelles ont des défenses, bien que celles des mâles soient généralement plus longues et utilisées pour montrer leur dominance, se défendre, grimper sur les blocs de glace et lors des combats entre mâles pendant la saison des amours. Le morse possède une épaisse couche de graisse (lard) le protégeant des températures extrêmement froides, et sa peau est généralement grise ou brun rougeâtre. Il a des moustaches épaisses très sensibles utilisées pour tâter le fond marin à la recherche de proies comme les palourdes, les escargots de mer et d autres invertébrés vivant dans les eaux peu profondes. Le morse vit socialement en grands groupes pouvant compter des centaines à des milliers d individus et est très vocal, surtout pendant la saison des amours. Il se reproduit lentement, les femelles ne donnant naissance qu à un petit tous les deux à trois ans après une gestation d environ 15 à 16 mois. Le bébé morse est allaité pendant plus d un an et dépend fortement de sa mère. Il existe deux sous-espèces principales : le morse de Atlantique vivant autour du Groenland et du nord-est du Canada, et le morse du Pacifique trouvé dans la mer de Béring et la mer des Tchouktches. Actuellement, le morse est confronté à diverses menaces, principalement dues au changement climatique qui provoque la fonte de la glace de mer, réduisant son habitat de repos et le forçant à se rassembler sur la terre ferme, ce qui peut entraîner une surpopulation et du stress. De plus, les activités industrielles, la pollution marine et les perturbations causées par le trafic maritime aggravent également la situation. En tant que symbole de la force et de la résilience de environnement arctique, la protection du morse est essentielle pour maintenir équilibre de écosystème polaire nord de plus en plus fragile.';
+
+  @override
+  String get descPolarCod => 'La morue polaire (Boreogadus saida) est un petit poisson extrêmement important dans écosystème marin arctique. Bien que de petite taille — avec une longueur moyenne d environ 20–30 cm — ce poisson joue un rôle vital en tant qu espèce clé dans la chaîne alimentaire arctique, servant de principale source de nourriture pour divers prédateurs comme les oiseaux marins, les phoques, les bélugas et les gros poissons. La morue polaire est largement répandue dans les eaux polaires du nord, y compris autour du Groenland, du nord du Canada, de la Russie et de la mer de Barents. Elle peut survivre à des températures très froides grâce à des protéines antigel naturelles dans son sang, empêchant la formation de cristaux de glace dans ses tissus. Les caractéristiques de la morue polaire incluent un corps élancé et de couleur argentée avec une teinte brune ou grise sur le dos. Elle vit sous la glace de mer et dans les eaux libres, selon âge et la saison. Les adultes vivent généralement dans des eaux plus profondes, tandis que les larves et les juvéniles restent souvent sous la glace, cherchant protection et nourriture sous forme de petit plancton. La reproduction a généralement lieu en hiver, et les femelles peuvent produire des milliers d œufs qui éclosent dans des conditions de température extrêmes. La morue polaire possède une capacité d adaptation remarquable à environnement gelé et pauvre en lumière. Cependant, elle est très vulnérable au changement climatique, notamment en raison de la fonte de la glace de mer et des changements de température de eau qui peuvent perturber son habitat et son schéma de reproduction. En raison de sa position centrale dans la chaîne alimentaire arctique, un déclin de la population de morue polaire pourrait avoir un impact majeur sur la survie de nombreuses autres espèces. Avec son rôle irremplaçable dans écosystème arctique, la morue polaire est un indicateur important de la santé de environnement marin polaire. Protéger ce petit poisson signifie également préserver la stabilité et la survie des grands animaux qui en dépendent dans un écosystème extrême, fragile et en rapide évolution en raison du réchauffement climatique.';
+
+  @override
+  String get descArcticJellyfish => 'La méduse arctique est un terme générique désignant plusieurs espèces de méduses vivant dans les eaux froides et gelées de la région arctique. une des espèces les plus connues est Cyanea capillata arctica, ou méduse à crinière de lion sous-espèce arctique, qui est une des plus grandes méduses au monde. Les méduses arctiques ont un corps transparent en forme de cloche avec de longs tentacules pouvant briller faiblement dans obscurité marine, créant une impression à la fois spectaculaire et mystérieuse dans les profondeurs glacées de océan. Ces méduses peuvent survivre à des températures très basses car leur corps est principalement composé d eau et de tissus gélatineux flexibles. Elles se déplacent lentement par contractions corporelles en forme de pulsations, mais sont plus souvent emportées par les courants marins. En tant que prédateurs filtreurs, les méduses arctiques se nourrissent de plancton, de larves de poissons et d autres petits organismes en utilisant leurs longs tentacules collants, qui contiennent des cellules urticantes ou nématocystes pour paralyser leurs proies. Bien qu elles semblent fragiles et simples, les méduses arctiques jouent un rôle important dans la chaîne alimentaire marine polaire. Elles sont une source de nourriture pour diverses espèces de poissons, d oiseaux marins et même de tortues si elles se trouvent dans des régions plus au sud. De plus, les méduses contribuent au recyclage de énergie et des nutriments dans les écosystèmes marins profonds, pauvres en lumière et très froids. Les méduses arctiques sont des indicateurs biologiques des changements environnementaux marins. augmentation de la température de eau et la fonte des glaces due au changement climatique peuvent affecter leur distribution, leur nombre et leur période de reproduction. Certaines études suggèrent que le changement climatique pourrait provoquer des explosions de populations de méduses dans certaines zones, potentiellement perturbant équilibre des écosystèmes. Avec leur grâce de mouvement et leur capacité à vivre dans les mers gelées, les méduses arctiques reflètent à la fois la merveille et la fragilité de écosystème arctique, aujourd hui confronté à de fortes pressions dues au réchauffement climatique et aux perturbations humaines.';
+
+  @override
+  String get descEmperorPenguin => 'Le manchot empereur (Aptenodytes forsteri) est la plus grande espèce de manchot et la seule à se reproduire exclusivement sur la glace continentale de Antarctique. Vivant dans un des environnements les plus extrêmes de la Terre, le manchot empereur a développé des adaptations remarquables pour survivre à des températures pouvant atteindre –60°C et des vents violents dépassant 150 km/h. Sa grande taille — pouvant atteindre 120 cm et pesant entre 20 et 40 kilogrammes — aide à réduire la perte de chaleur, et son plumage épais ainsi qu une épaisse couche de graisse sous-cutanée offrent une protection supplémentaire contre le froid. apparence du manchot empereur est très distinctive, avec un dos noir, un ventre blanc immaculé et des marques jaune-orange sur les côtés du cou et de la tête. C est un nageur et plongeur accompli, capable de plonger à plus de 500 mètres de profondeur et de rester sous eau pendant 20 minutes pour chercher du poisson, du krill et des calmars — ses principales sources de nourriture dans océan glacé. Ce qui rend le manchot empereur spécial est son mode de reproduction. Ils se reproduisent pendant hiver antarctique, une période où presque tous les autres animaux quittent le continent. Après que la femelle pond un seul œuf, elle part en mer pour se nourrir, tandis que le mâle couve œuf sur ses pieds pendant environ deux mois, le protégeant avec un repli de peau chaud appelé poche incubatrice. Pendant cette période, le mâle ne mange pas et survit grâce à ses réserves de graisse. Après éclosion, la femelle revient et nourrit le poussin avec de la nourriture prédigérée. Les soins parentaux sont partagés alternativement entre le mâle et la femelle. Le manchot empereur vit en grandes colonies pouvant compter des milliers d individus, et ils se rassemblent souvent étroitement en formant des « huddles » ou des groupes serrés pour partager la chaleur dans le froid glacial. Ce comportement social est crucial pour leur survie pendant la saison de reproduction. Bien que sa population soit encore relativement importante, le manchot empereur fait face à de graves menaces liées au changement climatique. La fonte accélérée de la glace de mer chaque année réduit son habitat essentiel pour la reproduction et perturbe la disponibilité de la nourriture. De nombreux scientifiques avertissent que si la tendance au réchauffement climatique se poursuit, la population de manchots empereurs pourrait diminuer drastiquement au cours de ce siècle. Avec son unicité à survivre dans environnement le plus dur de la Terre, le manchot empereur est non seulement un symbole de la vie sauvage antarctique, mais aussi un indicateur important de la santé de environnement polaire menacé.';
+
+  @override
+  String get descWeddellSeal => 'Le phoque de Weddell (Leptonychotes weddellii) est une des espèces de phoques vivant dans la région antarctique et connue comme un plongeur marin profond résistant et le mammifère marin le plus austral. Cet animal vit autour de la banquise dense couvrant océan gelé, en particulier dans les zones côtières et les baies glacées, où il creuse des trous de respiration dans la glace pour survivre sous une surface entièrement couverte. Le corps du phoque de Weddell est large et robuste, atteignant environ 2,5 à 3 mètres de long et pesant jusqu à 600 kilogrammes. Sa couleur est gris argenté avec un motif de taches irrégulières, aidant à se camoufler sous eau. Son visage est rond avec de grands yeux qui aident à voir dans la faible lumière sous la glace. un des principaux avantages de cette espèce est sa capacité à plonger profondément et longtemps ; ils peuvent plonger jusqu à 600 mètres et rester sous eau pendant plus d une heure, ce qui en fait un des meilleurs plongeurs parmi les mammifères marins. Le phoque de Weddell se nourrit de divers types de poissons, de krill et de calmars qu il capture sous la glace en utilisant son écholocation naturelle et sa vision aiguë. Il creuse et entretient souvent des trous dans la glace avec ses dents antérieures puissantes pour garder un accès à la surface. Malheureusement, usure des dents due au grattage de la glace peut limiter leur capacité à ouvrir des trous, affectant leur survie avec âge. Cet animal se reproduit au printemps antarctique. Les femelles donnent naissance à un petit sur la banquise après une gestation d environ 11 mois, et le petit est allaité pendant quelques semaines avant d apprendre à nager et plonger seul. Pendant cette période, la mère est très protectrice et fournit une énergie élevée par son lait pour que le petit grandisse rapidement. Le phoque de Weddell vit en petits groupes ou colonies, mais pas aussi densément que d autres espèces de phoques. Ils sont relativement peu actifs socialement hors de la saison des amours et passent beaucoup de temps à plonger ou se reposer sur la glace. Bien qu ils n aient pas beaucoup de prédateurs, les jeunes phoques sont vulnérables aux attaques des orques et des léopards de mer. Actuellement, la population de phoques de Weddell est relativement stable et non classée comme menacée, mais elle dépend d une banquise saine et est donc très vulnérable aux impacts à long terme du changement climatique. Avec sa capacité extraordinaire à survivre dans environnement le plus extrême de la Terre, le phoque de Weddell est un symbole de la résilience de la vie dans les régions polaires fragiles.';
+
+  @override
+  String get descAntarcticToothfish => 'La légine australe (Dissostichus mawsoni) est un grand poisson vivant dans les eaux froides et profondes autour de océan Austral, en particulier près des côtes du continent antarctique. Ce poisson est un prédateur au sommet de écosystème marin profond antarctique et joue un rôle crucial dans le maintien de équilibre de la chaîne alimentaire. En raison de sa grande taille et de ses dents acérées, il est surnommé « toothfish » (poisson à dents), bien qu il appartienne scientifiquement à la famille des Nototheniidae ou poissons des glaces (icefish), typiques des eaux polaires. La légine australe peut atteindre deux mètres de long et peser plus de 100 kilogrammes, ce qui en fait une des plus grandes espèces de poissons de la région antarctique. Son corps est robuste, de couleur grise à brunâtre, avec une longue nageoire dorsale et une mâchoire puissante pour capturer ses proies. une des particularités de ce poisson est sa capacité à survivre à des températures extrêmement basses, grâce à des protéines antigel naturelles dans son sang, empêchant la formation de cristaux de glace dans ses tissus. Ce poisson vit en eau profonde, à des profondeurs de 500 à plus de 2 000 mètres, et se déplace lentement dans les eaux sombres et froides. Son alimentation comprend principalement des petits poissons, des calmars et des crustacés, et en tant que prédateur au sommet, seuls quelques prédateurs naturels comme les orques et certains phoques peuvent s attaquer aux légines adultes. Ces dernières années, la légine australe est devenue une cible de la pêche commerciale à haute valeur, notamment pour le marché international, où elle est connue sous le nom de « Chilean sea bass » (légine du Chili). En raison de sa croissance lente et de sa reproduction limitée — les femelles ne pondent qu après avoir atteint un âge adulte assez avancé — une surpêche peut rapidement perturber la population. Actuellement, la pêche à la légine est strictement réglementée par la CCAMLR (Commission pour la conservation de la faune et la flore marines de Antarctique) avec un système de quotas et de traçabilité strict pour assurer la durabilité. La légine australe est également un sujet important dans les études scientifiques sur adaptation physiologique aux températures extrêmes, ainsi que sur les impacts du changement climatique et de exploitation halieutique sur les écosystèmes marins profonds. En raison de sa position clé dans environnement marin antarctique, la présence de la légine reflète la santé et la stabilité d un écosystème polaire unique et vulnérable. Des efforts de conservation et une gestion prudente sont essentiels pour garantir que cette espèce ne soit pas perturbée par les pressions humaines et les changements environnementaux mondiaux.';
+
+  @override
+  String get descLeopardSeal => 'Le léopard de mer (Hydrurga leptonyx) est un des prédateurs les plus redoutables de écosystème antarctique. Ce phoque doit son nom au motif de taches sombres sur son corps rappelant la peau d un léopard, ainsi qu à son comportement agressif et ses capacités de chasse exceptionnelles. Son corps est élancé, long et très puissant, pouvant atteindre 3 à 4 mètres de long et peser plus de 500 kilogrammes, ce qui en fait une des plus grandes espèces de phoques de la région polaire sud. Le léopard de mer a une grosse tête avec une large mâchoire et des dents acérées semblables à celles des reptiles, lui permettant de se nourrir d une grande variété d animaux. Contrairement à la plupart des autres phoques qui se nourrissent de petits poissons ou de crustacés, le léopard de mer est un vrai carnivore, chassant des manchots, des bébés phoques, des poissons et du krill. Il est particulièrement célèbre pour sa capacité à capturer et tuer des manchots avec des techniques de chasse rapides et mortelles, comme tendre une embuscade à sa proie depuis sous la glace ou depuis eau libre près de la côte. Bien que féroce envers ses proies, le léopard de mer est un plongeur calme et agile. Il peut plonger à plus de 300 mètres de profondeur et rester sous eau pendant 15 à 30 minutes, utilisant le son et sa vision perçante pour naviguer et chasser sous la glace. On le trouve souvent seul, contrairement aux autres espèces de phoques qui vivent en groupes. Le léopard de mer est une espèce solitaire, et ses interactions sociales sont généralement limitées à la saison des amours. Leur cycle reproductif commence pendant été antarctique. Après une gestation d environ 11 mois, la femelle donne naissance à un petit sur un bloc de glace, et en prend soin pendant les premières semaines avant que le petit puisse nager et chasser seul. Le léopard de mer joue un rôle crucial dans le maintien de équilibre de écosystème antarctique. En tant que prédateur au sommet, il aide à réguler les populations de manchots et d autres phoques. Bien qu il ne soit pas classé comme espèce menacée, il est très sensible au changement climatique, car il dépend de la glace de mer comme habitat principal pour se reposer, mettre bas et chasser. La fonte accélérée de la glace due au réchauffement climatique pourrait perturber son mode de vie à avenir. Connu pour son mélange de force, de vitesse et d intelligence, le léopard de mer est une des icônes de la vie sauvage du pôle sud. Il symbolise la beauté extrême, sauvage et vulnérable du monde antarctique, confronté aux impacts croissants de activité humaine.';
+
+  @override
+  String get descBlueWhale => 'La baleine bleue (Balaenoptera musculus) est le plus grand animal ayant jamais vécu sur Terre, surpassant même les dinosaures en taille. Sa longueur peut atteindre 30 mètres, et son poids peut dépasser 180 tonnes — équivalant à 33 éléphants adultes. Bien que d une taille extraordinaire, la baleine bleue est une mangeuse de plancton, principalement du krill, une petite crevette qu elle filtre de eau de mer à aide de ses fanons (lamelles en forme de peigne) dans sa bouche. En une seule journée, une baleine bleue peut consommer plus de 3,5 tonnes de krill, surtout pendant la saison d alimentation dans les eaux polaires. Le corps de la baleine bleue est de couleur gris bleuté avec des taches claires caractéristiques, et lorsqu elle est vue sous eau, sa couleur apparaît bleu verdâtre — d où son nom. Sa forme est longue, élancée et aérodynamique, avec une tête large et plate et une petite nageoire dorsale près de la queue. Elle possède une queue (nageoire caudale) large et puissante utilisée pour propulser son corps en nageant. Bien qu elle semble lente, la baleine bleue peut nager à des vitesses allant jusqu à 50 km/h dans certaines situations. La baleine bleue est un mammifère marin, ce qui signifie qu elle respire avec des poumons et doit remonter à la surface pour prendre de air. En expirant, elle produit un souffle d eau et d air pouvant atteindre 9 mètres de haut, une des caractéristiques les plus frappantes visibles de loin. Cette espèce migre sur de longues distances chaque année, se déplaçant des eaux polaires riches en nourriture vers les eaux tropicales ou subtropicales pour se reproduire et mettre bas. La gestation dure environ 11 à 12 mois, et les femelles donnent naissance à un petit tous les deux à trois ans. Le bébé baleine bleue est déjà énorme à la naissance, mesurant environ 7 mètres et pesant plus de 2 tonnes, et sera allaité pendant un an avec un lait riche en matières grasses de sa mère. Bien que protégée aujourd hui, la baleine bleue a été au bord de extinction en raison de la chasse intensive au XXe siècle. Sa population a drastiquement diminué pour ne représenter qu une petite fraction de son nombre original. Aujourd hui, bien que ses effectifs augmentent lentement, elle est toujours classée comme espèce en danger par UICN. Les principales menaces actuelles incluent les collisions avec les grands navires, la pollution sonore sous-marine et le changement climatique qui affecte la distribution du krill, sa principale source de nourriture. La baleine bleue est un symbole de grandeur et de vulnérabilité de la vie marine. En tant que plus grande créature de la planète, sa présence nous rappelle la richesse et les merveilles de océan, ainsi que importance de protéger les écosystèmes marins qui abritent des êtres aussi extraordinaires.';
+
+  @override
+  String get descAntarcticKrill => 'Le krill antarctique (Euphausia superba) est une petite crevette vivant dans les eaux froides et propres autour du continent antarctique. Bien que de taille minuscule — généralement de 2 à 6 centimètres — le krill est le fondement principal de la chaîne alimentaire de écosystème marin antarctique. En quantités massives, le krill constitue la principale source de nourriture pour de nombreux grands animaux marins comme les baleines bleues, les phoques, les manchots, les oiseaux marins et les gros poissons. En fait, la population de krill antarctique est estimée à des centaines de millions de tonnes, ce qui en fait une des plus grandes biomasses animales de la planète. Le corps du krill est transparent avec une teinte rougeâtre, et il possède de grands yeux ainsi que des pattes natatoires lui permettant de se déplacer en grands groupes formant des « essaims ». Le krill est actif dans la colonne d eau et peut plonger jusqu à plus de 200 mètres de profondeur, notamment pour éviter les prédateurs. La nuit, il remonte souvent vers la surface pour se nourrir, surtout en été lorsque la glace fond et que le phytoplancton — sa principale source de nourriture — est abondant. Le cycle de vie du krill est fortement influencé par les saisons. En hiver, il peut survivre en se nourrissant de la couche de glace marine contenant des algues microscopiques. Les jeunes krills dépendent fortement de la glace de mer comme abri et source de nourriture précoce. C est pourquoi la fonte de la glace due au changement climatique représente une menace majeure pour la survie du krill et de toute la chaîne alimentaire qui en dépend. Le krill possède également une capacité unique à muer (changer sa carapace externe), lui permettant de grandir et de survivre en période de pénurie alimentaire en réduisant sa taille. Ce processus montre à quel point le krill s est remarquablement adapté à environnement marin polaire extrême et difficile. Outre son importance pour la faune sauvage, le krill est de plus en plus exploité par industrie de la pêche, notamment pour la production de suppléments d oméga-3, d aliments pour aquaculture et la nutrition animale. Bien que cette pêche soit actuellement surveillée par la CCAMLR (Commission pour la conservation de la faune et la flore marines de Antarctique), une exploitation non contrôlée pourrait perturber la stabilité de écosystème antarctique dans son ensemble. En tant qu organisme minuscule soutenant de grandes vies dans la région polaire sud, le krill antarctique est un symbole important de interconnexion entre toutes les créatures marines. Préserver sa pérennité signifie préserver ensemble de écosystème qui dépend fortement de sa présence dans océan gelé et riche en vie.';
+
+  @override
+  String get mysteryPacificTitle => 'Mystère de océan Pacifique';
+
+  @override
+  String get mysteryPacificDescription => 'Il existe des rapports sur des sons mystérieux  Bloop  entendus depuis les profondeurs de océan Pacifique, dont origine reste inconnue à ce jour.';
+
+  @override
+  String get mysteryPacificFullContent => 'Le son mystérieux connu sous le nom de Bloop a été entendu pour la première fois en 1997 par la National Oceanic and Atmospheric Administration (NOAA) à travers un réseau d hydrophones installés dans océan Pacifique pour surveiller activité sismique sous-marine. Ce son avait une fréquence très basse mais était suffisamment puissant pour être détecté par des capteurs distants de plus de 5 000 kilomètres, et son caractère ressemblait à un son biologique—comme s il provenait d une créature vivante géante inconnue. Comme aucun animal marin connu ne pouvait produire un son aussi puissant, ce phénomène a suscité des spéculations généralisées, y compris des théories selon lesquelles il provenait d une créature marine mystérieuse, allant jusqu à être associé à des légendes comme Cthulhu. Cependant, après des années de recherche, les scientifiques de la NOAA ont conclu que origine la plus probable du son Bloop était des phénomènes géophysiques naturels, en particulier le craquement et la rupture d icebergs géants (séismes glaciaires) en Antarctique sous eau, créant des ondes sonores très similaires aux caractéristiques biologiques. Cette explication est renforcée par emplacement d origine du son près des glaciers dans la région de océan Pacifique Sud. Bien que son mystère ait été en grande partie résolu, le Bloop reste un des exemples les plus fascinants de la façon dont les profondeurs marines, en particulier les régions vastes et profondes comme océan Pacifique, contiennent encore des phénomènes non entièrement compris par homme. Des mystères comme celui-ci montrent à quel point espace de connaissance inexploré est vaste dans les profondeurs océaniques, et comment la technologie et la science continuent de jouer des rôles cruciaux dans la révélation des secrets des océans les plus profonds.';
+
+  @override
+  String get mysteryAtlanticTitle => 'Mystère de océan Atlantique';
+
+  @override
+  String get mysteryAtlanticDescription => 'Le triangle des Bermudes dans océan Atlantique est connu comme endroit où les navires et les avions disparaissent mystérieusement.';
+
+  @override
+  String get mysteryAtlanticFullContent => 'Le triangle des Bermudes, situé dans ouest de océan Atlantique entre Miami (Floride), les Bermudes et Porto Rico, est depuis longtemps connu comme un lieu mystérieux en raison de divers rapports sur la disparition soudaine et sans trace de navires et d avions. Ce phénomène a gagné en popularité au milieu du XXe siècle, surtout après la disparition du vol 19—une escadrille d avions militaires américains en 1945—qui a déclenché des vagues de spéculation et d attention publique. Depuis lors, des centaines d incidents ont été liés à cette zone, que certaines personnes considèrent comme ayant des pouvoirs surnaturels, des perturbations magnétiques, voire une technologie extraterrestre ou des portails spatio-temporels. Cependant, sur la base de recherches scientifiques, la plupart des incidents dans le triangle des Bermudes peuvent s expliquer par des causes naturelles, telles que des conditions météorologiques extrêmes soudaines, des erreurs de navigation, les champs magnétiques terrestres affectant les instruments de boussole, et des courants océaniques forts comme le Gulf Stream qui peuvent rapidement effacer les traces des épaves. De plus, cette zone est une des voies de navigation et de vol les plus fréquentées au monde, il est donc naturel que les taux d accidents soient plus élevés que dans d autres zones. Des études statistiques montrent que les taux de disparition dans le triangle des Bermudes ne sont pas significativement plus élevés que dans d autres zones maritimes lorsqu ils sont calculés en fonction du volume de trafic. Par conséquent, bien que aura mystérieuse reste forte dans la culture populaire, la communauté scientifique s accorde à dire qu il n existe aucune preuve soutenant existence de forces étranges ou extraordinaires dans le triangle des Bermudes, et que les incidents qui s y produisent sont plus raisonnablement expliqués par des facteurs naturels, techniques et humains.';
+
+  @override
+  String get mysteryIndianTitle => 'Mystère de océan Indien';
+
+  @override
+  String get mysteryIndianDescription => 'La disparition du vol MH370 de Malaysia Airlines dans océan Indien reste le plus grand mystère de histoire de aviation moderne.';
+
+  @override
+  String get mysteryIndianFullContent => 'La disparition du vol MH370 de Malaysia Airlines le 8 mars 2014 est un des plus grands mystères de histoire de aviation moderne et reste largement non résolu à ce jour. Le Boeing 777 a décollé de Kuala Lumpur à destination de Beijing avec 239 personnes à bord, mais a disparu des radars civils environ une heure après le décollage. Les données militaires ont montré que avion avait mystérieusement dévié de sa trajectoire initiale et s était dirigé vers le sud-ouest avant de s écraser présumé dans une zone reculée du sud de océan Indien. La zone suspectée du crash fait partie des mers les plus profondes et les plus isolées du monde, avec des courants océaniques forts, des profondeurs extrêmes et des conditions sous-marines complexes, ce qui rend la recherche extrêmement difficile et pleine de défis. Une enquête internationale impliquant divers pays et des technologies avancées a été menée, y compris un balayage des fonds marins par sonar et une analyse des données satellites d Inmarsat, indiquant que avion s est très probablement écrasé quelque part autour du Couloir Sud de océan Indien. Quelques fragments de débris de avion, comme un flaperon trouvé sur île de la Réunion et d autres plages de la région occidentale de océan Indien, ont été confirmés comme provenant du MH370, mais emplacement exact de épave principale reste inconnu. La cause exacte de la disparition du MH370 est également inconnue car sans la boîte noire et épave principale, les enquêteurs ne peuvent que spéculer sur la base de données limitées, y compris une possible intervention humaine ou des défaillances systémiques complexes. Ce mystère ne laisse pas seulement le deuil aux familles des victimes, mais suscite également un débat généralisé sur la sécurité aérienne, la transparence des données et les limites de la technologie de suivi des avions dans les vastes zones océaniques comme océan Indien. Cet événement souligne combien de zones océaniques mondiales ne sont pas encore entièrement accessibles à la technologie et aux connaissances humaines, tout en rappelant importance de la coopération internationale face aux tragédies mondiales.';
+
+  @override
+  String get mysteryArcticTitle => 'Mystère de océan Arctique';
+
+  @override
+  String get mysteryArcticDescription => 'Des découvertes étranges comme de la glace de couleur bleue et des formations sous-marines inhabituelles rendent océan Arctique plein d énigmes.';
+
+  @override
+  String get mysteryArcticFullContent => 'océan Arctique recèle en effet de nombreuses énigmes naturelles uniques qui continuent d être étudiées aujourd hui. un des phénomènes les plus frappants est la glace d un bleu vif souvent trouvée dans la région du pôle Nord. Cette couleur bleue apparaît parce que la glice arctique peut se former très densément sans beaucoup de bulles d air, permettant uniquement aux longueurs d onde de la lumière bleue de pénétrer et d être réfléchies. Plus la glace est ancienne et dense, plus la couleur bleue est profonde. Ceci est très différent de la glace blanche ordinaire qui contient beaucoup de bulles d air et réfléchit presque toute la lumière. Ce phénomène n est pas seulement beau, mais fournit également des informations importantes sur âge, la structure et la stabilité de la glice de mer dans les régions polaires. De plus, le fond de océan Arctique contient également des formations sous-marines inhabituelles, y compris des monts sous-marins, des fosses profondes et des fissures de plaques tectoniques actives comme la dorsale de Lomonossov et la dorsale Mendeleïev. Certaines de ces formations n ont été détectées qu au 21e siècle grâce à la cartographie sonar avancée et aux expéditions en eaux profondes. existence de ces formations soulève des questions scientifiques sur leurs origines géologiques et le potentiel de réserves minérales et de vie extrême autour d elles. Certaines zones montrent même une activité de méthane sous-marin, où des bulles de gaz méthane émergent du fond marin et indiquent un impact potentiel important sur le changement climatique si elles sont libérées à grande échelle. La combinaison d environnements extrêmes, d un terrain sous-marin complexe et d une exploration minimale fait de océan Arctique une des régions les plus mystérieuses de la planète. Ces conditions font que chaque nouvelle découverte scientifique dans la région—qu il s agisse de formations glaciaires inhabituelles, de vie microbienne extrême ou de structures géologiques anciennes—est un indice important pour comprendre la dynamique de la Terre et son impact sur le changement climatique global. Au milieu de la fonte des glaces due au réchauffement climatique, les mystères cachés dans Arctique deviennent de plus en plus importants à découvrir, tant pour la science que pour avenir de environnement de notre planète.';
+
+  @override
+  String get mysterySouthernTitle => 'Mystère de océan Austral';
+
+  @override
+  String get mysterySouthernDescription => 'Les navires explorant les eaux dangereuses de océan Austral signalent souvent des phénomènes météorologiques extrêmes qui ne peuvent être expliqués.';
+
+  @override
+  String get mysterySouthernFullContent => 'océan Austral, qui entoure le continent antarctique, est connu comme une des régions maritimes les plus extrêmes et dangereuses du monde. Les navires traversant ces eaux, que ce soit pour des expéditions scientifiques ou des voyages commerciaux, signalent souvent des phénomènes météorologiques très violents qui ne peuvent pas toujours être prédits avec précision. Le temps dans océan Austral peut changer en quelques minutes—d un ciel dégagé à une tempête de neige accompagnée de vents de force ouragan et de vagues géantes. Cela est dû au fait que cet océan n est pas limité par de grandes masses terrestres, permettant aux vents et aux courants océaniques de circuler sans entrave autour de Antarctique, créant un système météorologique très dynamique. un des phénomènes les plus célèbres est les Quarantièmes rugissants, Cinquantièmes furieux et Soixantièmes hurlants—des termes décrivant la puissance incroyable du vent survenant aux latitudes 40°, 50° et 60° sud. Ces vents produisent des vagues océaniques pouvant atteindre plus de 20 mètres de hauteur et créent des tempêtes en mer qui peuvent immobiliser les navires en peu de temps. De plus, apparition de brouillard de glace, de grêle et de courants froids transportant des morceaux de glice de mer ou des icebergs rend la navigation dans cette région de plus en plus risquée. Dans certains cas, les marins signalent des phénomènes comme des vagues scélérates ou des vagues anormales qui apparaissent soudainement et sont beaucoup plus hautes que les vagues normales environnantes—un événement qui reste un sujet de recherche océanographique à ce jour. En raison de la nature éloignée, inaccessible et météorologiquement extrême de océan Austral, de nombreux phénomènes météorologiques qui s y produisent ne sont pas entièrement compris. Ces conditions font de océan Austral à la fois un laboratoire naturel difficile pour les scientifiques et un rappel qu il existe encore de nombreuses forces naturelles en haute mer qui ne peuvent pas être entièrement expliquées par la science moderne.';
+
+  @override
+  String get humanConservationTitle => 'Conservation marine';
+
+  @override
+  String get humanConservationDescription => 'Les humains jouent un rôle actif dans la préservation des habitats marins par la conservation et la préservation.';
+
+  @override
+  String get humanConservationFullContent => 'Les humains jouent un rôle actif dans la préservation des habitats marins grâce à divers efforts de conservation et de préservation visant à protéger les écosystèmes marins des dommages causés par les activités humaines et les changements environnementaux. La conservation marine englobe toutes les actions visant à maintenir la biodiversité marine, préserver les fonctions des écosystèmes et assurer que les ressources marines puissent être utilisées durablement par les générations présentes et futures. Ces efforts deviennent de plus en plus importants car les océans font face à de graves menaces telles que la surpêche, la pollution plastique, les déversements d hydrocarbures, le changement climatique et la destruction des habitats comme les récifs coralliens et les herbiers marins. Une forme concrète de conservation marine est la création d aires marines protégées (AMP) qui restreignent ou interdisent certaines activités dans des zones marines spécifiques pour maintenir intégrité des écosystèmes et donner aux espèces le temps de se rétablir. De plus, la conservation implique la réhabilitation des écosystèmes, comme la restauration des récifs coralliens, la plantation de mangroves et la protection des habitats critiques comme les zones de frai des poissons et les sites de nidification des tortues. Ces efforts ne sont pas seulement menés par les gouvernements, mais aussi par les communautés locales, les organisations non gouvernementales, les scientifiques et le grand public qui prennent de plus en plus conscience de importance de la conservation des océans. éducation environnementale et les campagnes de sensibilisation sont également des parties importantes de la conservation marine. En augmentant les connaissances du public sur importance des écosystèmes marins pour la vie humaine—de la fourniture d oxygène, de la régulation du climat aux sources alimentaires—un sens de responsabilité collective à les protéger grandira. La réduction des déchets plastiques, utilisation d engins de pêche respectueux de environnement et la gestion durable des pêches sont des exemples d actions concrètes de préservation qui peuvent être entreprises par des individus ou des groupes. La technologie joue également un rôle dans le renforcement de la conservation marine grâce à la surveillance par satellite, les systèmes de suivi des navires pour prévenir la pêche illégale et utilisation de données scientifiques dans élaboration de politiques basées sur les écosystèmes. La collaboration internationale est cruciale car océan est un écosystème ouvert qui traverse les frontières nationales, donc la protection des habitats marins nécessite une coopération entre pays et institutions. Avec tous ces efforts, la conservation marine n est pas seulement la responsabilité des experts ou des gouvernements, mais fait partie de la responsabilité partagée de toute humanité dans le maintien de équilibre de la Terre. Un océan en bonne santé signifie une vie durable, car presque tous les aspects de la vie—de air que nous respirons à la nourriture que nous mangeons—dépendent de équilibre et de la préservation des écosystèmes marins.';
+
+  @override
+  String get humanPlasticReductionTitle => 'Réduction des déchets plastiques';
+
+  @override
+  String get humanPlasticReductionDescription => 'Les efforts humains pour réduire les déchets plastiques afin de maintenir la santé des écosystèmes marins.';
+
+  @override
+  String get humanPlasticReductionFullContent => 'La réduction des déchets plastiques est un des efforts humains les plus cruciaux pour maintenir la santé des écosystèmes marins. Les plastiques, en particulier les types à usage unique comme les sacs, les bouteilles et les pailles, sont devenus une menace majeure pour environnement marin en raison de leur nature non biodégradable et peuvent persister dans océan pendant des centaines d années. Chaque année, des millions de tonnes de déchets plastiques entrent dans océan provenant de diverses sources, allant des déchets ménagers, de industrie, aux activités touristiques côtières. Ces déchets non seulement polluent les eaux, mais mettent également en danger la vie marine car ils sont souvent confondus avec de la nourriture par des créatures comme les tortues, les oiseaux marins et les poissons. En conséquence, de nombreux animaux marins meurent d étouffement, d empoisonnement ou de troubles du système digestif dus à ingestion de plastique. Les efforts de réduction des déchets plastiques sont menés par diverses approches, des politiques gouvernementales aux changements de comportement individuels. Certains pays et villes ont mis en œuvre des interdictions ou des restrictions sur les plastiques à usage unique et encouragent utilisation d alternatives respectueuses de environnement comme les sacs en tissu, les récipients en verre ou les matériaux biodégradables. Dans le secteur industriel, de nombreuses entreprises passent à des emballages recyclables ou utilisent des matériaux recyclés pour réduire les nouveaux déchets. De plus, des campagnes mondiales comme les mouvements Zéro Déchet et Océan Sans Plastique ont accru la sensibilisation du public aux dangers du plastique et à importance de réduire son utilisation dans la vie quotidienne. éducation environnementale joue également un rôle important dans la formation de nouvelles mentalités plus soucieuses de durabilité. Dans les écoles, les communautés et les médias sociaux, éducation sur impact du plastique sur océan et les mesures de réduction continue d être encouragée. Des activités comme le nettoyage des plages, la gestion des déchets basée sur la communauté et les systèmes de recyclage efficaces font partie des solutions impliquant la participation directe de la communauté. D autre part, innovation technologique joue également un rôle important, comme le développement de machines de tri des déchets automatiques, les systèmes de collecte du plastique en mer et la création de plastiques alternatifs à base d algues ou d amidon. Ces efforts sont cruciaux pour maintenir les écosystèmes marins en bonne santé car le plastique ne pollue pas seulement eau, mais contribue également aux microplastiques—de petites particules qui peuvent entrer dans la chaîne alimentaire et finir dans le corps humain par la consommation de fruits de mer. Les microplastiques ont été trouvés dans diverses espèces marines, du plancton aux baleines, montrant que la pollution plastique a des impacts larges et à long terme. Avec engagement collectif des gouvernements, des acteurs industriels, des communautés et des individus, la réduction des déchets plastiques devient une étape concrète dans le maintien de équilibre et de la durabilité des écosystèmes marins. Un océan propre des déchets plastiques fournit non seulement une vie meilleure pour le biote marin, mais garantit également la durabilité des ressources naturelles marines pour les générations présentes et futures.';
+
+  @override
+  String get humanEducationTitle => 'Éducation & Campagnes';
+
+  @override
+  String get humanEducationDescription => 'Sensibilisation du public à importance de protéger océan par éducation et les campagnes.';
+
+  @override
+  String get humanEducationFullContent => 'La sensibilisation du public à importance de protéger océan par éducation et les campagnes est une étape stratégique et fondamentale dans les efforts de préservation des écosystèmes marins. éducation joue un rôle en fournissant une compréhension approfondie de la fonction de océan en tant que système de support de vie, source de nourriture, régulateur climatique et foyer de millions d espèces. Grâce à éducation formelle dans les écoles et universités, et à éducation informelle comme les séminaires, ateliers, documentaires et médias sociaux, la société est équipée de connaissances scientifiques sur les dangers de la pollution, les dommages aux récifs coralliens, le changement climatique et importance de la biodiversité marine. Cette éducation environnementale vise à développer le souci et la responsabilité dès le plus jeune âge, afin que les jeunes générations grandissent avec la conscience que océan doit être protégé et préservé. Pendant ce temps, les campagnes environnementales servent d outils puissants de communication publique pour transmettre des messages importants largement et toucher émotionnellement la société. Les campagnes sont menées par les gouvernements, les organisations non gouvernementales, les communautés environnementales, jusqu aux leaders communautaires ou influenceurs ayant une influence publique significative. Les formes de campagne peuvent inclure des mouvements de nettoyage de plage, la réduction des plastiques à usage unique, les campagnes #SaveTheOcean, la Journée mondiale de océan, jusqu aux initiatives de plantation de mangroves et de restauration des récifs coralliens. Les campagnes utilisent souvent la puissance visuelle et les médias numériques pour attirer attention et construire un engagement public actif. éducation et les campagnes se complètent: éducation construit une compréhension forte, tandis que les campagnes motivent action. Quand la société a suffisamment de connaissances, elle est plus réceptive aux invitations à participer aux activités de conservation, à changer les habitudes de consommation qui endommagent océan, et à encourager les politiques pro-environnementales. Ces efforts sont également importants pour créer une pression sociale et politique pour que les dirigeants et les décideurs prennent plus au sérieux la protection des zones marines. En fin de compte, avec une combinaison d éducation approfondie et de campagnes inspirantes, la sensibilisation du public à importance de océan peut croître largement et avoir un impact réel sur la durabilité des écosystèmes marins pour un avenir plus durable.';
+
+  @override
+  String get humanCoralRestorationTitle => 'Restauration des récifs coralliens';
+
+  @override
+  String get humanCoralRestorationDescription => 'Projets de restauration des récifs coralliens impliquant les communautés et les scientifiques.';
+
+  @override
+  String get humanCoralRestorationFullContent => 'La restauration des récifs coralliens est une série d efforts de conservation actifs visant à restaurer état et la fonction écologique des récifs coralliens endommagés par diverses pressions, comme le blanchiment des coraux, la pollution, la pêche destructive et les impacts du changement climatique. Les récifs coralliens sont des écosystèmes marins extrêmement riches en biodiversité et abritent environ 25% des espèces marines bien qu ils couvrent moins de 1% de la surface océanique. En plus d être des habitats importants, les récifs coralliens protègent également les côtes contre érosion, soutiennent les moyens de subsistance des pêcheurs et sont des sources de tourisme marin. Cependant, au cours des dernières décennies, plus d un tiers des récifs coralliens mondiaux ont subi une dégradation sérieuse. Les projets de restauration des récifs coralliens font partie de ces efforts de rétablissement et impliquent maintenant souvent la collaboration entre scientifiques, institutions de conservation, gouvernements et communautés locales. Ces projets commencent généralement par la cartographie et la surveillance des emplacements de récifs endommagés, suivies par des méthodes de restauration actives comme la plantation de fragments de corail, le jardinage corallien et utilisation de structures artificielles comme des supports métalliques, des récifs en béton ou du bio rock comme sites de croissance pour de nouveaux coraux. Des fragments de corail sains sont coupés à partir de colonies mères, cultivés en pépinières, puis transplantés vers des emplacements préparés pour repousser et former de nouvelles colonies. Dans certains cas, des techniques modernes comme impression d ADN de corail résistant à la chaleur ou ingénierie du microbiome corallien sont également développées pour augmenter la résilience des coraux contre augmentation des températures de la mer. Un aspect important du succès de la restauration des récifs coralliens est la participation des communautés locales. Les communautés de pêcheurs, plongeurs et résidents côtiers sont souvent directement impliqués dans le processus de plantation de corail, la surveillance des écosystèmes et les campagnes de protection de océan. Cette approche non seulement développe un sentiment d appartenance, mais assure également que les communautés locales comprennent la valeur à long terme de maintenir des récifs coralliens sains, y compris les avantages économiques de la pêche durable et de écotourisme. Dans de nombreux endroits, implication communautaire devient même la clé du succès car elles possèdent des connaissances locales très utiles et peuvent contribuer à la maintenance à long terme. La restauration des récifs coralliens est également soutenue par des politiques et réglementations, comme la création d aires marines protégées (AMP), interdiction d engins de pêche destructifs comme les bombes et le cyanure, et la surveillance du développement côtier qui endommage les écosystèmes. La collaboration intersectorielle—entre scientifiques marins, agences gouvernementales, organisations environnementales et secteur privé—est cruciale pour intégrer les données scientifiques avec les politiques et les actions sur le terrain. Bien que la restauration des récifs coralliens soit un processus long nécessitant des coûts et des efforts significatifs, les résultats sont inestimables. Les récifs restaurés avec succès peuvent redevenir des habitats productifs, fournir des sources alimentaires et renforcer la résilience des communautés côtières contre les catastrophes naturelles comme les grosses vagues ou les tempêtes. Face aux menaces du changement climatique global, la restauration des récifs coralliens ne consiste pas seulement à réparer ce qui est endommagé, mais aussi à construire la résilience et la durabilité pour avenir des océans et des humains qui en dépendent.';
+
+  @override
+  String get factIndianOceanTitle => 'Océan Indien';
+
+  @override
+  String get factIndianOceanDescription => 'Le troisième plus grand océan du monde jouant un rôle crucial dans le système climatique global.';
+
+  @override
+  String get factIndianOceanFullContent => 'océan Indien est le troisième plus grand océan du monde après les océans Pacifique et Atlantique, couvrant environ 20% de la surface totale de eau de la Terre. Cet océan est situé entre Asie au nord, Afrique à ouest, Australie à est et est limité par océan Austral au sud. Sa superficie est d environ 70 millions de kilomètres carrés, ce qui en fait une voie maritime vitale reliant le Moyen-Orient, Asie du Sud, Asie du Sud-Est et Afrique de Est. océan Indien joue un rôle important dans le système climatique global, en particulier en raison des phénomènes de mousson affectant le temps dans les régions environnantes comme Inde, Indonésie et Afrique de Est. À intérieur se trouvent plusieurs grandes mers comme la mer d Arabie, le golfe du Bengale et le golfe d Oman. Cet océan contient également d énormes richesses naturelles, allant des ressources halieutiques aux réserves de pétrole et de gaz sous-marines. Sa biodiversité est très élevée, y compris les récifs coralliens, baleines, tortues, requins et diverses espèces de poissons tropicaux. Plusieurs îles et pays archipels comme les Maldives, le Sri Lanka et Madagascar dépendent de océan Indien pour économie, la pêche et le tourisme. Cependant, cette région fait également face à de graves défis comme le changement climatique, élévation du niveau de la mer, la pollution marine et les conflits géopolitiques dus aux intérêts stratégiques des grands pays. En tant qu océan dense en trafic maritime et riche en vie, océan Indien joue des rôles importants non seulement écologiquement, mais aussi économiquement et géostratégiquement dans ordre global.';
+
+  @override
+  String get factAtlanticOceanTitle => 'Océan Atlantique';
+
+  @override
+  String get factAtlanticOceanDescription => 'océan séparant les Amériques de Europe et de Afrique, célèbre pour son Gulf Stream.';
+
+  @override
+  String get factAtlanticOceanFullContent => 'océan Atlantique est le deuxième plus grand océan du monde après océan Pacifique, s étendant de océan Arctique au nord à océan Austral au sud, et encadré par les Amériques à ouest et Europe et Afrique à est. Sa superficie atteint environ 85 millions de kilomètres carrés, et c est une voie de navigation majeure reliant les pays des deux côtés de océan, ce qui le rend très important dans histoire du commerce mondial, y compris à ère de exploration et du colonialisme. Cet océan est également endroit où se rencontrent de grands courants océaniques comme le Gulf Stream influençant les climats européens et nord-américains. Sur le fond de océan Atlantique se trouve la dorsale médio-atlantique, une chaîne de montagnes sous-marine qui est la preuve de processus géologiques actifs impliquant la séparation des plaques tectoniques. océan Atlantique a une biodiversité riche, y compris baleines, dauphins, morues et diverses espèces de plancton soutenant les chaînes alimentaires marines. Cet océan abrite également divers phénomènes naturels, comme les tempêtes atlantiques et les cyclones tropicaux qui peuvent grandement impacter les zones côtières. Outre la richesse biologique, Atlantique contient également des ressources économiques importantes comme le pétrole, le gaz naturel et les pêcheries. Cependant, comme les autres océans, océan Atlantique fait face à de graves défis environnementaux dus au changement climatique, à la pollution plastique et à la surpêche menaçant la durabilité de son écosystème. En tant qu océan ayant des rôles majeurs dans histoire, le climat et économie mondiales, océan Atlantique reste une région maritime très vitale pour avenir de humanité.';
+
+  @override
+  String get factPacificOceanTitle => 'Océan Pacifique';
+
+  @override
+  String get factPacificOceanDescription => 'Le plus grand et plus profond océan du monde, couvrant plus de 63 millions de miles carrés ou environ un tiers de la surface de la Terre.';
+
+  @override
+  String get factPacificOceanFullContent => 'océan Pacifique est le plus grand et le plus profond océan du monde, couvrant plus de 63 millions de miles carrés ou environ un tiers de la surface de la Terre, s étendant de Asie et de Australie à ouest aux Amériques à est. Cet océan n est pas seulement géographiquement vaste, mais aussi écologiquement et géologiquement riche, contenant la fosse des Mariannes—le point le plus profond des océans de la Terre avec plus de 11 000 mètres de profondeur. Le long de ses bords se trouve la ceinture de feu du Pacifique, une zone sismique active où se produisent fréquemment des tremblements de terre et des éruptions volcaniques. océan Pacifique englobe des milliers d îles tropicales et de pays archipels comme Indonésie, les Philippines, le Japon, la Papouasie-Nouvelle-Guinée, jusqu aux petites nations d Océanie, ce qui en fait le foyer de cultures diverses et de systèmes écologiques marins uniques. Les grands courants océaniques comme le courant Kuroshio et le courant équatorial Pacifique influencent le climat global et sont des parties importantes du système de circulation thermohaline mondial. Cet océan est également une région importante dans le commerce international, exploration énergétique et les sources alimentaires du secteur de la pêche. Cependant, le Pacifique est également un centre d attention global en raison de problèmes environnementaux sérieux comme le blanchiment des coraux, accumulation de déchets plastiques dans le vortex de déchets du Pacifique Nord, et les impacts du changement climatique sur les petites îles menacées de submersion. En tant que océan le plus large, profond et complexe du monde, océan Pacifique joue des rôles vitaux dans la dynamique climatique, la biodiversité, économie maritime et équilibre global de la planète.';
+
+  @override
+  String get factArcticOceanTitle => 'Océan Arctique';
+
+  @override
+  String get factArcticOceanDescription => 'Le plus petit et le moins profond océan, situé autour du pôle Nord et couvert de glace toute année.';
+
+  @override
+  String get factArcticOceanFullContent => 'océan Arctique est le plus petit et le moins profond parmi les cinq océans du monde, situé autour du pôle Nord et entouré par les continents comme Europe, Asie et Amérique du Nord. La plupart de sa surface est couverte par la glice de mer toute année, bien que cette zone de glice continue de rétrécir considérablement en raison du réchauffement climatique. Bien que petit comparé aux autres océans, Arctique joue un rôle important dans le maintien de équilibre climatique global car sa glice de mer aide à refléter le rayonnement solaire et à réguler la température de la Terre. Cet océan est également le foyer de diverses espèces hautement adaptées aux conditions extrêmes, comme les ours polaires, les morses, les bélugas et le plancton de glice qui forme la base des chaînes alimentaires marines polaires. Sous sa surface maritime se trouvent de grandes réserves de pétrole et de gaz naturel ciblées pour exploration, tout en soulevant des préoccupations de dommages environnementaux. De plus, océan Arctique devient une voie de navigation de plus en plus stratégique car la fonte des glices ouvre de nouvelles routes maritimes plus courtes entre Asie et Europe. Cependant, cette région est également très vulnérable aux impacts du changement climatique, à la pollution microplastique et aux perturbations des écosystèmes dues à augmentation des activités humaines. Avec toutes ses limitations, océan Arctique reste une zone cruciale pour la science globale, la géopolitique et la conservation environnementale.';
+
+  @override
+  String get factSouthernOceanTitle => 'Océan Austral';
+
+  @override
+  String get factSouthernOceanDescription => 'océan entourant Antarctique, jouant un rôle important dans la régulation du climat global.';
+
+  @override
+  String get factSouthernOceanFullContent => 'océan Austral, également connu sous le nom d océan Antarctique, est le plus récent officiellement reconnu internationalement entourant le continent antarctique, s étendant de la côte antarctique jusqu à environ la latitude 60° sud. Bien qu il ne soit pas le plus large, océan Austral joue un rôle très important dans le système climatique global en raison de ses courants forts, le courant circumpolaire antarctique, qui connecte et équilibre tous les autres grands océans. Cet océan fonctionne également comme un grand absorbeur de dioxyde de carbone et stocke environ 60% de eau de mer très froide du monde, en faisant un régulateur central de la température de la Terre. Cette région est un habitat unique pour diverses espèces marines polaires, y compris les baleines bleues, les phoques de Weddell, le krill antarctique et les manchots empereurs, tous très dépendants de la glice de mer saisonnière. Ses mers extrêmes et rudes servent également de champ de recherche scientifique global, à la fois pour les études climatiques, océanographie et la biodiversité des eaux profondes. Cependant, écosystème de océan Austral fait maintenant face à une grande pression du réchauffement climatique, de la fonte de la glice de mer et de exploitation des ressources comme le krill et les poissons. Avec sa nature éloignée et relativement vierge, océan Austral devient une des zones marines les plus importantes à protéger pour maintenir équilibre écologique global de la Terre.';
+
+  @override
+  String get pacificOceanGeneralDescription => 'océan Pacifique est également connu sous le nom de mer paisible. Pendant ce temps, le nom Pacifique lui-même vient de espagnol Pacifio qui signifie calme. océan Pacifique est la plus grande étendue d eau du monde. On dit qu il est le plus grand du monde car océan Pacifique couvre environ un tiers de la surface de la Terre. S il est mesuré et calculé, la superficie de océan Pacifique atteint 179,7 kilomètres carrés ou 69,4 miles carrés. La longueur de océan Pacifique atteint 15 500 kilomètres ou 9 600. Cet océan s étend de la mer de Béring dans Arctique jusqu à la limite des glaces dans la mer de Ross, en Antarctique du Sud. De plus, océan Pacifique s étend également de Indonésie à la côte colombienne. La limite occidentale de océan Pacifique est généralement placée dans le détroit de Malacca. Pas étonnant que océan Pacifique soit océan le plus grand ou le plus large du monde par rapport aux autres océans.';
+
+  @override
+  String get pacificOceanLocation => 'océan Pacifique est océan qui a la plus grande superficie sur Terre et est le roi des océans. océan Pacifique est très large et profond, donc son existence couvre diverses régions. Astronomiquement, océan Pacifique atteint sa plus grande largeur est-ouest à environ 5° de latitude nord qui s étend sur environ 19 800 km de Indonésie à la côte colombienne. Certaines informations sur emplacement de océan Pacifique sont déjà connues auparavant. Certains affirment que la superficie de océan Pacifique atteint 1/3 de la superficie de la Terre. Parce que océan Pacifique couvre presque 1/3 de la surface de la Terre, il y a de nombreux pays qui sont situés ou bordent océan Pacifique.';
+
+  @override
+  String get pacificOceanCharacteristics => 'Les océans du monde se composent de plusieurs nombres. Chacun de ces océans a ses propres caractéristiques. C est aussi le cas de océan Pacifique. océan Pacifique a sa propre singularité qui n est possédée que par océan Pacifique. Certaines caractéristiques de océan Pacifique incluent les suivantes:';
+
+  @override
+  String get pacificOceanCharacteristic1Title => 'C est océan le plus large du monde';
+
+  @override
+  String get pacificOceanCharacteristic1Description => 'La taille de océan Pacifique est beaucoup plus grande que les autres océans du monde, comme Atlantique, Arctique et aussi Indien. La taille de océan Pacifique atteint même 1/3 de la superficie de la Terre.';
+
+  @override
+  String get pacificOceanCharacteristic2Title => 'A la fosse la plus profonde du monde';
+
+  @override
+  String get pacificOceanCharacteristic2Description => 'Saviez-vous qu il y a un point le plus bas dans le monde? Et emplacement du point le plus bas du monde est dans la fosse océanique. Il existe plusieurs fosses océaniques, et la fosse la plus profonde se trouve dans la région de océan Pacifique. La fosse la plus profonde du monde est la fosse des Mariannes qui a une profondeur de 10 911 mètres au-dessus du niveau de la mer.';
+
+  @override
+  String get arcticOceanGeneralDescription => 'océan Arctique est le plus petit et le plus peu profond par rapport aux autres océans du monde sur la planète Terre. De plus, cet océan est océan qui a la température de surface la plus basse par rapport aux autres océans en raison de son emplacement entourant le pôle Nord. océan Arctique est également appelé océan gelé dans le passé, car toute sa surface est couverte de glice toute année. Cet océan a une superficie de 14,056 millions de km², ce qui équivaut à 1,5 fois la superficie des États-Unis ou environ 8% de la superficie de océan Pacifique. Pendant ce temps, la longueur de la côte est d environ 45 389 km et la profondeur moyenne atteint 1 300 mètres (3 406 pieds) avec le point le plus profond d environ 5 450 mètres (17 880 pieds) situé dans le bassin eurasien. océan Arctique a commencé à être connu depuis qu un Américain nommé Robert Peary a posé le pied au pôle Nord le 6 avril 1909. Les peuples autochtones qui habitent la région autour de océan Arctique sont la tribu Eskimo qui s est installée au pôle Nord depuis 4000 ans. La tribu Eskimo est constituée de mangeurs de viande crue. océan Arctique est reconnu et établi comme un océan par Organisation hydrographique internationale (OHI), bien que d autres océanographes affirment que océan Arctique n est pas inclus dans la classification des océans, mais seulement comme la mer Méditerranée arctique ou la mer Arctique qui fait partie de la mer Méditerranée qui rejoint océan Atlantique. Il y a la crête de Lomonosov au fond de océan Arctique qui divise le bassin des fonds marins au pôle Nord en deux régions, à savoir le bassin eurasien qui a une profondeur d environ 4 000 à 5 450 mètres, et le bassin américain (Hyperboréen) qui a une profondeur d environ 4 000 mètres. Certaines espèces marines de océan Arctique sont menacées d extinction, car cette région a un écosystème fragile et est lente à se rétablir lorsqu il y a des dommages. Les espèces marines menacées d extinction sont les morses et les baleines. Pendant ce temps, les espèces abondantes dans les eaux du pôle Nord sont les méduses à crinière de lion. océan Arctique a également relativement peu de vie végétale sous-marine, mais pas pour le phytoplancton. Le phytoplancton est une partie importante de la mer et se trouve principalement au pôle Nord. Le phytoplancton effectue la photosynthèse pendant été en raison de la lumière du soleil qui sort pendant le jour et la nuit. Inversement en hiver, le phytoplancton lutte pour obtenir suffisamment de lumière pour la photosynthèse et survivre.';
+
+  @override
+  String get arcticOceanLocation => 'océan Arctique est situé dans hémisphère nord et entoure entièrement le pôle Nord. emplacement de océan Arctique se trouve sur le continent asiatique, le continent européen et la partie nord de Amérique du Nord. emplacement astronomique de océan Arctique est à 90°00  de latitude nord et 0°00  de longitude est. océan Arctique est directement relié à océan Pacifique par le détroit de Béring, et relié à océan Atlantique par la mer du Groenland et la mer du Labrador. La région de océan Arctique est presque entourée de terres et borde plusieurs régions, à savoir Asie du Nord, Amérique du Nord, le Groenland et la péninsule scandinave ou Europe du Nord. Plusieurs mers situées dans la région de océan Arctique comprennent la baie de Baffin, la mer de Barents, la mer de Beaufort, la mer des Tchouktches, la mer de Sibérie orientale, la mer du Groenland, la baie d Hudson, le détroit d Hudson, la mer de Kara, la mer de Laptev et la mer Blanche.';
+
+  @override
+  String get arcticOceanCharacteristics => 'Les océans du monde se composent de plusieurs nombres. Chacun de ces océans a ses propres caractéristiques. C est aussi le cas de océan Arctique. océan Arctique a sa propre singularité qui n est possédée que par océan Arctique. Certaines caractéristiques de océan Arctique incluent les suivantes:';
+
+  @override
+  String get arcticOceanCharacteristic1 => 'océan Arctique est le plus petit et le plus peu profond du monde.';
+
+  @override
+  String get arcticOceanCharacteristic2 => 'Sa surface est toujours recouverte de glice, aussi bien en hiver que toute année.';
+
+  @override
+  String get arcticOceanCharacteristic3 => 'La salinité et la température de surface changent toujours en fonction de la saison et de la quantité de fonte des glices qui la recouvre.';
+
+  @override
+  String get arcticOceanCharacteristic4 => 'océan avec la salinité la plus basse du monde est causé par une faible évaporation et un écoulement d eau limité de cette région océanique vers sa région sud avec de eau douce entrant dans océan Arctique en grande quantité.';
+
+  @override
+  String get arcticOceanCharacteristic5 => 'Il y a le bassin eurasien qui a une profondeur d environ 4 000 à 5 450 mètres.';
+
+  @override
+  String get arcticOceanCharacteristic6 => 'Le point le plus bas se trouve dans le bassin eurasien qui atteint 5 450 mètres.';
+
+  @override
+  String get arcticOceanCharacteristic7 => 'La forme des fonds marins de océan Arctique est très variée, ayant des crêtes de failles (comme des collines), des plaines de la zone abyssale (comme des zones perforées), des mers profondes et des bassins.';
+
+  @override
+  String get arcticOceanCharacteristic8 => 'A un climat polaire toute année avec une température moyenne de -2°C.';
+
+  @override
+  String get arcticOceanCharacteristic9 => 'hiver dans océan Arctique est caractérisé par le froid, obscurité, un temps stable et un ciel clair.';
+
+  @override
+  String get arcticOceanCharacteristic10 => 'été est caractérisé par la lumière du soleil, des conditions humides, du brouillard et de faibles tourbillons avec de la pluie et de la neige.';
+
+  @override
+  String get indianOceanGeneralDescription => 'océan Indien est le troisième plus grand océan du monde. Le nom Indien est tiré du nom du pays, Inde. océan Indien en sanskrit est appelé Ratnakara qui signifie mine de gemmes. Cet océan a 20% de la surface de eau de la Terre ou environ 68,556 millions de km². océan Indien a un littoral de 66 526 km avec une profondeur moyenne de 3 890 m. Le point le plus profond de océan Indien se trouve dans la fosse de Java, au sud de île de Java avec une profondeur atteignant 7 725 m. océan Indien a également un volume d eau estimé à environ 292 131 000 km³. Il existe cinq grandes dorsales océaniques dans océan Indien qui sont centrées en un point, à savoir la dorsale sud-ouest de océan Indien, la dorsale sud-est de océan Indien, la dorsale de Sicile, la dorsale orientale de Nikety et la dorsale de Chagos-Lachandive. océan Indien, qui sert de voie de transport mondial, est estuaire de plusieurs rivières, telles que le fleuve Gange, le fleuve Zambèze, le fleuve Shatt al-Arab, le fleuve Brahmapoutre, le fleuve Ayeyarwady et le fleuve Indus. Plusieurs ports internationaux sont également situés dans la région de océan Indien, tels que Calcutta en Inde, Chennai à Madras, Inde, Colombo au Sri Lanka, Durban en Afrique du Sud, Jakarta en Indonésie, Karachi au Pakistan, Fremantle en Australie, Mumbai à Bombay, Inde et Richards Bay en Afrique du Sud.';
+
+  @override
+  String get indianOceanLocation => 'Astronomiquement, emplacement de océan Indien est séparé de océan Atlantique par 20° de longitude est, et de océan Pacifique par 147° de longitude est. océan, qui est la mer la plus chaude du monde, se compose de plusieurs collections de régions d eau, telles que la mer d Andaman, la Grande Baie Australienne, la mer d Arabie, le golfe du Bengale, le golfe d Aden, le golfe Persique, le golfe d Oman, le canal du Mozambique, le détroit de Malacca et la mer Rouge. Les limites de la région de océan Indien comprennent:';
+
+  @override
+  String get indianOceanLocationPoint1 => 'Au nord se trouve la région de Asie du Sud';
+
+  @override
+  String get indianOceanLocationPoint2 => 'Au sud se trouve le continent antarctique';
+
+  @override
+  String get indianOceanLocationPoint3 => 'À ouest se trouvent la péninsule arabique et le continent africain';
+
+  @override
+  String get indianOceanLocationPoint4 => 'À est se trouvent la péninsule malaise, île de Sumatra, Java, les petites îles de la Sonde et le continent australien';
+
+  @override
+  String get indianOceanCharacteristics => 'Chaque océan du monde a ses propres caractéristiques qui sont la marque de cet océan. Comme océan Pacifique qui a plusieurs caractéristiques, océan Indien a également plusieurs caractéristiques qui le distinguent des autres océans. Voici quelques caractéristiques de océan Indien:';
+
+  @override
+  String get indianOceanCharacteristic1 => 'océan Indien est le seul océan dont le territoire est situé dans hémisphère oriental.';
+
+  @override
+  String get indianOceanCharacteristic2 => 'océan Indien est bordé par trois continents, à savoir le continent africain, le continent asiatique, le continent australien et le pôle Sud.';
+
+  @override
+  String get indianOceanCharacteristic3 => 'La profondeur de la mer dans la région de océan Indien est estimée à environ ±3 960 m et la salinité moyenne est de 34,72%.';
+
+  @override
+  String get indianOceanCharacteristic4 => 'océan Indien a de forts courants et de hautes vagues.';
+
+  @override
+  String get indianOceanCharacteristic5 => 'océan Indien a peu d îles, dans la partie ouest se trouve île de Madagascar, à est se trouvent les îles de Sumatra, Java et Nusa Tenggara et au nord se trouvent île de Ceylan (Sri Lanka) et les Maldives.';
+
+  @override
+  String get indianOceanCharacteristic6 => 'De grandes tempêtes se produisent rarement dans océan Indien, contrairement à océan Pacifique et à océan Atlantique qui sont souvent frappés par de grandes tempêtes.';
+
+  @override
+  String get indianOceanCharacteristic7 => 'océan Indien est le seul océan dont la frontière nord ne touche pas la ligne du cercle arctique car elle est bloquée par le continent asiatique.';
+
+  @override
+  String get indianOceanCharacteristic8 => 'La plaque indo-australienne qui est le centre de subduction du continent asiatique se trouve au fond de océan Indien du nord, ce qui fait de cette région une zone instable.';
+
+  @override
+  String get indianOceanCharacteristic9 => 'Les vents de mousson dans océan Indien sont bénéfiques pour les marins dans leurs voyages, de sorte que la distance parcourue peut être plus longue.';
+
+  @override
+  String get indianOceanCharacteristic10 => 'De nombreux bassins marins ou dépressions se trouvent dans océan Indien, tels que le bassin de Madagascar, le bassin de Mascarena et le bassin de Croze.';
+
+  @override
+  String get indianOceanCharacteristic11 => 'Les grandes vagues de océan Indien provoquent souvent des catastrophes d inondation au Sri Lanka et aux Maldives.';
+
+  @override
+  String get atlanticOceanGeneralDescription => 'océan Atlantique est un des océans de la Terre à côté des océans Pacifique, Indien, Arctique et Antarctique. En fait, le nom Atlantique lui-même vient de la mythologie grecque, qui signifie mer d atlas. Si océan Pacifique est le plus grand du monde, alors le deuxième rang est occupé par océan Atlantique. La taille de océan Atlantique couvre 1/5 de la surface de la Terre ou 20% de la surface de la Terre. Si on le calcule, la superficie de océan Atlantique est de 106 450 000 kilomètres carrés. Ensuite, si les mers environnantes ne sont pas comptées, la superficie est de 82 362 000 kilomètres carrés. La largeur de océan Atlantique varie considérablement, de 2 848 km (entre le Brésil et le Liberia) à 4 830 km (entre les États-Unis et Afrique du Nord). Alors que le volume de océan Atlantique si les mers environnantes ne sont pas comptées est de 323 600 000 km³. Cela symbolise que la quantité de surface qui s écoule dans océan Atlantique est quatre fois plus grande que océan Pacifique ou océan Indien. La forme de océan Atlantique est comme la lettre S qui s étend de hémisphère nord à hémisphère sud. Quant à la profondeur de océan Atlantique lui-même, la moyenne est de 3 332 m (si avec les mers environnantes), et sans les mers environnantes est de 3 926 m. Le point le plus profond de cet océan se trouve dans une fosse très célèbre. La fosse la plus profonde de océan Atlantique est la fosse de Porto Rico.';
+
+  @override
+  String get atlanticOceanLocation => 'océan Atlantique est une étendue d eau située entre Afrique, Europe, océan Austral et le continent américain. Astronomiquement, océan Atlantique est situé aux coordonnées géographiques 0,00 N et 25,00 O. La frontière entre océan Atlantique et océan Indien à est est délimitée au point 20 degrés de longitude est (E). Et la frontière entre océan Atlantique et océan Arctique est la ligne de la région du Groenland au Svalbard qui est au nord de la Norvège. océan Atlantique est un océan unique car cet océan a un littoral irrégulier qui est délimité par diverses baies et mers. Certaines des mers qui bordent océan Atlantique sont:';
+
+  @override
+  String get atlanticOceanLocationPoint1 => 'Mer des Caraïbes';
+
+  @override
+  String get atlanticOceanLocationPoint2 => 'Golfe du Saint-Laurent';
+
+  @override
+  String get atlanticOceanLocationPoint3 => 'Golfe du Mexique';
+
+  @override
+  String get atlanticOceanLocationPoint4 => 'Mer Méditerranée';
+
+  @override
+  String get atlanticOceanLocationPoint5 => 'Mer Noire';
+
+  @override
+  String get atlanticOceanLocationPoint6 => 'Mer Baltique';
+
+  @override
+  String get atlanticOceanLocationPoint7 => 'Mer du Nord';
+
+  @override
+  String get atlanticOceanLocationPoint8 => 'Mer de Norvège-Groenland';
+
+  @override
+  String get atlanticOceanCharacteristics => 'En général, les océans sur Terre se ressemblent entre eux. Cependant, ces différents océans ont en réalité leurs propres caractéristiques. De même avec océan Atlantique. océan Atlantique a des caractéristiques qui rendent cet océan différent des autres océans. Certaines caractéristiques de océan Atlantique incluent les suivantes:';
+
+  @override
+  String get atlanticOceanCharacteristic1Title => 'Sa forme est sinueuse comme la lettre S';
+
+  @override
+  String get atlanticOceanCharacteristic1Description => 'une des caractéristiques ou faits uniques de océan Atlantique est sa forme sinueuse ressemblant à la lettre S. Pour cette raison, océan Atlantique a également un littoral irrégulier qui n est délimité que par diverses baies et mers.';
+
+  @override
+  String get atlanticOceanCharacteristic2Title => 'Les tempêtes tropicales se produisent souvent';
+
+  @override
+  String get atlanticOceanCharacteristic2Description => 'Une autre caractéristique de océan Atlantique est la fréquente occurrence de tempêtes tropicales. Ces tempêtes tropicales se développent autour de la zone côtiée de Afrique près du cap Vert, puis se déplacent vers ouest vers la mer des Caraïbes (cela se produit de mai à décembre).';
+
+  @override
+  String get atlanticOceanCharacteristic3Title => 'Les vents de tempête se produisent souvent';
+
+  @override
+  String get atlanticOceanCharacteristic3Description => 'Outre les tempêtes tropicales, un autre événement fréquent est les vents de tempête. Les vents de tempête se produisent généralement dans Atlantique Nord pendant hiver dans le nord, ce qui rend les traversées océaniques plus difficiles et dangereuses.';
+
+  @override
+  String get atlanticOceanCharacteristic4Title => 'La plupart de son territoire se trouve dans la région de longitude ouest';
+
+  @override
+  String get atlanticOceanCharacteristic4Description => 'Une autre caractéristique de océan Atlantique est que la majeure partie de son territoire se trouve dans la région de longitude ouest, de sorte que cet océan se trouve dans hémisphère ouest. Ce sont là quelques caractéristiques ou faits uniques sur océan Atlantique. En raison de ces caractéristiques, des choses comme celles-ci ne se trouvent pas dans d autres océans.';
+
+  @override
+  String get southernOceanGeneralDescription => 'Les limites et noms des océans et mers sont convenus internationalement lorsque le Bureau hydrographique international, prédécesseur de OHI, a tenu la première conférence internationale le 24 juillet 1919. OHI a ensuite publié dans Limits of Oceans and Seas, la première édition date de 1928. Depuis la première édition, la limite de océan Austral s est déplacée plus au sud; depuis 1953, il a été retiré des publications officielles et laissé aux bureaux hydrographiques locaux pour déterminer leurs propres limites. OHI a inclus océan et sa définition comme eaux au sud de 60 degrés de latitude sud dans sa révision de 2000, mais cela n a pas été formellement adopté, en raison d une impasse persistante sur certains contenus, comme le différend de nomination sur la mer du Japon. La définition de OHI 2000, cependant, a été diffusée dans une édition provisoire en 2002, et est utilisée par certains au sein de OHI et par d autres organisations telles que le CIA World Factbook et Merriam-Webster. Le gouvernement australien considère que océan Austral est juste au sud de Australie. La Fondation National Geographic a officiellement reconnu cet océan en juin 2021. Auparavant, elle le décrivait dans un type de police différent des autres océans du monde; au lieu de cela, il montre les océans Pacifique, Atlantique et Indien s étendant jusqu à Antarctique sur les cartes imprimées et en ligne. Les éditeurs de cartes qui utilisent le terme océan Austral sur leurs cartes incluent Hema Maps et GeoNova.';
+
+  @override
+  String get southernOceanGeography => 'océan Austral est géologiquement le plus jeune océan, et s est formé lorsque Antarctique et Amérique du Sud se sont séparés, ouvrant alors le passage de Drake il y a environ 30 millions d années. Cette séparation continentale a permis la formation du courant circumpolaire antarctique. Avec une limite nord à 60°S, océan Austral diffère des autres océans en ce que sa plus grande limite, la limite nord, ne borde pas la terre (comme c est arrivé dans la première édition de Limits of Oceans and Seas). Au lieu de cela, la limite nord de cet océan est avec les océans Atlantique, Indien et Pacifique. Une raison de le considérer comme un océan séparé vient du fait que la plupart de eau de océan Austral diffère de eau des autres océans. eau entrant autour de océan Austral circule assez rapidement en raison du courant circumpolaire antarctique qui circule autour de Antarctique. eau dans océan Austral sud, par exemple, la Nouvelle-Zélande, ressemble plus à eau dans océan Austral sud de Amérique du Sud qu à eau de océan Pacifique. océan Austral a une profondeur entre 4 000 et 5 000 m (13 000 et 16 000 pieds) sur la majeure partie de sa superficie avec seulement des zones d eau peu profonde limitées. La plus grande profondeur de 7 236 m (23 740 pieds) de océan Austral se produit à extrémité sud de la fosse des Sandwich du Sud, à 60°00 S, 024°O. La plate-forme continentale antarctique apparaît généralement étroite et extraordinairement profonde, avec son bord à des profondeurs allant jusqu à 800 m (2 600 pieds), comparé à la moyenne mondiale de 133 m (436 pieds). En ligne avec influence des saisons solaires, les floes de glice antarctiques fluctuent d un minimum moyen de 2,6 millions de kilomètres carrés (1,0×10^6 milles carrés) en mars à environ 1,88 million de km² (0,725×10^6 milles carrés) en septembre, une augmentation de superficie de plus de sept fois.';
+
+  @override
+  String get southernOceanSubdivisions => 'Les subdivisions océaniques sont des caractéristiques géographiques telles que les mers, les détroits, les baies et les canaux. Il existe de nombreuses subdivisions de océan Austral définies dans le projet de quatrième édition de 2002 jamais approuvé de la publication de OHI Limits of Oceans and Seas. Certaines d entre elles telles que la mer des Cosmonautes proposée par la Russie en 2002, la mer de la Coopération et la mer de Somov (explorateur polaire russe du milieu des années 1950) ne sont pas incluses dans le document de OHI de 1953 qui est toujours en vigueur aujourd hui, car leurs noms proviennent principalement de 1962 et au-delà. Les autorités géographiques et les atlas de premier plan n utilisent pas ces trois derniers noms, y compris atlas mondial 10e édition 2014 de la Fondation National Geographic des États-Unis et atlas mondial 12e édition 2014 des Temps britanniques, mais les cartes soviétiques et russes le font. Dans ordre horaire, ceux-ci incluent (avec secteur):';
+
+  @override
+  String get southernOceanSubdivision1 => 'Mer de Weddell (57°18 O – 12°16 E)';
+
+  @override
+  String get southernOceanSubdivision2 => 'Mer du Roi Haakon VII (20°O – 45°E)';
+
+  @override
+  String get southernOceanSubdivision3 => 'Mer de Lazarev (0° – 14°E)';
+
+  @override
+  String get southernOceanSubdivision4 => 'Mer de Riiser-Larsen (14° – 30°E)';
+
+  @override
+  String get southernOceanSubdivision5 => 'Mer des Cosmonautes (30° – 50°E)';
+
+  @override
+  String get southernOceanSubdivision6 => 'Mer de la Coopération (59°34  – 85°E)';
+
+  @override
+  String get southernOceanSubdivision7 => 'Mer de Davis (82° – 96°E)';
+
+  @override
+  String get southernOceanSubdivision8 => 'Mer de Mawson (95°45  – 113°E)';
+
+  @override
+  String get southernOceanSubdivision9 => 'Mer Dumont D Urville (140°E)';
+
+  @override
+  String get southernOceanSubdivision10 => 'Mer de Somov (150° – 170°E)';
+
+  @override
+  String get southernOceanSubdivision11 => 'Mer de Ross (166°E – 155°O)';
+
+  @override
+  String get southernOceanSubdivision12 => 'Mer d Amundsen (102°20′ – 126°O)';
+
+  @override
+  String get southernOceanSubdivision13 => 'Mer de Bellingshausen (57°18  – 102°20 O)';
+
+  @override
+  String get southernOceanSubdivision14 => 'Partie du détroit de Drake (54° – 68°O)';
+
+  @override
+  String get southernOceanSubdivision15 => 'Détroit de Bransfield (54° – 62°O)';
+
+  @override
+  String get southernOceanSubdivision16 => 'Partie de la mer de Scotia (26°30  – 65°O)';
+
+  @override
+  String get generalDescription => 'Description générale';
+
+  @override
+  String get location => 'Emplacement';
+
+  @override
+  String get characteristics => 'Caractéristiques';
+
+  @override
+  String get appTitle => 'Life Below Water';
+
+  @override
+  String get welcomeMessage => 'Bonjour ! Explorons ensemble les mystères de la vie sous-marine';
+
+  @override
+  String get viewMode => 'Mode d affichage';
+
+  @override
+  String get contentCategory => 'Catégorie de contenu';
+
+  @override
+  String get selectOcean => 'Sélectionner un océan';
+
+  @override
+  String get floraFaunaType => 'Type de flore et faune';
+
+  @override
+  String get faunaSpecies => 'Espèces de faune';
+
+  @override
+  String get selectMarineFauna => 'Sélectionner la faune marine';
+
+  @override
+  String get floraSpecies => 'Espèces de flore';
+
+  @override
+  String get selectMarineFlora => 'Sélectionner la flore marine';
+
+  @override
+  String get applyFilter => 'Appliquer le filtre';
+
+  @override
+  String get resetFilter => 'Réinitialiser le filtre';
+
+  @override
+  String get gridView => 'Vue en grille';
+
+  @override
+  String get listView => 'Vue en liste';
+
+  @override
+  String get latest => 'Derniers';
+
+  @override
+  String get newest => 'Plus récents';
+
+  @override
+  String get saved => 'Enregistrés';
+
+  @override
+  String get reposted => 'Republiés';
+
+  @override
+  String get shared => 'Partagés';
+
+  @override
+  String get unmarkedForLaterViewing => 'Retiré de la liste de visionnage';
+
+  @override
+  String get speciesTakenOffRepostList => 'Espèce retirée de votre liste de republication';
+
+  @override
+  String get removedFromSharedList => 'Retiré de la liste partagée';
+
+  @override
+  String get noContentSaved => 'Aucun contenu enregistré';
+
+  @override
+  String get likeRemoved => 'J aime retiré';
+
+  @override
+  String get youLikedThisSpecies => 'Vous avez aimé cette espèce';
+
+  @override
+  String get whatsapp => 'WhatsApp';
+
+  @override
+  String get sharedViaWhatsapp => 'Partagé via WhatsApp';
+
+  @override
+  String get instagram => 'Instagram';
+
+  @override
+  String get sharedViaInstagram => 'Partagé via Instagram';
+
+  @override
+  String get gmail => 'Gmail';
+
+  @override
+  String get sharedViaGmail => 'Partagé via Gmail';
+
+  @override
+  String get x => 'X';
+
+  @override
+  String get sharedViaX => 'Partagé via X';
+
+  @override
+  String get telegram => 'Telegram';
+
+  @override
+  String get sharedViaTelegram => 'Partagé via Telegram';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get sharedViaMessage => 'Partagé via Message';
+
+  @override
+  String get discord => 'Discord';
+
+  @override
+  String get line => 'LINE';
+
+  @override
+  String get sharedViaLine => 'Partagé via LINE';
+
+  @override
+  String get copy => 'Copier';
+
+  @override
+  String get linkCopiedToClipboard => 'Lien copié dans le presse-papier';
+
+  @override
+  String get pdf => 'PDF';
+
+  @override
+  String get pdfSuccessfullyCreated => 'PDF créé avec succès';
+
+  @override
+  String get print => 'Imprimer';
+
+  @override
+  String get sendingToPrinter => 'Envoi à imprimante...';
+
+  @override
+  String get cloud => 'Cloud';
+
+  @override
+  String get infoSuccessfullyDownloaded => 'Informations téléchargées avec succès';
+
+  @override
+  String get note => 'Note';
+
+  @override
+  String get addedToPrivateNotes => 'Ajouté aux notes privées';
+
+  @override
+  String get comments => 'Commentaires';
+
+  @override
+  String get writeYourThoughts => 'Écrivez vos pensées...';
+
+  @override
+  String get pleaseEnterYourComment => 'Veuillez saisir votre commentaire';
+
+  @override
+  String get hideComments => 'Masquer les commentaires';
+
+  @override
+  String get showComments => 'Afficher les commentaires';
+
+  @override
+  String get post => 'Publier';
+
+  @override
+  String get noCommentsYet => 'Pas encore de commentaires';
+
+  @override
+  String get undo => 'Annuler';
+
+  @override
+  String get save => 'Enregistrer';
+
+  @override
+  String get share => 'Partager';
+
+  @override
+  String get report => 'Signaler';
+
+  @override
+  String get repost => 'Republier';
+
+  @override
+  String get comment => 'Commenter';
+
+  @override
+  String get tapOrbitIcon => 'Appuyez sur icône orbit pour enregistrer, commenter, signaler et plus';
+
+  @override
+  String get understand => 'Compris';
+
+  @override
+  String get reportSpecies => 'Signaler une espèce';
+
+  @override
+  String get inappropriateContent => 'Contenu inapproprié';
+
+  @override
+  String get incorrectInformation => 'Informations incorrectes';
+
+  @override
+  String get offensiveOrAbusive => 'Contenu offensant ou abusif';
+
+  @override
+  String get spamOrMisleading => 'Spam ou trompeur';
+
+  @override
+  String get other => 'Autre';
+
+  @override
+  String get pleaseSpecifyYourReason => 'Veuillez préciser votre raison';
+
+  @override
+  String get thisFieldIsRequired => 'Ce champ est obligatoire';
+
+  @override
+  String get submitReport => 'Soumettre le rapport';
+
+  @override
+  String errorGeneral(Object error) {
+    return 'Une erreur s\'est produite : $error';
+  }
+
+  @override
+  String get emptyOceanData => 'Aucune donnée océanique disponible.';
+
+  @override
+  String get learnUnderwaterLife => 'Découvrez la vie sous-marine';
+
+  @override
+  String get learnMore => 'En savoir plus';
+}

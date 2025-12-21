@@ -1,6 +1,8 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/fact_item.dart';
+import '../../services/analytics_service.dart';
 
 class FactOceanDetailScreen extends StatelessWidget {
   final FactItem fact;
@@ -9,67 +11,52 @@ class FactOceanDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark ? Colors.grey[900] : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
-    final appBarColor = isDark ? Colors.blueAccent : Colors.blueAccent;
-    final iconColor = isDark ? Colors.white : Colors.black;
-    final shadowColor = isDark ? Colors.black54 : Colors.black87;
-
+    AnalyticsService(
+      FirebaseAnalytics.instance,
+    ).logScreenView("FactDetailScreen_${fact.title}");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: Colors.black.withOpacity(0.5),
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: iconColor),
-            onPressed: () => Navigator.pop(context),
+          child: CircleAvatar(
+            backgroundColor: Colors.black.withOpacity(0.3),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ),
       ),
       body: Stack(
         children: [
-          /// 🔹 Background
+          /// 🔹 Background Laut
           Positioned.fill(
-            child: Container(
-              color: theme.scaffoldBackgroundColor,
+            child: Image.asset(
+              "assets/images/oceanDetailBackground.jpg",
+              fit: BoxFit.cover,
             ),
           ),
 
-          /// 🔹 Overlay Gradient
+          /// 🔹 Overlay gelap agar teks terbaca
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: isDark
-                      ? [
-                          Colors.black.withOpacity(0.3),
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.8),
-                        ]
-                      : [
-                          Colors.white.withOpacity(0.2),
-                          Colors.white.withOpacity(0.4),
-                          Colors.white.withOpacity(0.5),
-                        ],
-                ),
-              ),
-            ),
+            child: Container(color: Colors.black.withOpacity(0.4)),
           ),
 
-          /// 🔹 Main Content
+          /// 🔹 Konten Utama
           SingleChildScrollView(
             padding: const EdgeInsets.only(
-                top: 100, left: 16, right: 16, bottom: 40),
+              top: 100,
+              left: 16,
+              right: 16,
+              bottom: 40,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 📌 Fact Title
+                /// 📌 Judul Fakta
                 Center(
                   child: Text(
                     fact.title,
@@ -77,26 +64,23 @@ class FactOceanDetailScreen extends StatelessWidget {
                     style: GoogleFonts.roboto(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: textColor,
+                      color: Colors.white,
                       shadows: [
-                        Shadow(
-                          blurRadius: 6,
-                          color: shadowColor,
-                        ),
+                        const Shadow(blurRadius: 6, color: Colors.black87),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                /// 📌 Full Article Content
+                /// 📌 Konten Artikel Penuh
                 Text(
                   fact.fullContent,
                   textAlign: TextAlign.justify,
                   style: GoogleFonts.poppins(
                     fontSize: 15,
                     height: 1.7,
-                    color: textColor.withOpacity(0.9),
+                    color: Colors.white.withOpacity(0.95),
                   ),
                 ),
               ],

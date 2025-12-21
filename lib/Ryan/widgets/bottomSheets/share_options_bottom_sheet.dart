@@ -20,78 +20,82 @@ class ShareOptionsBottomSheet extends StatelessWidget {
   });
 
   @override
+/*************  ✨ Windsurf Command ⭐  *************/
+/// Builds a [Material] widget that displays a bottom sheet with options to share the given [MarineSpecies].
+///
+/*******  5ac7907a-57dd-407d-959c-843d7fea5a8b  *******/
   Widget build(BuildContext context) {
     final shareOptions = [
       _ShareOption('WhatsApp', FontAwesomeIcons.whatsapp, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via WhatsApp',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('Instagram', FontAwesomeIcons.instagram, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via Instagram',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('Gmail', Icons.email, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via Gmail',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('X', FontAwesomeIcons.xTwitter, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via X',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('Telegram', FontAwesomeIcons.telegram, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via Telegram',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('Message', Icons.message, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via Message',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('Discord', FontAwesomeIcons.discord, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via Discord',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
       _ShareOption('LINE', FontAwesomeIcons.line, () {
-        provider.share(species);
+        provider.toggleShare(species);
         Navigator.pop(context);
         showCustomSnackbar(
           context,
           message: 'Shared via LINE',
-          onUndo: () => provider.unshare(species),
+          onUndo: () => provider.toggleShare(species),
         );
       }),
     ];

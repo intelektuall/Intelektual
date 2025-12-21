@@ -65,12 +65,12 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                               : [],
                     ),
                     child: Card(
-                      color: Colors.grey.shade800,
+                      color: Colors.white.withOpacity(0.15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       elevation: provider.isPressed ? 12 : 6,
-                      shadowColor: Colors.black,
+                      shadowColor: Colors.black.withOpacity(0.3),
                       child: Column(
                         children: [
                           Expanded(

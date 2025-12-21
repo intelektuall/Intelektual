@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/coral_species.dart';
 import '../models/comment_data.dart';
+import '../database/coral_species_db_helper.dart';
 
 class CoralSpeciesActionProvider with ChangeNotifier {
   final List<CoralSpecies> _liked = [];
@@ -13,6 +14,8 @@ class CoralSpeciesActionProvider with ChangeNotifier {
   // Komentar disimpan berdasarkan species.name sebagai key
   final Map<String, List<CommentData>> _commentTexts = {};
 
+  final _dbHelper = CoralSpeciesDBHelper.instance;
+
   List<CoralSpecies> get liked => _liked;
   List<CoralSpecies> get pinned => _pinned;
   List<CoralSpecies> get shared => _shared;
@@ -20,14 +23,58 @@ class CoralSpeciesActionProvider with ChangeNotifier {
   List<CoralSpecies> get reposted => _reposted;
   List<CoralSpecies> get reported => _reported;
 
+  //LOAD DATA DARI DATABASE
+  Future<void> loadActions() async {
+    final likedData = await _dbHelper.getActions('like');
+    final pinnedData = await _dbHelper.getActions('pin');
+    final sharedData = await _dbHelper.getActions('share');
+
+    _liked
+      ..clear()
+      ..addAll(likedData.map((e) => CoralSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+
+    _pinned
+      ..clear()
+      ..addAll(pinnedData.map((e) => CoralSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+
+    _shared
+      ..clear()
+      ..addAll(sharedData.map((e) => CoralSpecies(
+            name: e['name'],
+            imagePath: e['imagePath'],
+            description: e['description'],
+            category: e['category'],
+            ocean: e['ocean'],
+            subtype: e['subtype'],
+          )));
+    notifyListeners();
+  }
+
+
  // ---------- LIKE ----------
-  void toggleLike(CoralSpecies species) {
+  Future<void> toggleLike(CoralSpecies species) async {
     if (_liked.contains(species)) {
       _liked.remove(species);
+      await _dbHelper.deleteAction(species.name, 'like');
       if (species.likeCount > 0) species.likeCount--;
     } else {
       _liked.add(species);
       species.likeCount++;
+      await _dbHelper.insertAction(species, 'like');
     }
     notifyListeners();
   }
@@ -35,30 +82,28 @@ class CoralSpeciesActionProvider with ChangeNotifier {
   bool isLiked(CoralSpecies species) => _liked.contains(species);
 
   // ---------- PIN ----------
-  void pin(CoralSpecies species) {
-    if (!_pinned.contains(species)) {
+  Future<void> togglePin(CoralSpecies species) async {
+    if (_pinned.contains(species)) {
+      _pinned.remove(species);
+      await _dbHelper.deleteAction(species.name, 'pin');
+    } else {
       _pinned.add(species);
-      notifyListeners();
+      await _dbHelper.insertAction(species, 'pin');
     }
-  }
-
-  void unpin(CoralSpecies species) {
-    _pinned.remove(species);
     notifyListeners();
   }
 
   bool isPinned(CoralSpecies species) => _pinned.contains(species);
 
   // ---------- SHARE ----------
-  void share(CoralSpecies species) {
-    if (!_shared.contains(species)) {
+  Future<void> toggleShare(CoralSpecies species) async {
+    if (_shared.contains(species)) {
+      _shared.remove(species);
+      await _dbHelper.deleteAction(species.name, 'share');
+    } else {
       _shared.add(species);
-      notifyListeners();
+      await _dbHelper.insertAction(species, 'share');
     }
-  }
-
-  void unshare(CoralSpecies species) {
-    _shared.remove(species);
     notifyListeners();
   }
 
@@ -138,4 +183,13 @@ class CoralSpeciesActionProvider with ChangeNotifier {
   }
 
   bool isReported(CoralSpecies species) => _reported.contains(species);
+
+  //CLEAR ALL
+  Future<void> clearAll() async {
+    await _dbHelper.clearAll();
+    _liked.clear();
+    _pinned.clear();
+    _shared.clear();
+    notifyListeners();
+  }
 }

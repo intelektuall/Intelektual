@@ -1,6 +1,8 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/coral_species.dart';
+import '../../services/analytics_service.dart';
 
 class CoralSpeciesDetailScreen extends StatelessWidget {
   final CoralSpecies species;
@@ -9,62 +11,49 @@ class CoralSpeciesDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark ? Colors.grey[900] : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
-    final appBarColor = isDark ? Colors.blueAccent : Colors.blueAccent;
-    final iconColor = isDark ? Colors.white : Colors.black;
-
+    AnalyticsService(
+      FirebaseAnalytics.instance,
+    ).logScreenView("CoralSpeciesDetailScreen_${species.name}");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: Colors.black.withOpacity(0.5),
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: iconColor),
-            onPressed: () => Navigator.pop(context),
+          child: CircleAvatar(
+            backgroundColor: Colors.black.withOpacity(0.3),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ),
       ),
+
       body: Stack(
         children: [
-          /// 🔹 Background
+          /// 🔹 Background Gambar Laut
           Positioned.fill(
-            child: Container(
-              color: theme.scaffoldBackgroundColor,
+            child: Image.asset(
+              "assets/images/oceanDetailBackground.jpg",
+              fit: BoxFit.cover,
             ),
           ),
 
-          /// 🔹 Overlay Gradient
+          /// 🔹 Overlay Gelap Agar Tulisan Terbaca
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: isDark
-                      ? [
-                          Colors.black.withOpacity(0.3),
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.8),
-                        ]
-                      : [
-                          Colors.white.withOpacity(0.2),
-                          Colors.white.withOpacity(0.4),
-                          Colors.white.withOpacity(0.5),
-                        ],
-                ),
-              ),
-            ),
+            child: Container(color: Colors.black.withOpacity(0.3)),
           ),
 
           /// 🔹 Konten
           SingleChildScrollView(
             padding: const EdgeInsets.only(
-                top: 100, left: 16, right: 16, bottom: 40),
+              top: 100,
+              left: 16,
+              right: 16,
+              bottom: 40,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -74,7 +63,7 @@ class CoralSpeciesDetailScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: isDark ? Colors.black54 : Colors.black38,
+                        color: Colors.black38,
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -99,7 +88,10 @@ class CoralSpeciesDetailScreen extends StatelessWidget {
                     style: GoogleFonts.roboto(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: textColor,
+                      color: Colors.white,
+                      shadows: [
+                        const Shadow(blurRadius: 6, color: Colors.black87),
+                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -113,7 +105,7 @@ class CoralSpeciesDetailScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 15,
                     height: 1.6,
-                    color: textColor.withOpacity(0.9),
+                    color: Colors.white.withOpacity(0.9),
                   ),
                 ),
 

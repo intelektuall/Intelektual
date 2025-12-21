@@ -20,6 +20,7 @@ class MarineSpecies {
     this.likeCount = 0,
     this.commentCount = 0,
   });
+  
 
   @override
   bool operator ==(Object other) =>
@@ -38,11 +39,11 @@ final List<MarineSpecies> marineSpeciesList = [
     name: "Giant Pacific Octopus",
     imagePath: "assets/images/GiantPacificOctopus4.jpg",
     description: '''
-Giant Pacific Octopus (Enteroctopus dofleini) adalah spesies gurita terbesar di dunia yang hidup di perairan dingin Samudra Pasifik Utara, mulai dari Jepang hingga pantai barat Amerika Utara, termasuk Alaska dan California. Hewan ini dapat tumbuh hingga mencapai panjang 4 hingga 5 meter dengan berat lebih dari 50 kilogram, bahkan beberapa individu tercatat memiliki berat hampir 70–90 kilogram. Meskipun berukuran besar, umurnya relatif pendek, yaitu sekitar tiga hingga lima tahun.
+  Giant Pacific Octopus (Enteroctopus dofleini) adalah spesies gurita terbesar di dunia yang hidup di perairan dingin Samudra Pasifik Utara, mulai dari Jepang hingga pantai barat Amerika Utara, termasuk Alaska dan California. Hewan ini dapat tumbuh hingga mencapai panjang 4 hingga 5 meter dengan berat lebih dari 50 kilogram, bahkan beberapa individu tercatat memiliki berat hampir 70–90 kilogram. Meskipun berukuran besar, umurnya relatif pendek, yaitu sekitar tiga hingga lima tahun.
 
 Gurita ini hidup di dasar laut yang dalam, terutama di wilayah berbatu atau gua-gua laut, dan aktif berburu di malam hari. Makanannya mencakup berbagai hewan laut seperti kepiting, kerang, udang, ikan kecil, bahkan sesekali gurita lain. Dengan menggunakan paruhnya yang tajam dan racun, ia dapat menembus cangkang mangsanya.
 
-Giant Pacific Octopus juga terkenal karena tingkat kecerdasannya yang tinggi. Ia mampu memecahkan teka-teki, membuka toples, mengenali manusia, serta menggunakan kamuflase secara efektif dengan mengubah warna dan tekstur kulitnya untuk menyatu dengan lingkungan. Dalam hal reproduksi, betina akan bertelur sebanyak 20.000 hingga 100.000 butir dan menjaga telur-telur tersebut tanpa makan hingga menetas selama sekitar enam bulan. Setelah itu, ia akan mati, seperti halnya jantan yang juga mati tak lama setelah kawin, sebuah siklus hidup yang disebut semelparitas.
+  Giant Pacific Octopus juga terkenal karena tingkat kecerdasannya yang tinggi. Ia mampu memecahkan teka-teki, membuka toples, mengenali manusia, serta menggunakan kamuflase secara efektif dengan mengubah warna dan tekstur kulitnya untuk menyatu dengan lingkungan. Dalam hal reproduksi, betina akan bertelur sebanyak 20.000 hingga 100.000 butir dan menjaga telur-telur tersebut tanpa makan hingga menetas selama sekitar enam bulan. Setelah itu, ia akan mati, seperti halnya jantan yang juga mati tak lama setelah kawin, sebuah siklus hidup yang disebut semelparitas.
 
 Meskipun tidak tergolong spesies yang terancam punah, Giant Pacific Octopus tetap rentan terhadap dampak perubahan iklim, polusi laut, dan aktivitas penangkapan. Fakta menarik lainnya, gurita ini memiliki tiga jantung, darah berwarna biru karena kandungan hemosianin, dan mampu meregenerasi lengannya yang putus serta menyelinap melalui celah sekecil lubang koin berkat tubuhnya yang lunak tanpa tulang.
 ''',

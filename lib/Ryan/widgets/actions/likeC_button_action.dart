@@ -77,7 +77,7 @@ class _LikeCButtonActionState extends State<LikeCButtonAction> {
                           width: 15,
                           height: 15,
                           decoration: const BoxDecoration(
-                            color: Colors.blueAccent,
+                            color: Colors.blue,
                             shape: BoxShape.circle,
                           ),
                           alignment: Alignment.center,
