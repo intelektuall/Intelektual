@@ -58,11 +58,11 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-<<<<<<< HEAD
-  flutter_launcher_icons: ^0.14.4
-=======
-  shared_preferences: ^2.0.15
->>>>>>> 97399c4 (Update final hatami)
+# <<<<<<< HEAD
+#   flutter_launcher_icons: ^0.14.4
+# =======
+#   shared_preferences: ^2.0.15
+# >>>>>>> 97399c4 (Update final hatami)
 
 flutter_launcher_icons:
   android: true
