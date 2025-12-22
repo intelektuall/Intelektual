@@ -219,16 +219,26 @@ import 'Ryan/providers/cardOverlay/cardC_overlay_provider.dart';
 import 'Ryan/providers/locale_provider.dart';
 import 'Ryan/providers/user_access_provider.dart';
 
-//Services Ryan
+// Services Ryan
 import 'Ryan/services/analytics_service.dart';
 import 'l10n/app_localizations.dart';
+
+// === Interstitial Ad Manager ===
+import 'Periklanan/interstitial_ad_manager.dart';
 
 // === Halaman lain ===
 import 'Ryan/screens/newpage_unlocked.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MobileAds.instance.initialize();
+  
+  // === Inisialisasi Google Mobile Ads ===
+  try {
+    await MobileAds.instance.initialize();
+    print('📱 Google Mobile Ads initialized successfully.');
+  } catch (e) {
+    print('❌ Google Mobile Ads initialization failed: $e');
+  }
 
   // === Inisialisasi Firebase ===
   try {
@@ -262,6 +272,13 @@ Future<void> main() async {
   } catch (e) {
     debugPrint("Firestore connection failed ❌: $e");
   }
+
+  // === Pre-load iklan interstitial ===
+  WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
+    Future.delayed(const Duration(seconds: 2), () {
+      InterstitialAdManager().loadInterstitialAd();
+    });
+  });
 
   runApp(
     MultiProvider(
@@ -300,8 +317,6 @@ Future<void> main() async {
       ),
     ),
   );
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatefulWidget {
@@ -345,11 +360,6 @@ class _MainAppState extends State<MainApp> {
       name: 'change_theme',
       parameters: {'theme': isDark ? 'dark' : 'light'},
     );
-
-    // widget.analytics.logEvent(
-    //   name: 'change_language',
-    //   parameters: {'language': settings.language},
-    // );
   }
 
   @override
@@ -403,17 +413,6 @@ class _MainAppState extends State<MainApp> {
           ),
 
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-
-          // // === Lokalisasi ===
-          // locale: settings.language == "Indonesia"
-          //     ? const Locale('id')
-          //     : const Locale('en'),
-          // supportedLocales: const [Locale('id'), Locale('en')],
-          // localizationsDelegates: const [
-          //   GlobalMaterialLocalizations.delegate,
-          //   GlobalWidgetsLocalizations.delegate,
-          //   GlobalCupertinoLocalizations.delegate,
-          // ],
 
           home: const LaunchScreen(),
           routes: {'/newpage_unlocked': (context) => const NewPageUnlocked()},

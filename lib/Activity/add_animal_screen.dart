@@ -6,6 +6,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../Provider/hewan_provider.dart';
+import '../Periklanan/interstitial_ad_manager.dart';
 
 class AddAnimalScreen extends StatefulWidget {
   @override
@@ -56,7 +57,6 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
-      debugPrint('Error picking image: $e');
     }
   }
 
@@ -517,8 +517,23 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                                             _imageFile = null;
                                           });
 
+                                          // 🆕 SET FLAG SUBMIT BERHASIL untuk iklan
+                                          InterstitialAdManager.setSubmitSuccessful();
+
+                                          // Tampilkan snackbar konfirmasi
+                                          Get.snackbar(
+                                            'Berhasil!',
+                                            'Pengajuan hewan berhasil dikirim',
+                                            backgroundColor: Colors.green,
+                                            colorText: Colors.white,
+                                            duration: Duration(seconds: 2),
+                                          );
+
                                           formController.resetForm();
+                                          
+                                          // Navigasi kembali ke SeeAllScreen
                                           if (mounted) Navigator.pop(context);
+                                          
                                         } catch (e) {
                                           Navigator.of(
                                             context,
