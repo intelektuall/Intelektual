@@ -1,18 +1,28 @@
 import 'dart:async';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InterstitialAdManager {
-  static final InterstitialAdManager _instance = InterstitialAdManager._internal();
+  static final InterstitialAdManager _instance =
+      InterstitialAdManager._internal();
   factory InterstitialAdManager() => _instance;
   InterstitialAdManager._internal();
 
-  static const String _adUnitId = 'ca-app-pub-3940256099942544/1033173712';
-  
+  static const String _adUnitId =
+      'ca-app-pub-3940256099942544/1033173712';
+
   InterstitialAd? _interstitialAd;
   bool _isAdLoaded = false;
   bool _isShowingAd = false;
-  
+
   static bool _submitSuccessful = false;
+
+  // ================= PREMIUM CHECK =================
+  Future<bool> _isPremiumUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('is_premium') ?? false;
+  }
+  // =================================================
 
   static void setSubmitSuccessful() {
     _submitSuccessful = true;
@@ -25,6 +35,7 @@ class InterstitialAdManager {
   }
 
   Future<void> loadInterstitialAd() async {
+    if (await _isPremiumUser()) return; // ⛔ PREMIUM
     if (_isAdLoaded || _isShowingAd) return;
 
     try {
@@ -39,29 +50,29 @@ class InterstitialAdManager {
             _isAdLoaded = true;
             _setupAdListeners(ad);
           },
-          onAdFailedToLoad: (error) {
+          onAdFailedToLoad: (_) {
             _isAdLoaded = false;
             _interstitialAd = null;
           },
         ),
       );
-    } catch (e) {
+    } catch (_) {
       _isAdLoaded = false;
     }
   }
 
   void _setupAdListeners(InterstitialAd ad) {
     ad.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (ad) {
+      onAdShowedFullScreenContent: (_) {
         _isShowingAd = true;
       },
-      onAdDismissedFullScreenContent: (ad) {
+      onAdDismissedFullScreenContent: (_) {
         _isShowingAd = false;
         _isAdLoaded = false;
         _disposeAd();
         Future.delayed(const Duration(seconds: 1), loadInterstitialAd);
       },
-      onAdFailedToShowFullScreenContent: (ad, error) {
+      onAdFailedToShowFullScreenContent: (_, __) {
         _isShowingAd = false;
         _isAdLoaded = false;
         _disposeAd();
@@ -70,14 +81,13 @@ class InterstitialAdManager {
   }
 
   Future<void> showInterstitialAd() async {
+    if (await _isPremiumUser()) return; // ⛔ PREMIUM
     if (_isShowingAd) return;
 
     if (_isAdLoaded && _interstitialAd != null) {
       try {
         await _interstitialAd!.show();
-      } catch (e) {
-        _isAdLoaded = false;
-        _isShowingAd = false;
+      } catch (_) {
         _disposeAd();
       }
     } else {
@@ -91,6 +101,8 @@ class InterstitialAdManager {
   }
 
   Future<void> checkAndShowInterstitialAd() async {
+    if (await _isPremiumUser()) return; // ⛔ PREMIUM
+
     if (checkAndResetSubmitFlag()) {
       await Future.delayed(const Duration(milliseconds: 500));
       await showInterstitialAd();
@@ -109,4 +121,4 @@ class InterstitialAdManager {
   void dispose() {
     _disposeAd();
   }
-} 
+}
