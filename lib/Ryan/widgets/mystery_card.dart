@@ -1,24 +1,36 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// 🔴 TAMBAHAN 1 IMPORT SAJA
+import '../services/card_access_gate.dart';
+
 class MysteryCard extends StatelessWidget {
   final String title;
   final IconData icon;
   final String description;
-  final VoidCallback? onTap; // Tambahkan parameter onTap
+  final VoidCallback? onTap;
 
   const MysteryCard({
     super.key,
     required this.title,
     required this.icon,
     required this.description,
-    this.onTap, // Terima onTap di constructor
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // Pasang onTap di GestureDetector
+      // 🔥 SATU-SATUNYA BAGIAN YANG DIMODIFIKASI
+      onTap: () async {
+        if (onTap == null) return;
+
+        final allowed = await CardAccessGate.requestAccess(context);
+        if (allowed) {
+          onTap!();
+        }
+      },
+
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BackdropFilter(
@@ -27,10 +39,10 @@ class MysteryCard extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.grey.shade800,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.black,
                 width: 1.5,
               ),
             ),
@@ -39,7 +51,7 @@ class MysteryCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.3),
                   ),
                   padding: const EdgeInsets.all(10),
                   child: Icon(

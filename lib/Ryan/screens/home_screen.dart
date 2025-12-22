@@ -36,7 +36,7 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.blueAccent,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

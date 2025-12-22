@@ -9,6 +9,9 @@ import '../providers/cardOverlay/cardC_overlay_provider.dart';
 import 'overlayMenu/overlayC_menu.dart';
 import 'overlayMenu/overlayC_menu_manager.dart';
 
+// 🔴 TAMBAHAN SATU IMPORT (SAMA SEPERTI CARD LAIN)
+import '../services/card_access_gate.dart';
+
 class CoralSpeciesCard extends StatefulWidget {
   final CoralSpecies species;
   final VoidCallback onTap;
@@ -39,10 +42,18 @@ class _CoralSpeciesCardState extends State<CoralSpeciesCard> {
             children: [
               GestureDetector(
                 onTapDown: (_) => provider.setPressed(true),
-                onTapUp: (_) {
+
+                // 🔥 SATU-SATUNYA LOGIC YANG DISINKRONKAN
+                onTapUp: (_) async {
                   provider.setPressed(false);
-                  widget.onTap();
+
+                  final allowed =
+                      await CardAccessGate.requestAccess(context);
+                  if (allowed) {
+                    widget.onTap();
+                  }
                 },
+
                 onTapCancel: () => provider.setPressed(false),
                 child: AnimatedScale(
                   scale: provider.isPressed ? 0.95 : 1.0,
@@ -64,12 +75,12 @@ class _CoralSpeciesCardState extends State<CoralSpeciesCard> {
                           : [],
                     ),
                     child: Card(
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.grey.shade800,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       elevation: provider.isPressed ? 12 : 6,
-                      shadowColor: Colors.black.withOpacity(0.3),
+                      shadowColor: Colors.black,
                       child: Column(
                         children: [
                           Expanded(
@@ -105,7 +116,6 @@ class _CoralSpeciesCardState extends State<CoralSpeciesCard> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                /// ✅ Gunakan langsung CoralSpeciesActionProvider
                                 Consumer<CoralSpeciesActionProvider>(
                                   builder: (context, actionProvider, _) {
                                     final isLiked = actionProvider.isLiked(
@@ -121,12 +131,14 @@ class _CoralSpeciesCardState extends State<CoralSpeciesCard> {
                                 PressableIconButton(
                                   icon: Icons.more_vert,
                                   onPressed: () {
-                                    final renderBox = _cardKey.currentContext
-                                            ?.findRenderObject()
-                                        as RenderBox?;
+                                    final renderBox =
+                                        _cardKey.currentContext
+                                                ?.findRenderObject()
+                                            as RenderBox?;
                                     if (renderBox != null) {
                                       final position =
-                                          renderBox.localToGlobal(Offset.zero);
+                                          renderBox.localToGlobal(
+                                              Offset.zero);
                                       final size = renderBox.size;
                                       final rect = position & size;
 
@@ -138,8 +150,8 @@ class _CoralSpeciesCardState extends State<CoralSpeciesCard> {
                                       OverlayMenuManager.showOrbitMenu(
                                         context: context,
                                         species: widget.species,
-                                        selectedCard: _buildSelectedCard(
-                                            context),
+                                        selectedCard:
+                                            _buildSelectedCard(context),
                                         cardRect: rect,
                                         onDismiss: () {
                                           Provider.of<CardOverlayCProvider>(

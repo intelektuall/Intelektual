@@ -5,9 +5,11 @@ import '../providers/coral_species_action_provider.dart';
 import '../providers/marine_species_action_provider.dart';
 import '../widgets/species_card.dart';
 import '../models/marine_species.dart';
+import '../models/coral_species.dart';
 import '../widgets/customSnackbar/custom_snackbar.dart';
-//import '../models/coral_species.dart';
-import 'newpage_unlocked.dart';
+import 'detailScreens/marine_species_detail_screen.dart';
+import 'detailScreens/coral_species_detail_screen.dart';
+// import 'newpage_unlocked.dart';
 import '../services/analytics_mixin.dart';
 
 Widget buildGrid<T>({
@@ -366,6 +368,24 @@ class _ActionTabContent extends StatelessWidget {
     required this.textColor,
   });
 
+  void navigateToDetail(BuildContext context, dynamic item) {
+  if (item is MarineSpecies) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MarineSpeciesDetailScreen(species: item),
+      ),
+    );
+  } else if (item is CoralSpecies) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CoralSpeciesDetailScreen(species: item),
+      ),
+    );
+  }
+}
+
   List<dynamic> _applySorting(List<dynamic> items) {
     return sorting == SortingType.newest ? items.reversed.toList() : items;
   }
@@ -439,12 +459,7 @@ class _ActionTabContent extends StatelessWidget {
                 imagePath:
                     item.imagePath ?? 'assets/images/default_species.jpg',
                 onTap:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const NewPageUnlocked(),
-                      ),
-                    ),
+                    () => navigateToDetail(context, item),
                 onTapDelete: () async {
                   final provider =
                       item is MarineSpecies
@@ -509,10 +524,7 @@ class _ActionTabContent extends StatelessWidget {
               subtitle: item.description ?? 'Deskripsi tidak tersedia',
               imagePath: item.imagePath ?? 'assets/images/default_species.jpg',
               onTap:
-                  () => Navigator.push(
-                    parentContext,
-                    MaterialPageRoute(builder: (_) => const NewPageUnlocked()),
-                  ),
+                  () => navigateToDetail(context, item),
               onTapDelete: () async {
                 final provider =
                     item is MarineSpecies

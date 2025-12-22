@@ -217,6 +217,7 @@ import 'Ryan/providers/coral_species_action_provider.dart';
 import 'Ryan/providers/cardOverlay/card_overlay_provider.dart';
 import 'Ryan/providers/cardOverlay/cardC_overlay_provider.dart';
 import 'Ryan/providers/locale_provider.dart';
+import 'Ryan/providers/user_access_provider.dart';
 
 //Services Ryan
 import 'Ryan/services/analytics_service.dart';
@@ -289,6 +290,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CardOverlayProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => UserAccessProvider()),
         Provider.value(value: analyticsService),
       ],
       child: MainApp(

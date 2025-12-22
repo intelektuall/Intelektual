@@ -16,7 +16,7 @@ class MysteryDetailScreen extends StatelessWidget {
     ).logScreenView("MysteryDetailScreen_${mystery.title}");
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isDark ? Colors.grey[900] : Colors.white;
+    // final backgroundColor = isDark ? Colors.grey[900] : Colors.white;
     final textColor = isDark ? Colors.white : Colors.black;
     final appBarColor = isDark ? Colors.blueAccent : Colors.blueAccent;
     final iconColor = isDark ? Colors.white : Colors.black;
@@ -29,13 +29,10 @@ class MysteryDetailScreen extends StatelessWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: CircleAvatar(
-            backgroundColor: backgroundColor,
-            child: IconButton(
+          child: IconButton(
               icon: Icon(Icons.arrow_back, color: iconColor),
               onPressed: () => Navigator.pop(context),
             ),
-          ),
         ),
       ),
 

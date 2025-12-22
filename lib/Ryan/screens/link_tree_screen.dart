@@ -26,8 +26,6 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
     final linkProvider = Provider.of<LinkProvider>(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final shadowColor = isDark ? Colors.black54 : Colors.black87;
-
 
     return Scaffold(
       body: Stack(
@@ -72,10 +70,10 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                   onTap: () => Navigator.pop(context),
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black.withOpacity(0.3),
-                    ),
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   color: Colors.black.withOpacity(0.3),
+                    // ),
                     child: Icon(
                       Icons.arrow_back,
                       color: isDark ? Colors.white : Colors.black,
@@ -132,9 +130,9 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                     fontWeight: FontWeight.w700,
                     color:isDark ? Colors.white : Colors.black,
                     letterSpacing: 1.5,
-                    shadows: [
-                      Shadow(blurRadius: 8, color: shadowColor),
-                    ],
+                    // shadows: [
+                    //   Shadow(blurRadius: 8, color: shadowColor),
+                    // ],
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -150,9 +148,9 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : Colors.black,
                       letterSpacing: 1.0,
-                      shadows: [
-                        Shadow(blurRadius: 5, color: shadowColor),
-                      ],
+                      // shadows: [
+                      //   Shadow(blurRadius: 5, color: shadowColor),
+                      // ],
                     ),
                   ),
                 ),

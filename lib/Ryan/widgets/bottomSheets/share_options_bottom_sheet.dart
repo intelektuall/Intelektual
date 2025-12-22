@@ -20,91 +20,42 @@ class ShareOptionsBottomSheet extends StatelessWidget {
   });
 
   @override
-/*************  ✨ Windsurf Command ⭐  *************/
-/// Builds a [Material] widget that displays a bottom sheet with options to share the given [MarineSpecies].
-///
-/*******  5ac7907a-57dd-407d-959c-843d7fea5a8b  *******/
   Widget build(BuildContext context) {
     final shareOptions = [
       _ShareOption('WhatsApp', FontAwesomeIcons.whatsapp, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via WhatsApp',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via WhatsApp');
       }),
       _ShareOption('Instagram', FontAwesomeIcons.instagram, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via Instagram',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via Instagram');
       }),
       _ShareOption('Gmail', Icons.email, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via Gmail',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via Gmail');
       }),
       _ShareOption('X', FontAwesomeIcons.xTwitter, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via X',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via X');
       }),
       _ShareOption('Telegram', FontAwesomeIcons.telegram, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via Telegram',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via Telegram');
       }),
       _ShareOption('Message', Icons.message, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via Message',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via Message');
       }),
       _ShareOption('Discord', FontAwesomeIcons.discord, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via Discord',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via Discord');
       }),
       _ShareOption('LINE', FontAwesomeIcons.line, () {
-        provider.toggleShare(species);
-        Navigator.pop(context);
-        showCustomSnackbar(
-          context,
-          message: 'Shared via LINE',
-          onUndo: () => provider.toggleShare(species),
-        );
+        _handleShare(context, 'Shared via LINE');
       }),
     ];
 
     final utilityOptions = [
       _ShareOption('Copy', Icons.link, () {
-        Clipboard.setData(ClipboardData(
-          text: "https://example.com/species/${Uri.encodeComponent(species.name)}",
-        ));
+        Clipboard.setData(
+          ClipboardData(
+            text:
+                "https://example.com/species/${Uri.encodeComponent(species.name)}",
+          ),
+        );
         Navigator.pop(context);
         noUndoCustomSnackbar(context, message: "Tautan disalin ke clipboard");
       }),
@@ -139,76 +90,104 @@ class ShareOptionsBottomSheet extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.55),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: SafeArea(
               top: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight:
+                      MediaQuery.of(context).size.height * 0.75,
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(Icons.clear, color: CupertinoColors.white),
-                          onPressed: () => Navigator.pop(context),
+                      // HEADER
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minSize: 32,
+                              child: const Icon(
+                                Icons.clear,
+                                color: CupertinoColors.white,
+                                size: 22,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          const Text(
+                            'Share',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              color: CupertinoColors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // SHARE GRID
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: shareOptions.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 6,
+                          crossAxisSpacing: 6,
+                          childAspectRatio: 1.0,
+                        ),
+                        itemBuilder: (_, index) =>
+                            _buildIconButton(shareOptions[index]),
+                      ),
+
+                      const SizedBox(height: 10),
+                      const Divider(color: Colors.white38, thickness: 0.6),
+                      const SizedBox(height: 8),
+
+                      // UTILITY OPTIONS
+                      SizedBox(
+                        height: 72,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: utilityOptions.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
+                          itemBuilder: (_, index) =>
+                              _buildIconButton(utilityOptions[index]),
                         ),
                       ),
-                      const Text(
-                        'Share',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: CupertinoColors.white,
-                        ),
-                      ),
+
+                      const SizedBox(height: 6),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: shareOptions.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 1.1,
-                    ),
-                    itemBuilder: (context, index) {
-                      final option = shareOptions[index];
-                      return _buildIconButton(option);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  const Divider(color: Colors.white60, thickness: 0.7),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 85,
-                    child: GridView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: utilityOptions.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.9,
-                      ),
-                      itemBuilder: (context, index) {
-                        final option = utilityOptions[index];
-                        return _buildIconButton(option);
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _handleShare(BuildContext context, String message) {
+    provider.toggleShare(species);
+    Navigator.pop(context);
+    showCustomSnackbar(
+      context,
+      message: message,
+      onUndo: () => provider.toggleShare(species),
     );
   }
 
@@ -218,18 +197,28 @@ class ShareOptionsBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Center(
-            child: CircleAvatar(
-              radius: 24,
-              backgroundColor: CupertinoColors.white,
-              child: Icon(option.icon, color: CupertinoColors.black, size: 24),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: CupertinoColors.white,
+            child: Icon(
+              option.icon,
+              size: 20,
+              color: CupertinoColors.black,
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            option.label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 11.5, color: CupertinoColors.white),
+          const SizedBox(height: 4),
+          SizedBox(
+            width: 64,
+            child: Text(
+              option.label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                color: CupertinoColors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -240,7 +229,7 @@ class ShareOptionsBottomSheet extends StatelessWidget {
 class _ShareOption {
   final String label;
   final IconData icon;
-  final void Function() onTap;
+  final VoidCallback onTap;
 
   _ShareOption(this.label, this.icon, this.onTap);
 }

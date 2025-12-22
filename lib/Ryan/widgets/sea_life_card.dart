@@ -47,12 +47,12 @@ class _SeaLifeCardState extends State<SeaLifeCard> {
             ],
           ),
           child: Card(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.grey.shade800,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
             elevation: 6,
-            shadowColor: Colors.black.withOpacity(0.4),
+            shadowColor: Colors.black,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

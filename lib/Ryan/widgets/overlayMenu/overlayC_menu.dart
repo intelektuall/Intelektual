@@ -384,11 +384,14 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                     category: widget.species.category,
                     method: 'Species Repost',
                   );
-                  showCustomSnackbar(
-                    context,
-                    message: 'Reposted! Added to your items',
-                    onUndo: () => provider.unrepost(widget.species),
-                  );
+                  Future.microtask(() {
+                    if (!mounted) return;
+                    showCustomSnackbar(
+                      context,
+                      message: 'Reposted! Added to your items',
+                      onUndo: () => provider.unrepost(widget.species),
+                    );
+                  });
                   break;
                 case 'Comment':
                   await _analytics.logComment(

@@ -19,9 +19,9 @@ class LinkButton extends StatelessWidget {
       child: Card(
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.grey.shade800,
         child: ListTile(
-          leading: Icon(item.icon, color: Colors.white, size: 32),
+          leading: Icon(item.icon, color: Colors.black, size: 32),
           title: Text(
             item.title.localized(t),
             style: GoogleFonts.poppins(

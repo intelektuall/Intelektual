@@ -9,6 +9,9 @@ import '../providers/marine_species_action_provider.dart';
 import 'overlayMenu/overlay_menu.dart';
 import 'overlayMenu/overlay_menu_manager.dart';
 
+// 🔴 TAMBAHAN SATU BARIS SAJA
+import '../services/card_access_gate.dart';
+
 class MarineSpeciesCard extends StatefulWidget {
   final MarineSpecies species;
   final VoidCallback onTap;
@@ -39,10 +42,19 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
             children: [
               GestureDetector(
                 onTapDown: (_) => provider.setPressed(true),
-                onTapUp: (_) {
+
+                // 🔥 INI SATU-SATUNYA BAGIAN YANG DIMODIFIKASI
+                onTapUp: (_) async {
                   provider.setPressed(false);
-                  widget.onTap();
+
+                  final allowed =
+                      await CardAccessGate.requestAccess(context);
+
+                  if (allowed) {
+                    widget.onTap();
+                  }
                 },
+
                 onTapCancel: () => provider.setPressed(false),
                 child: AnimatedScale(
                   scale: provider.isPressed ? 0.95 : 1.0,
@@ -56,21 +68,21 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                       boxShadow:
                           isSelected
                               ? [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.4),
-                                  blurRadius: 20,
-                                  spreadRadius: 2,
-                                ),
-                              ]
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.4),
+                                    blurRadius: 20,
+                                    spreadRadius: 2,
+                                  ),
+                                ]
                               : [],
                     ),
                     child: Card(
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.grey.shade800,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       elevation: provider.isPressed ? 12 : 6,
-                      shadowColor: Colors.black.withOpacity(0.3),
+                      shadowColor: Colors.black,
                       child: Column(
                         children: [
                           Expanded(
@@ -108,9 +120,8 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                                 const SizedBox(width: 6),
                                 Consumer<MarineSpeciesActionProvider>(
                                   builder: (context, provider, _) {
-                                    final isLiked = provider.isLiked(
-                                      widget.species,
-                                    );
+                                    final isLiked =
+                                        provider.isLiked(widget.species);
                                     return LikeButtonAction(
                                       species: widget.species,
                                       isLiked: isLiked,
@@ -118,7 +129,6 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                                     );
                                   },
                                 ),
-                                // const SizedBox(width: 1),
                                 PressableIconButton(
                                   icon: Icons.more_vert,
                                   onPressed: () {
@@ -127,9 +137,9 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                                                 ?.findRenderObject()
                                             as RenderBox?;
                                     if (renderBox != null) {
-                                      final position = renderBox.localToGlobal(
-                                        Offset.zero,
-                                      );
+                                      final position =
+                                          renderBox.localToGlobal(
+                                              Offset.zero);
                                       final size = renderBox.size;
                                       final rect = position & size;
 
@@ -141,9 +151,8 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                                       OverlayMenuManager.showOrbitMenu(
                                         context: context,
                                         species: widget.species,
-                                        selectedCard: _buildSelectedCard(
-                                          context,
-                                        ),
+                                        selectedCard:
+                                            _buildSelectedCard(context),
                                         cardRect: rect,
                                         onDismiss: () {
                                           Provider.of<CardOverlayProvider>(
@@ -228,19 +237,17 @@ class _MarineSpeciesCardState extends State<MarineSpeciesCard> {
                     const Icon(
                       Icons.more_vert,
                       color: Colors.black87,
-                    ), // ⬅️ WARNA LEBIH GELAP
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-
-        // ⬛ Overlay Gelap Transparan
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.30), // Efek gelap
+              color: Colors.black.withOpacity(0.30),
               borderRadius: BorderRadius.circular(15),
             ),
           ),

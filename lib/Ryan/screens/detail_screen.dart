@@ -41,17 +41,16 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDark ? Colors.white : Colors.black;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final shadowColor = isDark ? Colors.black54 : Colors.black87;
-
+    
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: isDark ? Colors.black54 : Colors.blueAccent,
+        backgroundColor: Colors.blueAccent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: IconButton(
-            icon: Icon(Icons.arrow_back, color: textColor),
+            icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -129,7 +128,7 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: textColor,
-                            shadows: [Shadow(blurRadius: 6, color: shadowColor)],
+                            // shadows: [Shadow(blurRadius: 6, color: shadowColor)],
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -146,7 +145,7 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: textColor,
-                                shadows: [Shadow(blurRadius: 4, color: shadowColor)],
+                                // shadows: [Shadow(blurRadius: 4, color: shadowColor)],
                               ),
                             ),
                             if (section.text != null && section.text!.isNotEmpty)
@@ -183,7 +182,7 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                   color: textColor,
-                                                  shadows: [Shadow(blurRadius: 3, color: shadowColor)],
+                                                  // shadows: [Shadow(blurRadius: 3, color: shadowColor)],
                                                 ),
                                               ),
                                             ),

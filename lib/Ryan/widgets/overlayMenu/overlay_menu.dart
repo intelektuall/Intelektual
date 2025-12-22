@@ -264,12 +264,10 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                                   child: const Text(
                                     "Mengerti",
                                     style: TextStyle(
-                                      color:
-                                          Colors
-                                              .white, // ganti sesuai kebutuhan, misalnya Colors.black atau warna kustom
-                                      fontWeight:
-                                          FontWeight
-                                              .bold, // opsional, untuk mempercantik
+                                      color: Colors
+                                          .white, // ganti sesuai kebutuhan, misalnya Colors.black atau warna kustom
+                                      fontWeight: FontWeight
+                                          .bold, // opsional, untuk mempercantik
                                     ),
                                   ),
                                 ),
@@ -328,11 +326,10 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
 
                   await showCupertinoModalBottomSheet(
                     context: context,
-                    builder:
-                        (_) => ShareOptionsBottomSheet(
-                          species: widget.species,
-                          provider: provider,
-                        ),
+                    builder: (_) => ShareOptionsBottomSheet(
+                      species: widget.species,
+                      provider: provider,
+                    ),
                     expand: false,
                     backgroundColor: Colors.transparent,
                     enableDrag: true,
@@ -370,16 +367,17 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                   showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder:
-                        (_) => ReportDialog(
-                          onReport: () {
-                            provider.report(widget.species);
-                            noUndoCustomSnackbar(
-                              context,
-                              message: 'Species reported. Thank you!',
-                            );
-                          },
-                        ),
+                    builder: (context) {
+                      return ReportDialog(
+                        onReport: () {
+                          provider.report(widget.species);
+                          noUndoCustomSnackbar(
+                            context,
+                            message: 'Species reported. Thank you!',
+                          );
+                        },
+                      );
+                    },
                   );
                   break;
                 case 'Repost':
@@ -389,11 +387,14 @@ class _OverlayBackgroundMenuState extends State<OverlayBackgroundMenu>
                     category: widget.species.category,
                     method: 'Species Repost',
                   );
-                  showCustomSnackbar(
-                    context,
-                    message: 'Reposted! Added to your items',
-                    onUndo: () => provider.unrepost(widget.species),
-                  );
+                  Future.microtask(() {
+                    if (!mounted) return;
+                    showCustomSnackbar(
+                      context,
+                      message: 'Reposted! Added to your items',
+                      onUndo: () => provider.unrepost(widget.species),
+                    );
+                  });
                   break;
                 case 'Comment':
                   await _analytics.logComment(

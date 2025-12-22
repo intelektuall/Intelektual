@@ -1,24 +1,36 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// 🔴 TAMBAHAN 1 IMPORT SAJA (SAMA DENGAN CARD LAIN)
+import '../services/card_access_gate.dart';
+
 class FactCard extends StatelessWidget {
   final String title;
   final IconData icon;
   final String description;
-  final VoidCallback? onTap; // <<--- Tambahkan properti ini
+  final VoidCallback? onTap;
 
   const FactCard({
     super.key,
     required this.title,
     required this.icon,
     required this.description,
-    this.onTap, // <<--- Tambahkan di constructor
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( // <<--- Bungkus dengan GestureDetector
-      onTap: onTap,
+    return GestureDetector(
+      // 🔥 SATU-SATUNYA PERUBAHAN LOGIKA
+      onTap: () async {
+        if (onTap == null) return;
+
+        final allowed = await CardAccessGate.requestAccess(context);
+        if (allowed) {
+          onTap!();
+        }
+      },
+
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BackdropFilter(
@@ -27,10 +39,10 @@ class FactCard extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.grey.shade800,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.black.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
@@ -39,7 +51,7 @@ class FactCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.3),
                   ),
                   padding: const EdgeInsets.all(10),
                   child: Icon(
