@@ -31,11 +31,11 @@ class SpeciesCard extends StatelessWidget {
             6,
           ), // sedikit margin untuk spacing antar card
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.grey.shade800,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black,
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -93,11 +93,11 @@ class SpeciesCard extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.grey.shade800,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black,
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

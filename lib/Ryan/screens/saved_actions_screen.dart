@@ -20,9 +20,10 @@ Widget buildGrid<T>({
   double childAspectRatio = 0.9,
   bool shrinkWrap = false,
   ScrollPhysics physics = const ScrollPhysics(),
+  double paddingTop = 0,
 }) {
   return GridView.builder(
-    padding: const EdgeInsets.all(12),
+    padding: EdgeInsets.fromLTRB(12, paddingTop, 12, 12),
     itemCount: items.length,
     shrinkWrap: shrinkWrap,
     physics: physics,
@@ -452,6 +453,7 @@ class _ActionTabContent extends StatelessWidget {
           crossAxisCount: 2,
           spacing: 10,
           childAspectRatio: 0.9,
+          paddingTop: 24,
           builder:
               (item) => SpeciesCard(
                 title: item.name,
@@ -515,7 +517,7 @@ class _ActionTabContent extends StatelessWidget {
               ),
         )
         : ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.fromLTRB(3, 24, 3, 3),
           itemCount: allItems.length,
           itemBuilder: (context, index) {
             final item = allItems[index];
