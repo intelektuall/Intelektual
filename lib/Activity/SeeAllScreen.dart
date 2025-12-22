@@ -5,6 +5,7 @@ import '../Provider/hewan_provider.dart';
 import 'DetailScreen.dart';
 import 'add_animal_screen.dart';
 import 'pengajuan.dart';
+import '../Periklanan/interstitial_ad_manager.dart';
 
 class SeeAllScreen extends StatefulWidget {
   const SeeAllScreen({super.key});
@@ -24,16 +25,16 @@ class _SeeAllScreenState extends State<SeeAllScreen>
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
 
+    // Pre-load iklan saat screen pertama kali dibuka
+    Future.delayed(const Duration(seconds: 1), () {
+      InterstitialAdManager().loadInterstitialAd();
+    });
+
     // Pastikan data di-load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = context.read<HewanProvider>();
       if (provider.apiAnimals.isEmpty && !provider.isLoadingApi) {
-        print('SeeAllScreen: Memuat data dari API...');
         provider.fetchAnimalsFromAPI();
-      } else {
-        print(
-          'SeeAllScreen: Data sudah tersedia: ${provider.allAnimals.length} hewan',
-        );
       }
     });
   }
@@ -63,24 +64,18 @@ class _SeeAllScreenState extends State<SeeAllScreen>
       data = data.where((e) => e['location'] == lokasi).toList();
     }
 
-    // 🔧 FIX: Safe sorting dengan error handling
     try {
       data.sort((a, b) {
         DateTime aDate;
         DateTime bDate;
 
-        // Handle jika timestamp adalah DateTime object
         if (a['timestamp'] is DateTime) {
           aDate = a['timestamp'];
           bDate = b['timestamp'];
-        }
-        // Handle jika timestamp adalah String
-        else if (a['timestamp'] is String) {
+        } else if (a['timestamp'] is String) {
           aDate = DateTime.parse(a['timestamp']);
           bDate = DateTime.parse(b['timestamp']);
-        }
-        // Fallback ke DateTime.now()
-        else {
+        } else {
           aDate = DateTime.now();
           bDate = DateTime.now();
         }
@@ -88,14 +83,12 @@ class _SeeAllScreenState extends State<SeeAllScreen>
         return _sortNewest ? bDate.compareTo(aDate) : aDate.compareTo(bDate);
       });
     } catch (e) {
-      print('❌ Error sorting data: $e');
-      // Tetap return data meski sorting gagal
+      print('Error sorting data: $e');
     }
 
     return data;
   }
 
-  // 🔄 UPDATE: Widget untuk loading indicator
   Widget _buildLoadingIndicator() {
     return Center(
       child: Column(
@@ -109,7 +102,6 @@ class _SeeAllScreenState extends State<SeeAllScreen>
     );
   }
 
-  // 🔄 UPDATE: Widget untuk error state
   Widget _buildErrorWidget(String error) {
     return Center(
       child: Column(
@@ -143,7 +135,6 @@ class _SeeAllScreenState extends State<SeeAllScreen>
     );
   }
 
-  // UPDATE: Widget untuk menampilkan list/grid animals
   Widget _buildAnimalList(List<Map<String, dynamic>> animals, bool isDark) {
     if (animals.isEmpty) {
       return Center(
@@ -212,7 +203,6 @@ class _SeeAllScreenState extends State<SeeAllScreen>
               "Spesies Langka",
               style: TextStyle(color: isDark ? Colors.white : Colors.black),
             ),
-            // UPDATE: Tambah loading indicator kecil di appbar
             if (provider.isLoadingApi) ...[
               SizedBox(width: 8),
               SizedBox(
@@ -232,7 +222,6 @@ class _SeeAllScreenState extends State<SeeAllScreen>
         ),
         backgroundColor: isDark ? Colors.grey[900] : Colors.white,
         actions: [
-          // UPDATE: Tambah refresh button
           if (!provider.isLoadingApi)
             IconButton(
               icon: Icon(
@@ -371,7 +360,6 @@ class _SeeAllScreenState extends State<SeeAllScreen>
           ],
         ),
       ),
-      //UPDATE: Body dengan kondisi loading/error/data
       body: provider.isLoadingApi && provider.allAnimals.isEmpty
           ? _buildLoadingIndicator()
           : provider.apiError != null && provider.allAnimals.isEmpty
@@ -391,10 +379,18 @@ class _SeeAllScreenState extends State<SeeAllScreen>
         children: [
           FloatingActionButton.small(
             heroTag: 'addAnimal',
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => AddAnimalScreen()),
-            ),
+            onPressed: () async {
+              // Navigasi ke AddAnimalScreen
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AddAnimalScreen()),
+              );
+              
+              // Cek dan tampilkan iklan setelah kembali
+              Future.delayed(const Duration(milliseconds: 300), () {
+                InterstitialAdManager().checkAndShowInterstitialAd();
+              });
+            },
             tooltip: 'Ajukan Hewan Baru',
             backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
             foregroundColor: isDark ? Colors.white : Colors.white,
@@ -402,10 +398,12 @@ class _SeeAllScreenState extends State<SeeAllScreen>
           ),
           FloatingActionButton.small(
             heroTag: 'viewHistory',
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SubmissionHistoryScreen()),
-            ),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SubmissionHistoryScreen()),
+              );
+            },
             tooltip: 'Riwayat Pengajuan',
             backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
             foregroundColor: isDark ? Colors.white : Colors.white,
@@ -449,7 +447,6 @@ class AnimalCard extends StatelessWidget {
                 animal['image'],
                 fit: BoxFit.cover,
                 width: double.infinity,
-                //UPDATE: Tambah error builder untuk handle image error
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
