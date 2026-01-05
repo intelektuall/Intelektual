@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sopan_santun_app/Fauzan/Event/EventDataList/event_constants.dart';
+import 'package:sopan_santun_app/Fauzan/Event/Widget/custom_dropdown.dart';
 
 class TambahEventPage extends StatefulWidget {
   @override
@@ -13,16 +15,8 @@ class _TambahEventPageState extends State<TambahEventPage> {
   DateTime? selectedDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
-
-  final List<String> lokasiList = [
-    'Aceh',
-    'Medan',
-    'Jakarta',
-    'Surabaya',
-    'Bali',
-  ];
-
-  final List<String> kategoriList = ['Lingkungan', 'Edukasi', 'Sosial'];
+  String? lokasiError;
+  String? kategoriError;
 
   @override
   Widget build(BuildContext context) {
@@ -44,46 +38,61 @@ class _TambahEventPageState extends State<TambahEventPage> {
               SizedBox(height: 8),
               TextFormField(
                 decoration: inputDecoration("Masukkan nama event"),
-                validator:
-                    (val) => val == null || val.isEmpty ? "Wajib diisi" : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? "Wajib diisi" : null,
                 onChanged: (val) => namaEvent = val,
               ),
               SizedBox(height: 20),
 
               Text("Lokasi", style: labelStyle),
               SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: lokasi,
-                hint: Text("Pilih Lokasi"),
-                decoration: inputDecoration(null),
-                items:
-                    lokasiList
-                        .map(
-                          (lok) =>
-                              DropdownMenuItem(value: lok, child: Text(lok)),
-                        )
-                        .toList(),
-                onChanged: (val) => setState(() => lokasi = val),
-                validator: (val) => val == null ? "Wajib pilih lokasi" : null,
-              ),
-              SizedBox(height: 20),
 
+              CustomDropdown(
+                hint: "Pilih Provinsi",
+                value: lokasi,
+                items: provinces.where((p) => p != 'None').toList(),
+                onChanged: (val) {
+                  setState(() {
+                    lokasi = val;
+                    lokasiError = null;
+                  });
+                },
+              ),
+
+              if (lokasiError != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 8),
+                  child: Text(
+                    lokasiError!,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+
+              SizedBox(height: 20),
               Text("Kategori", style: labelStyle),
               SizedBox(height: 8),
-              DropdownButtonFormField<String>(
+
+              CustomDropdown(
+                hint: "Pilih Kategori",
                 value: kategori,
-                hint: Text("Pilih Kategori"),
-                decoration: inputDecoration(null),
-                items:
-                    kategoriList
-                        .map(
-                          (kat) =>
-                              DropdownMenuItem(value: kat, child: Text(kat)),
-                        )
-                        .toList(),
-                onChanged: (val) => setState(() => kategori = val),
-                validator: (val) => val == null ? "Wajib pilih kategori" : null,
+                items: eventCategories.where((c) => c != 'None').toList(),
+                onChanged: (val) {
+                  setState(() {
+                    kategori = val;
+                    kategoriError = null;
+                  });
+                },
               ),
+
+              if (kategoriError != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 8),
+                  child: Text(
+                    kategoriError!,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+
               SizedBox(height: 20),
 
               // ======================= TANGGAL ==========================
@@ -108,9 +117,8 @@ class _TambahEventPageState extends State<TambahEventPage> {
                           ? "Pilih tanggal"
                           : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
                     ).copyWith(prefixIcon: Icon(Icons.calendar_today_rounded)),
-                    validator:
-                        (_) =>
-                            selectedDate == null ? "Wajib pilih tanggal" : null,
+                    validator: (_) =>
+                        selectedDate == null ? "Wajib pilih tanggal" : null,
                   ),
                 ),
               ),
@@ -146,18 +154,17 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration: inputDecoration(
-                            startTime == null
-                                ? "Waktu mulai"
-                                : startTime!.format(context),
-                          ).copyWith(
-                            prefixIcon: Icon(Icons.access_time_rounded),
-                          ),
-                          validator:
-                              (_) =>
-                                  startTime == null
-                                      ? "Wajib pilih waktu mulai"
-                                      : null,
+                          decoration:
+                              inputDecoration(
+                                startTime == null
+                                    ? "Waktu mulai"
+                                    : startTime!.format(context),
+                              ).copyWith(
+                                prefixIcon: Icon(Icons.access_time_rounded),
+                              ),
+                          validator: (_) => startTime == null
+                              ? "Wajib pilih waktu mulai"
+                              : null,
                         ),
                       ),
                     ),
@@ -188,18 +195,17 @@ class _TambahEventPageState extends State<TambahEventPage> {
                       },
                       child: AbsorbPointer(
                         child: TextFormField(
-                          decoration: inputDecoration(
-                            endTime == null
-                                ? "Waktu selesai"
-                                : endTime!.format(context),
-                          ).copyWith(
-                            prefixIcon: Icon(Icons.access_time_outlined),
-                          ),
-                          validator:
-                              (_) =>
-                                  endTime == null
-                                      ? "Wajib pilih waktu selesai"
-                                      : null,
+                          decoration:
+                              inputDecoration(
+                                endTime == null
+                                    ? "Waktu selesai"
+                                    : endTime!.format(context),
+                              ).copyWith(
+                                prefixIcon: Icon(Icons.access_time_outlined),
+                              ),
+                          validator: (_) => endTime == null
+                              ? "Wajib pilih waktu selesai"
+                              : null,
                         ),
                       ),
                     ),
@@ -213,7 +219,18 @@ class _TambahEventPageState extends State<TambahEventPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    final isFormValid = _formKey.currentState!.validate();
+
+                    setState(() {
+                      lokasiError = lokasi == null
+                          ? "Wajib pilih lokasi"
+                          : null;
+                      kategoriError = kategori == null
+                          ? "Wajib pilih kategori"
+                          : null;
+                    });
+
+                    if (isFormValid && lokasi != null && kategori != null) {
                       Navigator.pop(context, {
                         'status': true,
                         'nama': namaEvent!,

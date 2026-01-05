@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dropdown_bottom_sheet.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String hint;
   final String? value;
   final List<String> items;
-  final Function(String?) onChanged;
+  final Function(String) onChanged;
 
   const CustomDropdown({
     super.key,
@@ -14,29 +15,50 @@ class CustomDropdown extends StatelessWidget {
     required this.onChanged,
   });
 
+  void _openSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return DropdownBottomSheet(
+          title: hint,
+          items: items,
+          onSelected: (val) {
+            Navigator.pop(context);
+            onChanged(val);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        // hapus hintText di sini, karena sekarang kita pakai 'hint' di DropdownButton
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        isDense: true,
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value, // null = tak ada filter
-          hint: Text(
-            hint,
-          ), // 👈 inilah yang menampilkan “Pilih Lokasi/Kategori”
-          isExpanded: true,
-          onChanged: onChanged,
-          items:
-              items
-                  .map(
-                    (e) => DropdownMenuItem<String>(value: e, child: Text(e)),
-                  )
-                  .toList(),
+    return InkWell(
+      onTap: () => _openSheet(context),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 14,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          isDense: true,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              value ?? hint,
+              style: TextStyle(
+                color: value == null ? Colors.grey : Colors.black,
+              ),
+            ),
+            const Icon(Icons.arrow_drop_down),
+          ],
         ),
       ),
     );

@@ -231,7 +231,7 @@ import 'Ryan/screens/newpage_unlocked.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // === Inisialisasi Google Mobile Ads ===
   try {
     await MobileAds.instance.initialize();
@@ -317,6 +317,9 @@ Future<void> main() async {
       ),
     ),
   );
+  // === Hapus database notifikasi lama untuk pengujian ===
+  // Jangan Hapus Program ini, dan gunakan hanya untuk pengujian saja
+  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatefulWidget {
@@ -371,7 +374,7 @@ class _MainAppState extends State<MainApp> {
       builder: (context, LocaleProvider, _) {
         return MaterialApp(
           locale: LocaleProvider.locale,
-           supportedLocales: const [
+          supportedLocales: const [
             Locale('id'),
             Locale('en'),
             Locale('zh'),

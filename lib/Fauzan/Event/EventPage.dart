@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopan_santun_app/Fauzan/Event/EventAdd.dart';
 import 'package:sopan_santun_app/Fauzan/Event/Widget/custom_dropdown.dart';
+import 'package:sopan_santun_app/Fauzan/Event/EventDataList/event_constants.dart';
 import 'Providers/event_provider.dart';
 import 'Notification/notification_provider.dart';
 import 'NotificationPage.dart';
@@ -87,14 +88,7 @@ class _EventLautPageState extends State<EventLautPage> {
                   child: CustomDropdown(
                     value: selectedLocation,
                     hint: "Pilih Lokasi",
-                    items: [
-                      'None',
-                      'Aceh',
-                      'Medan',
-                      'Jakarta',
-                      'Surabaya',
-                      'Bali',
-                    ],
+                    items: provinces,
                     onChanged: (val) {
                       setState(() {
                         selectedLocation = val == 'None' ? null : val;
@@ -108,7 +102,7 @@ class _EventLautPageState extends State<EventLautPage> {
                   child: CustomDropdown(
                     hint: "Pilih Kategori",
                     value: selectedCategory,
-                    items: ['None', 'Lingkungan', 'Edukasi', 'Sosial'],
+                    items: eventCategories,
                     onChanged: (val) {
                       setState(() {
                         selectedCategory = val == 'None' ? null : val;
