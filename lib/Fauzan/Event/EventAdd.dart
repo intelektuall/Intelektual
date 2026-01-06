@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sopan_santun_app/Fauzan/Event/EventDataList/event_constants.dart';
 import 'package:sopan_santun_app/Fauzan/Event/Widget/custom_dropdown.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class TambahEventPage extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class _TambahEventPageState extends State<TambahEventPage> {
   final _formKey = GlobalKey<FormState>();
   String? namaEvent;
   String? lokasi;
+  String? kota;
+  String? kotaError;
   String? kategori;
   DateTime? selectedDate;
   TimeOfDay? startTime;
@@ -19,14 +23,46 @@ class _TambahEventPageState extends State<TambahEventPage> {
   String? kategoriError;
 
   @override
+  void initState() {
+    super.initState();
+    _detectProvinceFromGPS();
+  }
+
+  Future<void> _detectProvinceFromGPS() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isEmpty) return;
+
+      final rawProvince = placemarks.first.administrativeArea ?? '';
+      final normalized = normalizeProvince(rawProvince);
+
+      if (provinces.contains(normalized)) {
+        setState(() {
+          lokasi = normalized; // 🔥 AUTO SELECT DROPDOWN
+        });
+      }
+    } catch (e) {
+      debugPrint('GPS error: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Tambah Event"),
         backgroundColor: Colors.blueAccent.withOpacity(0.7),
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -64,6 +100,30 @@ class _TambahEventPageState extends State<TambahEventPage> {
                   padding: const EdgeInsets.only(top: 6, left: 8),
                   child: Text(
                     lokasiError!,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+
+              SizedBox(height: 12),
+
+              // ================= KOTA =================
+              CustomDropdown(
+                hint: lokasi == null ? "Pilih Provinsi dahulu" : "Pilih Kota",
+                value: kota,
+                items: lokasi == null ? [] : citiesByProvince[lokasi] ?? [],
+                onChanged: (val) {
+                  setState(() {
+                    kota = val;
+                    kotaError = null;
+                  });
+                },
+              ),
+
+              if (kotaError != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 8),
+                  child: Text(
+                    kotaError!,
                     style: TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
@@ -223,19 +283,24 @@ class _TambahEventPageState extends State<TambahEventPage> {
 
                     setState(() {
                       lokasiError = lokasi == null
-                          ? "Wajib pilih lokasi"
+                          ? "Wajib pilih provinsi"
                           : null;
+                      kotaError = kota == null ? "Wajib pilih kota" : null;
                       kategoriError = kategori == null
                           ? "Wajib pilih kategori"
                           : null;
                     });
 
-                    if (isFormValid && lokasi != null && kategori != null) {
+                    if (isFormValid &&
+                        lokasi != null &&
+                        kota != null &&
+                        kategori != null) {
                       Navigator.pop(context, {
                         'status': true,
                         'nama': namaEvent!,
                         'kategori': kategori!,
                         'lokasi': lokasi!,
+                        'kota': kota!,
                         'tanggal': selectedDate,
                         'startTime': startTime!.format(context),
                         'endTime': endTime!.format(context),

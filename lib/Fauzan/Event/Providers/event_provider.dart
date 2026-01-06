@@ -5,6 +5,7 @@ class Event {
   final String title;
   final String category;
   final String location;
+  final String city;
   final DateTime? date;
   final String? startTime;
   final String? endTime;
@@ -14,6 +15,7 @@ class Event {
     required this.title,
     required this.category,
     required this.location,
+    required this.city,
     this.date,
     this.startTime,
     this.endTime,
@@ -32,12 +34,12 @@ class EventProvider with ChangeNotifier {
   }
 
   Future<void> loadEvents() async {
-    // ✅ Dummy event tetap ada
     _events.clear();
     _events.addAll([
       Event(
         title: "Bersih Pantai",
-        location: "Bali",
+        location: "Bali", // ✅ Provinsi
+        city: "Denpasar",
         category: "Lingkungan",
         date: DateTime(2025, 7, 15),
         startTime: "08:00",
@@ -45,7 +47,8 @@ class EventProvider with ChangeNotifier {
       ),
       Event(
         title: "Seminar Kelautan",
-        location: "Jakarta",
+        location: "DKI Jakarta", // ✅ BUKAN "Jakarta"
+        city: "Jakarta Selatan",
         category: "Edukasi",
         date: DateTime(2025, 7, 20),
         startTime: "13:30",
@@ -53,7 +56,8 @@ class EventProvider with ChangeNotifier {
       ),
       Event(
         title: "Cleaning Sungai Sembahe",
-        location: "Medan",
+        location: "Sumatera Utara", // ✅ BUKAN "Medan"
+        city: "Medan",
         category: "Sosial",
         date: DateTime(2025, 7, 20),
         startTime: "13:30",
