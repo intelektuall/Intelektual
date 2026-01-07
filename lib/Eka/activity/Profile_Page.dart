@@ -12,7 +12,11 @@ import '/Eka/provider/settings_provider.dart';
 import '/Eka/activity/Profile_Edit.dart';
 import '/Eka/activity/Profile_Settings.dart';
 import '/Eka/activity/Profile_About.dart';
+
+// 🔧 MODIFIKASI (dependency injection)
 import '/Eka/provider/firestore_service.dart';
+import '/Eka/provider/firestore_service_base.dart';
+
 import '/Eka/provider/firebase_helper.dart';
 import '/Eka/provider/permission_helper.dart';
 import '/Periklanan/HalamanHapusIklan.dart';
@@ -21,7 +25,12 @@ import '/Periklanan/HalamanHapusIklan.dart';
 import '/Fauzan/LoginPage/login_screen.dart';
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({super.key});
+  final FirestoreServiceBase firestore;
+
+  MyProfile({
+    super.key,
+    FirestoreServiceBase? firestore,
+  }) : firestore = firestore ?? FirestoreService();
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -114,9 +123,8 @@ class _MyProfileState extends State<MyProfile> {
     }
 
     if (!granted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Akses ditolak")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Akses ditolak")));
       return;
     }
 
@@ -129,7 +137,7 @@ class _MyProfileState extends State<MyProfile> {
       await _saveLocalImage(file);
 
       final base64Image = base64Encode(await file.readAsBytes());
-      await FirestoreService().saveProfileData({
+      await widget.firestore.saveProfileData({
         'profileImageBase64': base64Image,
       });
 
@@ -173,7 +181,7 @@ class _MyProfileState extends State<MyProfile> {
               final file = File(p.join(dir.path, 'profile_image.jpg'));
               if (await file.exists()) await file.delete();
 
-              await FirestoreService().saveProfileData({
+              await widget.firestore.saveProfileData({
                 'profileImageBase64': '',
               });
 
@@ -188,9 +196,8 @@ class _MyProfileState extends State<MyProfile> {
   // ================= MENU =================
   void handleMenuSelection(String value) async {
     if (currentData.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Data belum dimuat")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Data belum dimuat")));
       return;
     }
 
@@ -287,7 +294,7 @@ class _MyProfileState extends State<MyProfile> {
         ],
       ),
       body: StreamBuilder<Map<String, dynamic>>(
-        stream: FirestoreService().getProfileStream(),
+        stream: widget.firestore.getProfileStream(),
         builder: (context, snap) {
           if (!snap.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -320,11 +327,7 @@ class _MyProfileState extends State<MyProfile> {
                           child: const CircleAvatar(
                             radius: 14,
                             backgroundColor: Colors.blueAccent,
-                            child: Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Colors.white,
-                            ),
+                            child: Icon(Icons.edit, size: 16, color: Colors.white),
                           ),
                         ),
                       ],
@@ -346,38 +349,13 @@ class _MyProfileState extends State<MyProfile> {
                   ],
                 ),
               ),
-              buildInfoTile(
-                "Nomor HP",
-                currentData['nomorHP'] ?? '',
-                sub,
-                text,
-              ),
-              buildInfoTile(
-                "Jenis Kelamin",
-                currentData['jenisKelamin'] ?? '',
-                sub,
-                text,
-              ),
+              buildInfoTile("Nomor HP", currentData['nomorHP'] ?? '', sub, text),
+              buildInfoTile("Jenis Kelamin", currentData['jenisKelamin'] ?? '', sub, text),
               buildInfoTile("Umur", currentData['umur'] ?? '', sub, text),
-              buildInfoTile(
-                "TTL",
-                currentData['tempatTanggalLahir'] ?? '',
-                sub,
-                text,
-              ),
+              buildInfoTile("TTL", currentData['tempatTanggalLahir'] ?? '', sub, text),
               const SizedBox(height: 12),
-              buildInfoTile(
-                "Pekerjaan",
-                currentData['pekerjaan'] ?? '',
-                sub,
-                text,
-              ),
-              buildInfoTile(
-                "Alamat Rumah",
-                currentData['alamatRumah'] ?? '',
-                sub,
-                text,
-              ),
+              buildInfoTile("Pekerjaan", currentData['pekerjaan'] ?? '', sub, text),
+              buildInfoTile("Alamat Rumah", currentData['alamatRumah'] ?? '', sub, text),
               buildInfoTile(
                 "Hobi",
                 (currentData['hobi'] is List)
@@ -386,34 +364,17 @@ class _MyProfileState extends State<MyProfile> {
                 sub,
                 text,
               ),
-              buildInfoTile(
-                "Status Pernikahan",
-                currentData['statusPernikahan'] ?? '',
-                sub,
-                text,
-              ),
+              buildInfoTile("Status Pernikahan", currentData['statusPernikahan'] ?? '', sub, text),
               buildInfoTile("Bio", currentData['bio'] ?? '', sub, text),
-
-              // ================= LOG OUT BUTTON =================
               const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Colors.black,
-                    size: 20,
-                  ),
+                  icon: const Icon(Icons.logout, color: Colors.black),
                   label: const Text(
                     "Log Out",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(vertical: 14),
@@ -421,9 +382,7 @@ class _MyProfileState extends State<MyProfile> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const MyLoginAndSignin(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const MyLoginAndSignin()),
                       (route) => false,
                     );
                   },
