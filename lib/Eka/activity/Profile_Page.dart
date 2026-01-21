@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // ✅ FIX UTAMA
 import 'package:image_picker/image_picker.dart';
 import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
@@ -13,24 +15,25 @@ import '/Eka/activity/Profile_Edit.dart';
 import '/Eka/activity/Profile_Settings.dart';
 import '/Eka/activity/Profile_About.dart';
 
-// 🔧 MODIFIKASI (dependency injection)
 import '/Eka/provider/firestore_service.dart';
 import '/Eka/provider/firestore_service_base.dart';
-
 import '/Eka/provider/firebase_helper.dart';
 import '/Eka/provider/permission_helper.dart';
-import '/Periklanan/HalamanHapusIklan.dart';
 
-// ✅ IMPORT LOGIN SCREEN
+import '/Periklanan/HalamanHapusIklan.dart';
 import '/Fauzan/LoginPage/login_screen.dart';
+
+// 🔑 FIX UTAMA: FLAG KHUSUS INTEGRATION TEST
+const bool isIntegrationTest = bool.fromEnvironment(
+  'INTEGRATION_TEST',
+  defaultValue: false,
+);
 
 class MyProfile extends StatefulWidget {
   final FirestoreServiceBase firestore;
 
-  MyProfile({
-    super.key,
-    FirestoreServiceBase? firestore,
-  }) : firestore = firestore ?? FirestoreService();
+  MyProfile({super.key, FirestoreServiceBase? firestore})
+    : firestore = firestore ?? FirestoreService();
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -38,8 +41,9 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
   final ImagePicker _picker = ImagePicker();
-  bool _isUploading = false;
   File? _localImageFile;
+  bool _isUploading = false;
+
   Map<String, dynamic> currentData = {};
 
   @override
@@ -49,6 +53,7 @@ class _MyProfileState extends State<MyProfile> {
     _loadLocalImage();
   }
 
+  // ================= LOCAL IMAGE =================
   Future<void> _loadLocalImage() async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File(p.join(dir.path, 'profile_image.jpg'));
@@ -64,7 +69,7 @@ class _MyProfileState extends State<MyProfile> {
     setState(() => _localImageFile = file);
   }
 
-  // ================= PRE PERMISSION =================
+  // ================= PERMISSION DIALOG =================
   Future<bool> _showPermissionReasonDialog({
     required String title,
     required String message,
@@ -123,8 +128,9 @@ class _MyProfileState extends State<MyProfile> {
     }
 
     if (!granted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Akses ditolak")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Akses ditolak")));
       return;
     }
 
@@ -133,6 +139,7 @@ class _MyProfileState extends State<MyProfile> {
       if (picked == null) return;
 
       setState(() => _isUploading = true);
+
       final file = File(picked.path);
       await _saveLocalImage(file);
 
@@ -193,25 +200,19 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  // ================= MENU =================
-  void handleMenuSelection(String value) async {
-    if (currentData.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Data belum dimuat")));
-      return;
-    }
+  // ================= MENU HANDLER =================
+  Future<void> _handleMenuSelection(String value) async {
+    if (currentData.isEmpty) return;
 
-    Widget page = const SizedBox();
+    Widget page;
 
     if (value == 'edit') {
-      String hobi = "";
-      if (currentData['hobi'] is List) {
-        hobi = (currentData['hobi'] as List).join(", ");
-      } else {
-        hobi = currentData['hobi'] ?? '';
-      }
+      final hobi = (currentData['hobi'] is List)
+          ? (currentData['hobi'] as List).join(', ')
+          : currentData['hobi'] ?? '';
 
       page = ProfileEdit(
+        firestore: widget.firestore,
         pekerjaan: currentData['pekerjaan'] ?? '',
         alamatRumah: currentData['alamatRumah'] ?? '',
         hobi: hobi,
@@ -263,6 +264,7 @@ class _MyProfileState extends State<MyProfile> {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
     final isDark = settings.backgroundMode == "Hitam";
+
     final bg = isDark ? Colors.black : Colors.grey[100]!;
     final text = isDark ? Colors.white : Colors.black87;
     final sub = isDark ? Colors.grey[400]! : Colors.blueGrey;
@@ -283,25 +285,39 @@ class _MyProfileState extends State<MyProfile> {
               );
             },
           ),
+
+          // 🔑 POPUP MENU (PRODUCTION)
           PopupMenuButton<String>(
-            onSelected: handleMenuSelection,
+            key: const Key('profile_menu'),
+            onSelected: _handleMenuSelection,
             itemBuilder: (_) => const [
               PopupMenuItem(value: 'edit', child: Text('Edit Profil')),
               PopupMenuItem(value: 'settings', child: Text('Settings')),
               PopupMenuItem(value: 'about', child: Text('About Us')),
             ],
           ),
+
+          // 🧪 TEST-ONLY BUTTON (DEBUG & TEST MODE)
+          if (isIntegrationTest)
+            IconButton(
+              key: const Key('test_edit_profile'),
+              icon: const Icon(Icons.edit),
+              onPressed: () => _handleMenuSelection('edit'),
+            ),
         ],
       ),
       body: StreamBuilder<Map<String, dynamic>>(
         stream: widget.firestore.getProfileStream(),
+        initialData: const {},
         builder: (context, snap) {
-          if (!snap.hasData) {
+          final data = snap.data ?? {};
+
+          if (data.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          currentData = snap.data!;
-          final base64 = currentData['profileImageBase64'];
+          currentData = data;
+          final base64 = data['profileImageBase64'];
 
           ImageProvider avatar;
           if (_localImageFile != null) {
@@ -327,7 +343,11 @@ class _MyProfileState extends State<MyProfile> {
                           child: const CircleAvatar(
                             radius: 14,
                             backgroundColor: Colors.blueAccent,
-                            child: Icon(Icons.edit, size: 16, color: Colors.white),
+                            child: Icon(
+                              Icons.edit,
+                              size: 16,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -337,43 +357,60 @@ class _MyProfileState extends State<MyProfile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          currentData['nama'] ?? '',
+                          data['nama'] ?? '',
                           style: TextStyle(color: text, fontSize: 20),
                         ),
-                        Text(
-                          currentData['email'] ?? '',
-                          style: TextStyle(color: sub),
-                        ),
+                        Text(data['email'] ?? '', style: TextStyle(color: sub)),
                       ],
                     ),
                   ],
                 ),
               ),
-              buildInfoTile("Nomor HP", currentData['nomorHP'] ?? '', sub, text),
-              buildInfoTile("Jenis Kelamin", currentData['jenisKelamin'] ?? '', sub, text),
-              buildInfoTile("Umur", currentData['umur'] ?? '', sub, text),
-              buildInfoTile("TTL", currentData['tempatTanggalLahir'] ?? '', sub, text),
-              const SizedBox(height: 12),
-              buildInfoTile("Pekerjaan", currentData['pekerjaan'] ?? '', sub, text),
-              buildInfoTile("Alamat Rumah", currentData['alamatRumah'] ?? '', sub, text),
+              buildInfoTile("Nomor HP", data['nomorHP'] ?? '', sub, text),
               buildInfoTile(
-                "Hobi",
-                (currentData['hobi'] is List)
-                    ? (currentData['hobi'] as List).join(", ")
-                    : currentData['hobi'] ?? '',
+                "Jenis Kelamin",
+                data['jenisKelamin'] ?? '',
                 sub,
                 text,
               ),
-              buildInfoTile("Status Pernikahan", currentData['statusPernikahan'] ?? '', sub, text),
-              buildInfoTile("Bio", currentData['bio'] ?? '', sub, text),
+              buildInfoTile("Umur", data['umur'] ?? '', sub, text),
+              buildInfoTile("TTL", data['tempatTanggalLahir'] ?? '', sub, text),
+              const SizedBox(height: 12),
+              buildInfoTile("Pekerjaan", data['pekerjaan'] ?? '', sub, text),
+              buildInfoTile(
+                "Alamat Rumah",
+                data['alamatRumah'] ?? '',
+                sub,
+                text,
+              ),
+              buildInfoTile(
+                "Hobi",
+                (data['hobi'] is List)
+                    ? (data['hobi'] as List).join(', ')
+                    : data['hobi'] ?? '',
+                sub,
+                text,
+              ),
+              buildInfoTile(
+                "Status Pernikahan",
+                data['statusPernikahan'] ?? '',
+                sub,
+                text,
+              ),
+              buildInfoTile("Bio", data['bio'] ?? '', sub, text),
               const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
+                  key: const Key('btn_logout'),
                   icon: const Icon(Icons.logout, color: Colors.black),
                   label: const Text(
                     "Log Out",
-                    style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -382,12 +419,15 @@ class _MyProfileState extends State<MyProfile> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => const MyLoginAndSignin()),
+                      MaterialPageRoute(
+                        builder: (_) => const MyLoginAndSignin(),
+                      ),
                       (route) => false,
                     );
                   },
                 ),
               ),
+
               const SizedBox(height: 30),
             ],
           );

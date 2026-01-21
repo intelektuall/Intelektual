@@ -1,0 +1,83 @@
+import 'dart:async';
+
+import 'package:sopan_santun_app/Eka/provider/firestore_service_base.dart';
+
+class MockFirestoreProfileEdit implements FirestoreServiceBase {
+  /// =================================================
+  /// INTERNAL DATA
+  /// =================================================
+  Map<String, dynamic> _data = {
+    'nama': 'Mock User',
+    'email': 'mock@mail.com',
+    'nomorHP': '08123456789',
+    'jenisKelamin': 'Laki-laki',
+    'umur': '22',
+    'tempatTanggalLahir': 'Bandung, 01/01/2002',
+    'pekerjaan': 'QA Engineer',
+    'alamatRumah': 'Jl. Testing No. 1',
+    'hobi': ['Coding', 'Testing'],
+    'statusPernikahan': 'Belum Kawin',
+    'bio': 'Ini data dari mock firestore',
+    'profileImageBase64': '',
+  };
+
+  /// =================================================
+  /// STREAM CONTROLLER (🔥 FIX UTAMA)
+  /// =================================================
+  late final StreamController<Map<String, dynamic>> _controller =
+      StreamController<Map<String, dynamic>>.broadcast(
+    onListen: () {
+      // 🔥 KIRIM DATA TERAKHIR SAAT LISTENER MASUK
+      _controller.add(Map<String, dynamic>.from(_data));
+    },
+  );
+
+  /// =================================================
+  /// STREAM
+  /// =================================================
+  @override
+  Stream<Map<String, dynamic>> getProfileStream([String? userId]) {
+    return _controller.stream;
+  }
+
+  /// =================================================
+  /// GET ONCE
+  /// =================================================
+  @override
+  Future<Map<String, dynamic>> getProfileOnce([String? userId]) async {
+    return Map<String, dynamic>.from(_data);
+  }
+
+  /// =================================================
+  /// SAVE (REALTIME UPDATE)
+  /// =================================================
+  @override
+  Future<void> saveProfileData(
+    Map<String, dynamic> data, [
+    String? userId,
+  ]) async {
+    _data = {
+      ..._data,
+      ...data,
+    };
+
+    // 🔥 PENTING: UPDATE STREAM
+    _controller.add(Map<String, dynamic>.from(_data));
+  }
+
+  /// =================================================
+  /// DELETE
+  /// =================================================
+  @override
+  Future<void> deleteProfile([String? userId]) async {
+    _data = {};
+    _controller.add({});
+  }
+
+  /// =================================================
+  /// CLEANUP
+  /// =================================================
+  void dispose() {
+    _controller.close();
+  }
+}

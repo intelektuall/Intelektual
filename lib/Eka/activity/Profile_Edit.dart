@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '/Eka/provider/firestore_service.dart';
-import '/Eka/provider/firebase_helper.dart';
 import 'package:intl/intl.dart';
 
+import '/Eka/provider/firestore_service_base.dart';
+import '/Eka/provider/firebase_helper.dart';
+
 class ProfileEdit extends StatefulWidget {
+  final FirestoreServiceBase firestore;
   final String pekerjaan, alamatRumah, hobi, status, bio;
 
   const ProfileEdit({
     super.key,
+    required this.firestore,
     required this.pekerjaan,
     required this.alamatRumah,
     required this.hobi,
@@ -34,11 +36,13 @@ class _ProfileEditState extends State<ProfileEdit> {
   late TextEditingController hobiController;
   late TextEditingController statusController;
   late TextEditingController bioController;
+
   bool agree = false;
 
   @override
   void initState() {
     super.initState();
+
     namaController = TextEditingController();
     emailController = TextEditingController();
     nomorHPController = TextEditingController();
@@ -48,13 +52,7 @@ class _ProfileEditState extends State<ProfileEdit> {
 
     pekerjaanController = TextEditingController(text: widget.pekerjaan);
     alamatController = TextEditingController(text: widget.alamatRumah);
-
-    // Hobi bisa list atau string
-    final hobiString = widget.hobi is List
-        ? (widget.hobi as List).join(", ")
-        : widget.hobi;
-    hobiController = TextEditingController(text: hobiString);
-
+    hobiController = TextEditingController(text: widget.hobi);
     statusController = TextEditingController(text: widget.status);
     bioController = TextEditingController(text: widget.bio);
 
@@ -63,48 +61,45 @@ class _ProfileEditState extends State<ProfileEdit> {
     _loadExistingData();
   }
 
+  // ================= LOAD DATA (MOCK / REAL) =================
   Future<void> _loadExistingData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
+    final data = await widget.firestore.getProfileOnce();
+    if (data.isEmpty) return;
 
-    final data = await FirestoreService().getProfileOnce(user.uid);
-    if (data.isNotEmpty) {
-      setState(() {
-        namaController.text = data['nama'] ?? user.displayName ?? '';
-        emailController.text = data['email'] ?? user.email ?? '';
-        nomorHPController.text = data['nomorHP'] ?? '';
-        jenisKelaminController.text = data['jenisKelamin'] ?? '';
-        pekerjaanController.text = data['pekerjaan'] ?? '';
-        alamatController.text = data['alamatRumah'] ?? '';
+    setState(() {
+      namaController.text = data['nama'] ?? '';
+      emailController.text = data['email'] ?? '';
+      nomorHPController.text = data['nomorHP'] ?? '';
+      jenisKelaminController.text = data['jenisKelamin'] ?? '';
+      pekerjaanController.text = data['pekerjaan'] ?? '';
+      alamatController.text = data['alamatRumah'] ?? '';
 
-        if (data['hobi'] is List) {
-          hobiController.text = (data['hobi'] as List).join(', ');
-        } else {
-          hobiController.text = data['hobi'] ?? '';
-        }
+      if (data['hobi'] is List) {
+        hobiController.text = (data['hobi'] as List).join(', ');
+      } else {
+        hobiController.text = data['hobi'] ?? '';
+      }
 
-        statusController.text = data['statusPernikahan'] ?? '';
-        bioController.text = data['bio'] ?? '';
+      statusController.text = data['statusPernikahan'] ?? '';
+      bioController.text = data['bio'] ?? '';
 
-        // 🔹 Pisahkan tempat dan tanggal lahir kalau ada datanya
-        final ttl = data['tempatTanggalLahir'] ?? '';
-        if (ttl.contains(',')) {
-          final parts = ttl.split(',');
-          tempatLahirController.text = parts[0].trim();
-          final datePart = parts.length > 1 ? parts[1].trim() : '';
-          try {
-            selectedTanggalLahir = DateFormat(
-              "dd/MM/yyyy",
-            ).parseStrict(datePart);
-            _updateUmur();
-          } catch (_) {}
-        }
-      });
-    }
+      final ttl = data['tempatTanggalLahir'] ?? '';
+      if (ttl.contains(',')) {
+        final parts = ttl.split(',');
+        tempatLahirController.text = parts[0].trim();
+        try {
+          selectedTanggalLahir = DateFormat(
+            'dd/MM/yyyy',
+          ).parseStrict(parts[1].trim());
+          _updateUmur();
+        } catch (_) {}
+      }
+    });
   }
 
   void _updateUmur() {
     if (selectedTanggalLahir == null) return;
+
     final today = DateTime.now();
     int age = today.year - selectedTanggalLahir!.year;
     if (today.month < selectedTanggalLahir!.month ||
@@ -112,9 +107,8 @@ class _ProfileEditState extends State<ProfileEdit> {
             today.day < selectedTanggalLahir!.day)) {
       age--;
     }
-    setState(() {
-      umurController.text = age.toString();
-    });
+
+    umurController.text = age.toString();
   }
 
   Future<void> _selectTanggalLahir(BuildContext context) async {
@@ -126,11 +120,58 @@ class _ProfileEditState extends State<ProfileEdit> {
       helpText: 'Pilih Tanggal Lahir',
       locale: const Locale('id', 'ID'),
     );
+
     if (picked != null) {
       setState(() {
         selectedTanggalLahir = picked;
         _updateUmur();
       });
+    }
+  }
+
+  Future<void> saveData() async {
+    if (!agree) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Harap setujui perubahan terlebih dahulu"),
+        ),
+      );
+      return;
+    }
+
+    List<String> hobiList = [];
+    if (hobiController.text.trim().isNotEmpty) {
+      hobiList = hobiController.text
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+
+    String tempatTanggalLahir = tempatLahirController.text.trim();
+    if (selectedTanggalLahir != null) {
+      tempatTanggalLahir +=
+          ", ${DateFormat('dd/MM/yyyy').format(selectedTanggalLahir!)}";
+    }
+
+    final updatedData = {
+      'nama': namaController.text.trim(),
+      'email': emailController.text.trim(),
+      'nomorHP': nomorHPController.text.trim(),
+      'jenisKelamin': jenisKelaminController.text.trim(),
+      'umur': umurController.text.trim(),
+      'tempatTanggalLahir': tempatTanggalLahir,
+      'pekerjaan': pekerjaanController.text.trim(),
+      'alamatRumah': alamatController.text.trim(),
+      'hobi': hobiList,
+      'statusPernikahan': statusController.text.trim(),
+      'bio': bioController.text.trim(),
+    };
+
+    await widget.firestore.saveProfileData(updatedData);
+
+    if (mounted) {
+      Navigator.pop(context, updatedData);
     }
   }
 
@@ -150,80 +191,10 @@ class _ProfileEditState extends State<ProfileEdit> {
     super.dispose();
   }
 
-  Future<void> saveData() async {
-    if (!agree) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Harap setujui perubahan terlebih dahulu"),
-        ),
-      );
-      return;
-    }
-
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("User belum login")));
-      return;
-    }
-
-    // Konversi hobi ke list
-    List<String> hobiList = [];
-    if (hobiController.text.trim().isNotEmpty) {
-      hobiList = hobiController.text
-          .split(',')
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList();
-    }
-
-    // Format Tempat/Tanggal Lahir
-    String tempatTanggalLahir = tempatLahirController.text.trim();
-    if (selectedTanggalLahir != null) {
-      final formattedDate = DateFormat(
-        'dd/MM/yyyy',
-      ).format(selectedTanggalLahir!);
-      tempatTanggalLahir = "$tempatTanggalLahir, $formattedDate";
-    }
-
-    final updatedData = {
-      'nama': namaController.text.trim(),
-      'email': emailController.text.trim(),
-      'nomorHP': nomorHPController.text.trim(),
-      'jenisKelamin': jenisKelaminController.text.trim(),
-      'umur': umurController.text.trim(),
-      'tempatTanggalLahir': tempatTanggalLahir,
-      'pekerjaan': pekerjaanController.text.trim(),
-      'alamatRumah': alamatController.text.trim(),
-      'hobi': hobiList,
-      'statusPernikahan': statusController.text.trim(),
-      'bio': bioController.text.trim(),
-    };
-
-    try {
-      await FirestoreService().saveProfileData(updatedData, user.uid);
-      FirebaseAnalyticsHelper.logEvent(
-        name: 'profile_edit_saved',
-        parameters: {'fields': updatedData.keys.join(',')},
-      );
-
-      if (mounted) {
-        Navigator.pop(context, updatedData);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Perubahan berhasil disimpan")),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Gagal menyimpan: $e")));
-    }
-  }
-
   Widget buildEditableField(
     String label,
-    TextEditingController controller, {
+    TextEditingController controller,
+    Key fieldKey, {
     int maxLines = 1,
     bool readOnly = false,
     String? hintText,
@@ -236,6 +207,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           TextField(
+            key: fieldKey,
             controller: controller,
             readOnly: readOnly,
             maxLines: maxLines,
@@ -268,6 +240,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               Expanded(
                 flex: 2,
                 child: TextField(
+                  key: const Key('field_tempat_lahir'),
                   controller: tempatLahirController,
                   decoration: InputDecoration(
                     hintText: "Tempat lahir",
@@ -282,6 +255,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               Expanded(
                 flex: 2,
                 child: InkWell(
+                  key: const Key('field_tanggal_lahir'),
                   onTap: () => _selectTanggalLahir(context),
                   child: InputDecorator(
                     decoration: InputDecoration(
@@ -315,51 +289,92 @@ class _ProfileEditState extends State<ProfileEdit> {
         backgroundColor: Colors.blueAccent,
         title: const Text("Edit Profil", style: TextStyle(color: Colors.white)),
       ),
-      body: ListView(
+      body: SingleChildScrollView(
+        key: const Key('profile_edit_scroll'),
         padding: const EdgeInsets.only(top: 12, bottom: 24),
-        children: [
-          buildEditableField("Nama", namaController),
-          buildEditableField("Email", emailController, readOnly: true),
-          buildEditableField("Nomor HP", nomorHPController),
-          buildEditableField("Jenis Kelamin", jenisKelaminController),
-          buildEditableField("Umur", umurController, readOnly: true),
-          buildTempatTanggalField(),
-          buildEditableField("Pekerjaan", pekerjaanController),
-          buildEditableField("Alamat Rumah", alamatController),
-          buildEditableField(
-            "Hobi",
-            hobiController,
-            hintText:
-                "Pisahkan dengan koma (contoh: Membaca, Menulis, Traveling)",
-          ),
-          buildEditableField("Status Pernikahan", statusController),
-          buildEditableField("Bio", bioController, maxLines: 3),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CheckboxListTile(
-              title: const Text("Saya menyetujui untuk menyimpan perubahan"),
-              value: agree,
-              onChanged: (val) => setState(() => agree = val ?? false),
+        child: Column(
+          children: [
+            buildEditableField("Nama", namaController, const Key('field_nama')),
+            buildEditableField(
+              "Email",
+              emailController,
+              const Key('field_email'),
+              readOnly: true,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ElevatedButton(
-              onPressed: agree ? saveData : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            buildEditableField(
+              "Nomor HP",
+              nomorHPController,
+              const Key('field_nomor_hp'),
+            ),
+            buildEditableField(
+              "Jenis Kelamin",
+              jenisKelaminController,
+              const Key('field_jenis_kelamin'),
+            ),
+            buildEditableField(
+              "Umur",
+              umurController,
+              const Key('field_umur'),
+              readOnly: true,
+            ),
+            buildTempatTanggalField(),
+            buildEditableField(
+              "Pekerjaan",
+              pekerjaanController,
+              const Key('field_pekerjaan'),
+            ),
+            buildEditableField(
+              "Alamat Rumah",
+              alamatController,
+              const Key('field_alamat'),
+            ),
+            buildEditableField(
+              "Hobi",
+              hobiController,
+              const Key('field_hobi'),
+              hintText:
+                  "Pisahkan dengan koma (contoh: Membaca, Menulis, Traveling)",
+            ),
+            buildEditableField(
+              "Status Pernikahan",
+              statusController,
+              const Key('field_status'),
+            ),
+            buildEditableField(
+              "Bio",
+              bioController,
+              const Key('field_bio'),
+              maxLines: 3,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CheckboxListTile(
+                key: const Key('checkbox_agree'),
+                title: const Text("Saya menyetujui untuk menyimpan perubahan"),
+                value: agree,
+                onChanged: (val) => setState(() => agree = val ?? false),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                key: const Key('btn_save_profile'),
+                onPressed: agree ? saveData : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Simpan Perubahan",
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              child: const Text(
-                "Simpan Perubahan",
-                style: TextStyle(color: Colors.white),
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
