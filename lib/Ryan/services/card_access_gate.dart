@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/user_access_provider.dart';
 import '../widgets/customSnackbar/customC_snackbar.dart';
 import '../../Periklanan/reward_ads_manager.dart';
+import '../widgets/reward_choice_dialog.dart';
 
 class CardAccessGate {
   /// Return TRUE jika card boleh dibuka
@@ -27,9 +28,20 @@ class CardAccessGate {
     }
 
     // 📺 GRATIS + coin habis → reward ads
+    final wantToWatchAd = await showRewardChoiceDialog(context);
+
+    // User pilih "Tidak"
+    if (wantToWatchAd != true) {
+      noUndoCustomSnackbar(
+        context,
+        message: "❌ Koin habis, tidak jadi membuka konten",
+      );
+      return false;
+    }
+
+     // 📺 User SETUJU nonton iklan
     final rewarded = await RewardAdsManager.showRewardedAd();
 
-    // ✅ REWARD COIN HANYA UNTUK NON-PREMIUM
     if (rewarded) {
       access.addCoins(5);
 
@@ -38,9 +50,9 @@ class CardAccessGate {
         message: "🎉 Get 5 Coins! Tap again to open",
       );
 
-      return false; // tap ulang
+      return false; // tetap tap ulang
     }
-
+    
     // ❌ gagal nonton iklan
     noUndoCustomSnackbar(
       context,

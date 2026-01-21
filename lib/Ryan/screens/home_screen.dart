@@ -8,7 +8,13 @@ import '../services/analytics_mixin.dart';
 import 'detail_screen.dart';
 
 class RyanHomeScreen extends StatefulWidget {
-  const RyanHomeScreen({super.key});
+  // const RyanHomeScreen({super.key});
+  final HttpHelper httpHelper;
+
+  RyanHomeScreen({
+    super.key,
+    HttpHelper? httpHelper,
+  }) : httpHelper = httpHelper ?? HttpHelper();
 
   @override
   State<RyanHomeScreen> createState() => _HomeScreenState();
@@ -23,9 +29,7 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
   @override
   void initState() {
     super.initState();
-    futureSeaLife = HttpHelper().fetchData(
-      'https://68f78975f7fb897c66163a7c.mockapi.io/api/education_sea/seaLifeModel',
-    );
+    futureSeaLife = widget.httpHelper.fetchSeaLife(); 
   }
 
   @override

@@ -23,6 +23,7 @@ import 'detailScreens/coral_species_detail_screen.dart';
 import 'detailScreens/fact_detail_screen.dart';
 import 'detailScreens/human_detail_screen.dart';
 import 'detailScreens/mystery_detail_screen.dart';
+import '../providers/user_access_provider.dart';
 
 class DetailEducationScreen extends StatefulWidget {
   const DetailEducationScreen({super.key});
@@ -33,6 +34,9 @@ class DetailEducationScreen extends StatefulWidget {
 
 class _DetailEducationScreenState extends State<DetailEducationScreen>
     with AnalyticsScreenTracking {
+      
+  bool _showCoins = true;
+
   @override
   String get screenName => 'DetailEducationScreen';
 
@@ -295,6 +299,80 @@ class _DetailEducationScreenState extends State<DetailEducationScreen>
                   ],
                 ],
               ),
+            ),
+          ),
+          // 🪙 COIN INDICATOR (FLOATING)
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 10,
+            right: 16,
+            child: Consumer<UserAccessProvider>(
+              builder: (context, access, _) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showCoins = !_showCoins;
+                    });
+                  },
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: _showCoins
+                        ? Container(
+                            key: const ValueKey('coin_visible'),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black26, blurRadius: 8),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.monetization_on,
+                                  color: Colors.amber,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "${access.coins} Coin",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                const Icon(
+                                  Icons.visibility_off,
+                                  color: Colors.white70,
+                                  size: 16,
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            key: const ValueKey('coin_hidden'),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.monetization_on,
+                              color: Colors.amber,
+                              size: 20,
+                            ),
+                          ),
+                  ),
+                );
+              },
             ),
           ),
         ],

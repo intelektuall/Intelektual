@@ -7,14 +7,17 @@ import '../services/analytics_mixin.dart';
 
 class DetailScreen extends StatefulWidget {
   final String oceanId;
+  final HttpHelper httpHelper;
 
-  const DetailScreen({super.key, required this.oceanId});
+  DetailScreen({super.key, HttpHelper? httpHelper, required this.oceanId})
+    : httpHelper = httpHelper ?? HttpHelper();
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTracking{
+class _DetailScreenState extends State<DetailScreen>
+    with AnalyticsScreenTracking {
   late Future<Ocean> futureOcean;
 
   @override
@@ -27,12 +30,12 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
   }
 
   Future<Ocean> fetchOceanDetail(String id) async {
-    final allOceans = await HttpHelper().fetchData(
-        'https://68f78975f7fb897c66163a7c.mockapi.io/api/education_sea/seaLifeModel');
+    final allOceans = await widget.httpHelper.fetchSeaLife();
     // cari ocean berdasarkan id
     return allOceans.firstWhere(
       (ocean) => ocean.id == id,
-      orElse: () => Ocean(id: '', name: 'Tidak ditemukan', imagePath: '', sections: []),
+      orElse: () =>
+          Ocean(id: '', name: 'Tidak ditemukan', imagePath: '', sections: []),
     );
   }
 
@@ -41,7 +44,7 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDark ? Colors.white : Colors.black;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -59,7 +62,9 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
         future: futureOcean,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: Colors.white));
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            );
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -81,16 +86,17 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
               children: [
                 // Background
                 /// 🔹 Background
-          Positioned.fill(
-            child: Container(color: backgroundColor),
-          ),
+                Positioned.fill(child: Container(color: backgroundColor)),
 
-          /// 🔹 Overlay Transparan (diabaikan karena tidak ada gambar background)
-          Positioned.fill(
-            child: Container(color: backgroundColor),
-          ),
+                /// 🔹 Overlay Transparan (diabaikan karena tidak ada gambar background)
+                Positioned.fill(child: Container(color: backgroundColor)),
                 SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 80),
+                  padding: const EdgeInsets.only(
+                    top: 100,
+                    left: 16,
+                    right: 16,
+                    bottom: 80,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -99,7 +105,13 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                         margin: const EdgeInsets.only(top: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 10, offset: Offset(0, 4))],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
@@ -114,7 +126,11 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                   height: 250,
                                   color: Colors.grey[700],
                                   child: const Center(
-                                    child: Icon(Icons.image_not_supported, color: Colors.white, size: 50),
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
                                   ),
                                 ),
                         ),
@@ -148,7 +164,8 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                 // shadows: [Shadow(blurRadius: 4, color: shadowColor)],
                               ),
                             ),
-                            if (section.text != null && section.text!.isNotEmpty)
+                            if (section.text != null &&
+                                section.text!.isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Text(
@@ -166,12 +183,16 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: section.points.map((point) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    padding: const EdgeInsets.only(
+                                      bottom: 12.0,
+                                    ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               width: 25,
@@ -194,7 +215,9 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 14,
                                                   height: 1.5,
-                                                  color: textColor.withOpacity(0.9),
+                                                  color: textColor.withOpacity(
+                                                    0.9,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -202,7 +225,10 @@ class _DetailScreenState extends State<DetailScreen> with AnalyticsScreenTrackin
                                         ),
                                         if (point.description != null)
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 33.0, top: 4),
+                                            padding: const EdgeInsets.only(
+                                              left: 33.0,
+                                              top: 4,
+                                            ),
                                             child: Text(
                                               point.description!,
                                               textAlign: TextAlign.justify,

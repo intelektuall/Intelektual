@@ -24,6 +24,7 @@ class UserAccessProvider extends ChangeNotifier {
     }
   }
 
+
   void addCoins(int amount) {
     _coins += amount;
     notifyListeners();
