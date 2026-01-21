@@ -43,7 +43,7 @@ class _EventLautPageState extends State<EventLautPage> {
   }
 
   Future<void> _simulateLoading() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override

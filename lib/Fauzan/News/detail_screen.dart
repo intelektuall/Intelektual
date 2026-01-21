@@ -215,6 +215,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   Tooltip(
                                     message: "Share",
                                     child: IconButton(
+                                      key: const Key('share_button'),
                                       icon: const Icon(Icons.share),
                                       onPressed: () =>
                                           _showShareOptions(context),
