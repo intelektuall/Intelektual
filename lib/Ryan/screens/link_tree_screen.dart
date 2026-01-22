@@ -3,6 +3,7 @@ import '../screens/detail_education_screen.dart';
 import '../services/analytics_mixin.dart';
 import 'package:provider/provider.dart';
 import '../providers/link_provider.dart';
+import '../providers/user_access_provider.dart'; // ✅ DITAMBAHKAN
 import '../widgets/link_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
@@ -30,8 +31,8 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          /// 🌊 Background Image
-           Container(
+          /// 🌊 Background
+          Container(
             color: theme.scaffoldBackgroundColor,
           ),
 
@@ -56,7 +57,7 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
             ),
           ),
 
-          /// 🔝 Top Actions (Back + Language)
+          /// 🔝 Top Actions (Back)
           Positioned(
             top: 40,
             left: 20,
@@ -69,10 +70,6 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                   onTap: () => Navigator.pop(context),
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    // decoration: BoxDecoration(
-                    //   shape: BoxShape.circle,
-                    //   color: Colors.black.withOpacity(0.3),
-                    // ),
                     child: Icon(
                       Icons.arrow_back,
                       color: isDark ? Colors.white : Colors.black,
@@ -84,7 +81,7 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
             ),
           ),
 
-          /// 📦 Konten Utama
+          /// 📦 Main Content
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -105,11 +102,8 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                   style: GoogleFonts.fredoka(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
-                    color:isDark ? Colors.white : Colors.black,
+                    color: isDark ? Colors.white : Colors.black,
                     letterSpacing: 1.5,
-                    // shadows: [
-                    //   Shadow(blurRadius: 8, color: shadowColor),
-                    // ],
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -125,9 +119,6 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : Colors.black,
                       letterSpacing: 1.0,
-                      // shadows: [
-                      //   Shadow(blurRadius: 5, color: shadowColor),
-                      // ],
                     ),
                   ),
                 ),
@@ -144,7 +135,10 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                const DetailEducationScreen(),
+                                ChangeNotifierProvider.value(
+                              value: context.read<UserAccessProvider>(),
+                              child: const DetailEducationScreen(),
+                            ),
                           ),
                         );
                       },

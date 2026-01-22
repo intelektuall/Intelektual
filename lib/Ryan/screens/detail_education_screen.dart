@@ -34,7 +34,6 @@ class DetailEducationScreen extends StatefulWidget {
 
 class _DetailEducationScreenState extends State<DetailEducationScreen>
     with AnalyticsScreenTracking {
-      
   bool _showCoins = true;
 
   @override
