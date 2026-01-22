@@ -7,6 +7,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sopan_santun_app/Eka/activity/Profile_Page.dart';
 import 'package:sopan_santun_app/Ryan/screens/home_screen.dart';
 import 'SeeAllScreen.dart';
@@ -27,61 +28,72 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('📨 Body: ${message.notification?.body}');
   print('📨 Data: ${message.data}');
   
-  // Simpan notifikasi untuk ditampilkan saat app dibuka
-  await _saveNotificationForLater(message);
+  // Cek apakah ini notification untuk fitur aplikasi
+  if (message.data['notification_type'] == 'feature_announcement' ||
+      message.data['notification_type'] == 'app_update' ||
+      message.data['notification_type'] == 'tip_of_the_day' ||
+      message.data['notification_type'] == 'educational_content') {
+    
+    // Simpan notifikasi fitur untuk ditampilkan saat app dibuka
+    await _saveFeatureNotification(message);
+  }
 }
 
-// Helper untuk simpan notifikasi ke SharedPreferences
-Future<void> _saveNotificationForLater(RemoteMessage message) async {
+// Helper untuk simpan notifikasi fitur
+Future<void> _saveFeatureNotification(RemoteMessage message) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     
-    // Baca notifikasi yang tersimpan
-    final savedNotificationsJson = prefs.getStringList('saved_notifications') ?? [];
+    // Baca notifikasi fitur yang tersimpan
+    final savedFeatureNotificationsJson = prefs.getStringList('feature_notifications') ?? [];
     List<Map<String, dynamic>> savedNotifications = [];
     
-    // Decode JSON string ke list
-    for (final jsonString in savedNotificationsJson) {
+    // Decode JSON
+    for (final jsonString in savedFeatureNotificationsJson) {
       try {
-        // Format sederhana: simpan sebagai map
         final parts = jsonString.split('|||');
-        if (parts.length >= 4) {
+        if (parts.length >= 6) {
           savedNotifications.add({
             'id': parts[0],
             'title': parts[1],
             'message': parts[2],
             'timestamp': parts[3],
-            'type': parts.length > 4 ? parts[4] : 'general',
-            'fromBackground': true,
+            'type': parts[4],
+            'action_url': parts[5],
+            'feature_name': parts.length > 6 ? parts[6] : '',
+            'read': false, // Default unread untuk notifikasi baru
           });
         }
       } catch (e) {
-        print('❌ Error parsing saved notification: $e');
+        print('❌ Error parsing feature notification: $e');
       }
     }
     
-    // Tambahkan notifikasi baru
-    final newId = DateTime.now().millisecondsSinceEpoch.toString();
+    // Tambahkan notifikasi fitur baru (default unread)
+    final newId = 'feature_${DateTime.now().millisecondsSinceEpoch}';
     final notificationString = [
       newId,
-      message.notification?.title ?? 'Notifikasi Baru',
-      message.notification?.body ?? 'Ada informasi baru',
+      message.notification?.title ?? 'Fitur Baru!',
+      message.notification?.body ?? 'Cek fitur terbaru kami',
       DateTime.now().toIso8601String(),
-      message.data['type'] ?? 'general',
+      message.data['notification_type'] ?? 'feature_announcement',
+      message.data['action_url'] ?? '',
+      message.data['feature_name'] ?? '',
+      'false', // read status: false (unread)
     ].join('|||');
     
-    savedNotificationsJson.add(notificationString);
+    savedFeatureNotificationsJson.add(notificationString);
     
-    // Simpan kembali (maksimal 50 notifikasi)
-    if (savedNotificationsJson.length > 50) {
-      savedNotificationsJson.removeAt(0);
+    // Simpan kembali (maksimal 20 notifikasi fitur)
+    if (savedFeatureNotificationsJson.length > 20) {
+      savedFeatureNotificationsJson.removeAt(0);
     }
     
-    await prefs.setStringList('saved_notifications', savedNotificationsJson);
-    print('💾 Background notification saved: ${message.notification?.title}');
+    await prefs.setStringList('feature_notifications', savedFeatureNotificationsJson);
+    print('💾 Feature notification saved: ${message.notification?.title}');
     
   } catch (e) {
-    print('❌ Error saving notification: $e');
+    print('❌ Error saving feature notification: $e');
   }
 }
 
@@ -212,9 +224,12 @@ class _HomeContentState extends State<HomeContent> {
   String _welcomeMessage = "Temukan keanekaragaman hayati laut di seluruh dunia";
   bool _isConfigLoaded = false;
 
-  // In-App Notification State
-  final List<Map<String, dynamic>> _inAppNotifications = [];
-  int _notificationCount = 0;
+  // Notification State
+  final List<Map<String, dynamic>> _featureNotifications = [];
+  int _permissionRequestCount = 0;
+  bool _permissionDeniedForever = false;
+  bool _permissionGranted = false;
+  bool _showPermissionBanner = false;
   
   // Timer untuk auto-cleanup
   Timer? _cleanupTimer;
@@ -250,62 +265,63 @@ class _HomeContentState extends State<HomeContent> {
   Future<void> _initializeFirebaseServices() async {
     await _setupRemoteConfig();
     await _setupPushNotifications();
-    await _loadSavedNotifications();
+    await _loadSavedFeatureNotifications();
     _startAutoCleanupTimer();
   }
 
-  // Load saved notifications from SharedPreferences
-  Future<void> _loadSavedNotifications() async {
+  // Load saved feature notifications from SharedPreferences
+  Future<void> _loadSavedFeatureNotifications() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final savedNotificationsJson = prefs.getStringList('saved_notifications') ?? [];
+      final savedNotificationsJson = prefs.getStringList('feature_notifications') ?? [];
       
       List<Map<String, dynamic>> loadedNotifications = [];
       
       for (final jsonString in savedNotificationsJson) {
         try {
           final parts = jsonString.split('|||');
-          if (parts.length >= 4) {
+          if (parts.length >= 7) {
             final timestamp = DateTime.parse(parts[3]);
             final ageInHours = DateTime.now().difference(timestamp).inHours;
             
-            // Hapus notifikasi yang sudah lebih dari 24 jam
-            if (ageInHours < 24) {
+            // Hapus notifikasi fitur yang sudah lebih dari 7 hari
+            if (ageInHours < (24 * 7)) { // 7 hari
               loadedNotifications.add({
                 'id': parts[0],
                 'title': parts[1],
                 'message': parts[2],
                 'timestamp': timestamp,
-                'type': parts.length > 4 ? parts[4] : 'general',
-                'read': false,
-                'fromBackground': true,
+                'type': parts[4],
+                'action_url': parts[5],
+                'feature_name': parts[6],
+                'read': parts.length > 7 ? parts[7] == 'true' : false,
               });
             }
           }
         } catch (e) {
-          print('❌ Error parsing notification: $e');
+          print('❌ Error parsing feature notification: $e');
         }
       }
       
-      // Simpan notifikasi yang masih valid
-      await _saveValidNotifications(loadedNotifications);
+      // Simpan notifikasi fitur yang masih valid
+      await _saveValidFeatureNotifications(loadedNotifications);
       
       // Load ke memory
       setState(() {
-        _inAppNotifications.clear();
-        _inAppNotifications.addAll(loadedNotifications);
-        _notificationCount = loadedNotifications.length;
+        _featureNotifications.clear();
+        _featureNotifications.addAll(loadedNotifications);
       });
       
-      print('📂 Loaded ${loadedNotifications.length} notifications from storage');
+      print('📂 Loaded ${loadedNotifications.length} feature notifications from storage');
+      print('📂 Unread notifications: ${loadedNotifications.where((n) => !n['read']).length}');
       
     } catch (e) {
-      print('❌ Error loading notifications: $e');
+      print('❌ Error loading feature notifications: $e');
     }
   }
 
-  // Save valid notifications to SharedPreferences
-  Future<void> _saveValidNotifications(List<Map<String, dynamic>> notifications) async {
+  // Save valid feature notifications to SharedPreferences
+  Future<void> _saveValidFeatureNotifications(List<Map<String, dynamic>> notifications) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final List<String> jsonList = [];
@@ -318,39 +334,58 @@ class _HomeContentState extends State<HomeContent> {
           notification['message'],
           timestamp.toIso8601String(),
           notification['type'],
+          notification['action_url'] ?? '',
+          notification['feature_name'] ?? '',
+          notification['read'].toString(), // Simpan status read
         ].join('|||'));
       }
       
-      await prefs.setStringList('saved_notifications', jsonList);
+      await prefs.setStringList('feature_notifications', jsonList);
+      print('💾 Saved ${notifications.length} notifications to storage');
     } catch (e) {
-      print('❌ Error saving notifications: $e');
+      print('❌ Error saving feature notifications: $e');
+    }
+  }
+
+  // Mark a single notification as read
+  Future<void> _markNotificationAsRead(String notificationId) async {
+    final index = _featureNotifications.indexWhere((n) => n['id'] == notificationId);
+    if (index != -1 && !_featureNotifications[index]['read']) {
+      setState(() {
+        _featureNotifications[index]['read'] = true;
+      });
+      
+      await _saveValidFeatureNotifications(_featureNotifications);
+      AnalyticsService.trackInteraction('notification_marked_as_read');
+      print('✅ Marked notification as read: $notificationId');
     }
   }
 
   // Start auto cleanup timer (setiap 1 jam)
   void _startAutoCleanupTimer() {
     _cleanupTimer = Timer.periodic(Duration(hours: 1), (timer) {
-      _cleanupOldNotifications();
+      _cleanupOldFeatureNotifications();
     });
   }
 
-  // Cleanup notifications older than 24 hours
-  Future<void> _cleanupOldNotifications() async {
+  // Cleanup feature notifications older than 7 days
+  Future<void> _cleanupOldFeatureNotifications() async {
     final now = DateTime.now();
-    final validNotifications = _inAppNotifications.where((notification) {
+    final sevenDaysAgo = now.subtract(Duration(days: 7));
+    
+    final validNotifications = _featureNotifications.where((notification) {
       final timestamp = notification['timestamp'] as DateTime;
-      return now.difference(timestamp).inHours < 24;
+      return timestamp.isAfter(sevenDaysAgo);
     }).toList();
     
-    if (validNotifications.length < _inAppNotifications.length) {
+    if (validNotifications.length < _featureNotifications.length) {
       setState(() {
-        _inAppNotifications.clear();
-        _inAppNotifications.addAll(validNotifications);
-        _notificationCount = validNotifications.length;
+        _featureNotifications.clear();
+        _featureNotifications.addAll(validNotifications);
       });
       
-      await _saveValidNotifications(validNotifications);
-      print('🧹 Cleaned up old notifications');
+      await _saveValidFeatureNotifications(validNotifications);
+      print('🧹 Cleaned up old feature notifications');
     }
   }
 
@@ -475,8 +510,11 @@ class _HomeContentState extends State<HomeContent> {
         print('✅ Animal Data: Refreshed via pull-to-refresh');
       }
 
-      // 3. Cleanup old notifications
-      await _cleanupOldNotifications();
+      // 3. Cleanup old feature notifications
+      await _cleanupOldFeatureNotifications();
+
+      // 4. Re-check permission status setelah refresh
+      await _checkAndUpdatePermissionStatus();
 
       stopwatch.stop();
       AnalyticsService.trackPerformance(
@@ -486,6 +524,33 @@ class _HomeContentState extends State<HomeContent> {
     } catch (e) {
       AnalyticsService.trackError('refresh_error', e.toString());
       print('❌ Refresh Error: $e');
+    }
+  }
+
+  // Cek dan update permission status
+  Future<void> _checkAndUpdatePermissionStatus() async {
+    try {
+      final permissionStatus = await Permission.notification.status;
+      
+      print('🔄 Checking permission status: $permissionStatus');
+      
+      setState(() {
+        _permissionGranted = permissionStatus.isGranted;
+        _permissionDeniedForever = permissionStatus.isPermanentlyDenied;
+        
+        // LOGIKA YANG BENAR UNTUK BANNER:
+        // 1. Tampilkan banner jika permission BELUM diberikan
+        // 2. Tampilkan banner jika permission DITOLAK selamanya (untuk show "Buka Pengaturan")
+        // 3. Jangan tampilkan banner jika permission SUDAH diberikan
+        _showPermissionBanner = !_permissionGranted;
+        
+        print('📱 Permission Granted: $_permissionGranted');
+        print('📱 Permission Denied Forever: $_permissionDeniedForever');
+        print('📱 Show Banner: $_showPermissionBanner');
+      });
+      
+    } catch (e) {
+      print('❌ Error checking permission status: $e');
     }
   }
 
@@ -501,9 +566,110 @@ class _HomeContentState extends State<HomeContent> {
     }
   }
 
-  // FCM setup
+  // FCM setup untuk notifikasi fitur aplikasi
   Future<void> _setupPushNotifications() async {
     try {
+      // Load permission request count dari SharedPreferences
+      await _loadPermissionRequestCount();
+      
+      // Cek status permission
+      final permissionStatus = await Permission.notification.status;
+      
+      setState(() {
+        _permissionGranted = permissionStatus.isGranted;
+        _permissionDeniedForever = permissionStatus.isPermanentlyDenied;
+        
+        // LOGIKA YANG BENAR: 
+        // Tampilkan banner jika permission BELUM diberikan
+        // Ini termasuk jika ditolak selamanya (akan tampilkan "Buka Pengaturan")
+        _showPermissionBanner = !_permissionGranted;
+      });
+      
+      print('📱 Initial Permission Status: $permissionStatus');
+      print('📱 Initial Permission Granted: $_permissionGranted');
+      print('📱 Initial Permission Denied Forever: $_permissionDeniedForever');
+      print('📱 Initial Show Permission Banner: $_showPermissionBanner');
+      print('📱 Initial Permission Request Count: $_permissionRequestCount');
+      
+      // Setup Firebase Cloud Messaging dengan benar
+      await _setupFirebaseCloudMessaging();
+      
+    } catch (e) {
+      AnalyticsService.trackError('notification_setup_error', e.toString());
+      print('❌ Notification Setup Error: $e');
+    }
+  }
+
+  // Setup Firebase Cloud Messaging dengan benar
+  Future<void> _setupFirebaseCloudMessaging() async {
+    try {
+      // Dapatkan FCM Token
+      final token = await _fcm.getToken();
+      print('🔑 FCM Token: $token');
+
+      // Setup Android Notification Channel
+      await _fcm.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      
+      // Setup background handler
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      
+      // Handle incoming notifications - FOREGROUND
+      FirebaseMessaging.onMessage.listen(_handleIncomingForegroundNotification);
+      
+      // Handle when notification opens the app (app dibuka dari notification)
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationOpenedApp);
+      
+      // Get initial message saat app dibuka dari terminated state
+      final initialMessage = await _fcm.getInitialMessage();
+      if (initialMessage != null) {
+        print('📱 App opened from terminated state via notification');
+        await _handleNotificationOpenedApp(initialMessage);
+      }
+
+      print('✅ Firebase Cloud Messaging setup successful');
+      
+    } catch (e) {
+      AnalyticsService.trackError('fcm_setup_error', e.toString());
+      print('❌ FCM Setup Error: $e');
+    }
+  }
+
+  // Load permission request count dari SharedPreferences
+  Future<void> _loadPermissionRequestCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _permissionRequestCount = prefs.getInt('permission_request_count') ?? 0;
+      print('📱 Loaded permission request count: $_permissionRequestCount');
+    } catch (e) {
+      print('❌ Error loading permission request count: $e');
+    }
+  }
+
+  // Save permission request count ke SharedPreferences
+  Future<void> _savePermissionRequestCount() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('permission_request_count', _permissionRequestCount);
+      print('💾 Saved permission request count: $_permissionRequestCount');
+    } catch (e) {
+      print('❌ Error saving permission request count: $e');
+    }
+  }
+
+  // Minta permission untuk notifikasi
+  Future<void> _requestNotificationPermission() async {
+    try {
+      // Increment counter
+      _permissionRequestCount++;
+      await _savePermissionRequestCount();
+      
+      print('📱 Requesting permission (attempt $_permissionRequestCount)');
+      
+      // Request permission
       final settings = await _fcm.requestPermission(
         alert: true,
         announcement: false,
@@ -513,164 +679,277 @@ class _HomeContentState extends State<HomeContent> {
         provisional: false,
         sound: true,
       );
-
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        final token = await _fcm.getToken();
+      
+      final isGranted = settings.authorizationStatus == AuthorizationStatus.authorized;
+      
+      // Get updated status
+      final updatedStatus = await Permission.notification.status;
+      
+      print('📱 After request - Permission status: $updatedStatus');
+      print('📱 After request - Is granted: $isGranted');
+      print('📱 After request - Is permanently denied: ${updatedStatus.isPermanentlyDenied}');
+      
+      setState(() {
+        _permissionGranted = isGranted;
+        _permissionDeniedForever = updatedStatus.isPermanentlyDenied;
+        
+        // LOGIKA YANG BENAR:
+        // 1. Jika permission diberikan -> HILANGKAN BANNER
+        if (isGranted) {
+          _showPermissionBanner = false;
+          print('✅ Permission granted - Hiding banner');
+        } 
+        // 2. Jika ditolak -> TAMPILKAN BANNER (akan otomatis show "Buka Pengaturan" jika sudah 2x)
+        else {
+          _showPermissionBanner = true;
+          print('❌ Permission denied - Showing banner');
+        }
+      });
+      
+      if (_permissionGranted) {
         AnalyticsService.trackFeatureUsage('push_notifications_enabled');
-        print('🔑 FCM Token: $token');
-
-        // Setup background handler
-        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
         
-        // Handle incoming notifications - FOREGROUND
-        FirebaseMessaging.onMessage.listen(_handleIncomingNotification);
+        // Setup FCM setelah permission diberikan
+        await _setupFirebaseCloudMessaging();
         
-        // Handle when notification opens the app
-        FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationOpened);
-
-        print('✅ FCM: Setup successful with background handler');
+        // Tampilkan snackbar konfirmasi
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Notifikasi telah diaktifkan!'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       } else {
         AnalyticsService.trackFeatureUsage('push_notifications_denied');
-        print('ℹ️ FCM: Permission not granted');
+        print('❌ Notification permission denied');
+        
+        // Cek jika sudah ditolak 2 kali
+        if (_permissionRequestCount >= 2) {
+          print('⚠️ User has denied permission 2 times');
+        }
       }
+      
     } catch (e) {
-      AnalyticsService.trackError('fcm_setup_error', e.toString());
-      print('❌ FCM Error: $e');
+      print('❌ Error requesting notification permission: $e');
     }
   }
 
-  // Handle incoming notification - FOREGROUND (app terbuka)
-  void _handleIncomingNotification(RemoteMessage message) async {
-    AnalyticsService.trackInteraction('push_notification_received_foreground');
+  // Handle incoming foreground notification
+  Future<void> _handleIncomingForegroundNotification(RemoteMessage message) async {
+    print('📱 [FOREGROUND] Notification received');
+    print('📱 Title: ${message.notification?.title}');
+    print('📱 Body: ${message.notification?.body}');
+    print('📱 Data: ${message.data}');
     
-    // Add to in-app notifications
-    await _addInAppNotification(
-      title: message.notification?.title ?? 'Pemberitahuan Baru',
-      message: message.notification?.body ?? 'Ada informasi baru untuk Anda',
-      type: message.data['type'] ?? 'general',
-      payload: message.data,
-      fromBackground: false,
+    // Add to feature notifications
+    await _addFeatureNotification(
+      title: message.notification?.title ?? 'Fitur Baru!',
+      message: message.notification?.body ?? 'Ada fitur baru untuk Anda',
+      type: message.data['notification_type'] ?? 'feature_announcement',
+      actionUrl: message.data['action_url'],
+      featureName: message.data['feature_name'],
     );
     
-    // Show snackbar notification
+    // Show snackbar untuk memberi tahu user
     _showNotificationSnackbar(
-      message.notification?.title ?? 'Pemberitahuan',
+      message.notification?.title ?? 'Notifikasi',
       message.notification?.body ?? '',
-      message.data['type'] ?? 'general',
+      message.data,
     );
-    
-    print('📨 [FOREGROUND] Notification received: ${message.notification?.title}');
   }
 
-  // Handle notification opened (app dibuka dari notification)
-  void _handleNotificationOpened(RemoteMessage message) async {
-    AnalyticsService.trackInteraction('push_notification_opened');
-    AnalyticsService.trackFeatureUsage(
-      'notification_opened_${message.data['type'] ?? 'unknown'}',
+  // Handle notification opened app (app dibuka dari notification)
+  Future<void> _handleNotificationOpenedApp(RemoteMessage message) async {
+    print('👆 [NOTIFICATION OPENED] App opened from notification');
+    print('👆 Title: ${message.notification?.title}');
+    print('👆 Body: ${message.notification?.body}');
+    print('👆 Data: ${message.data}');
+    
+    // Add to feature notifications
+    await _addFeatureNotification(
+      title: message.notification?.title ?? 'Fitur Baru!',
+      message: message.notification?.body ?? 'Ada fitur baru untuk Anda',
+      type: message.data['notification_type'] ?? 'feature_announcement',
+      actionUrl: message.data['action_url'],
+      featureName: message.data['feature_name'],
     );
     
-    // Add to in-app notifications
-    await _addInAppNotification(
-      title: message.notification?.title ?? 'Notifikasi',
-      message: message.notification?.body ?? 'Informasi baru',
-      type: message.data['type'] ?? 'general',
-      payload: message.data,
-      fromBackground: true,
-    );
-    
-    // Navigate based on notification type
-    final data = message.data;
-    if (data['type'] == 'new_animal' && data['animal_name'] != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        AnalyticsService.trackNavigation('notification', 'animal_detail');
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailScreen(animalName: data['animal_name']!),
-          ),
-        );
-      });
-    } else if (data['type'] == 'feature_update') {
-      // Show feature dialog
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showFeatureDialog(
-          message.notification?.title ?? 'Fitur Baru',
-          message.notification?.body ?? '',
-        );
-      });
-    }
-  }
-
-  // Add in-app notification dengan save ke storage
-  Future<void> _addInAppNotification({
-    required String title,
-    required String message,
-    String type = 'general',
-    Map<String, dynamic>? payload,
-    bool fromBackground = false,
-  }) async {
-    final newNotification = {
-      'id': DateTime.now().millisecondsSinceEpoch.toString(),
-      'title': title,
-      'message': message,
-      'timestamp': DateTime.now(),
-      'type': type,
-      'read': false,
-      'payload': payload,
-      'fromBackground': fromBackground,
-    };
-    
-    setState(() {
-      _inAppNotifications.insert(0, newNotification);
-      _notificationCount++;
+    // Navigate ke halaman notifikasi
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showFeatureNotificationsScreen();
     });
-    
-    AnalyticsService.trackFeatureUsage('in_app_notification_received');
-    
-    // Save to SharedPreferences
-    await _saveValidNotifications(_inAppNotifications);
   }
 
   // Show notification snackbar
-  void _showNotificationSnackbar(String title, String message, String type) {
+  void _showNotificationSnackbar(String title, String message, Map<String, dynamic> data) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _getNotificationIcon(type, size: 20),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    message,
-                    style: TextStyle(fontSize: 12),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
+            Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 4),
+            Text(
+              message,
+              style: TextStyle(fontSize: 12),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
         duration: Duration(seconds: 4),
         action: SnackBarAction(
           label: 'Lihat',
-          onPressed: () => _showNotificationsScreen(),
+          onPressed: () => _showFeatureNotificationsScreen(),
         ),
       ),
     );
   }
 
-  // Show notifications screen
-  void _showNotificationsScreen() {
-    AnalyticsService.trackInteraction('notification_center_opened');
-    AnalyticsService.trackFeatureUsage('notification_center_view');
+  // Add feature notification dengan save ke storage
+  Future<void> _addFeatureNotification({
+    required String title,
+    required String message,
+    String type = 'feature_announcement',
+    String? actionUrl,
+    String? featureName,
+  }) async {
+    final newNotification = {
+      'id': 'feature_${DateTime.now().millisecondsSinceEpoch}',
+      'title': title,
+      'message': message,
+      'timestamp': DateTime.now(),
+      'type': type,
+      'action_url': actionUrl ?? '',
+      'feature_name': featureName ?? '',
+      'read': false, // Default unread saat notifikasi baru diterima
+    };
+    
+    setState(() {
+      _featureNotifications.insert(0, newNotification);
+    });
+    
+    AnalyticsService.trackFeatureUsage('feature_notification_received');
+    
+    // Save to SharedPreferences
+    await _saveValidFeatureNotifications(_featureNotifications);
+    
+    print('✅ Feature notification added to list: $title (unread)');
+  }
+
+  // Show feature announcement dialog
+  void _showFeatureAnnouncementDialog(String title, String message, String featureName, String? actionUrl) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.new_releases, color: Colors.amber),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (featureName.isNotEmpty) ...[
+              Text(
+                'Fitur: $featureName',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              SizedBox(height: 8),
+            ],
+            Text(
+              message,
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 16),
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Tutup'),
+          ),
+          if (actionUrl != null && actionUrl.isNotEmpty)
+            ElevatedButton(
+              onPressed: () {
+                AnalyticsService.trackInteraction('feature_explore_clicked');
+                Navigator.pop(context);
+                // Navigate berdasarkan actionUrl
+                _handleFeatureAction(actionUrl, featureName);
+              },
+              child: Text('Jelajahi Fitur'),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Handle feature action
+  void _handleFeatureAction(String actionUrl, String featureName) {
+    AnalyticsService.trackFeatureUsage('feature_explored_$featureName');
+    
+    // Parse actionUrl untuk menentukan navigasi
+    if (actionUrl.startsWith('screen://')) {
+      final screen = actionUrl.replaceFirst('screen://', '');
+      switch (screen) {
+        case 'events':
+          final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
+          if (homeScreenState != null) {
+            homeScreenState._onItemTapped(2); // Event page index
+          }
+          break;
+        case 'education':
+          final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
+          if (homeScreenState != null) {
+            homeScreenState._onItemTapped(3); // Edukasi page index
+          }
+          break;
+        case 'news':
+          final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
+          if (homeScreenState != null) {
+            homeScreenState._onItemTapped(1); // Berita page index
+          }
+          break;
+        case 'profile':
+          final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
+          if (homeScreenState != null) {
+            homeScreenState._onItemTapped(4); // Profile page index
+          }
+          break;
+      }
+    }
+    // Bisa ditambahkan untuk deep link lainnya
+  }
+
+  // Show feature notifications screen
+  void _showFeatureNotificationsScreen() {
+    AnalyticsService.trackInteraction('feature_notifications_opened');
+    AnalyticsService.trackFeatureUsage('feature_notifications_view');
     
     Navigator.push(
       context,
@@ -679,86 +958,180 @@ class _HomeContentState extends State<HomeContent> {
           appBar: AppBar(
             title: Text('Notifikasi'),
             actions: [
-              if (_notificationCount > 0)
-                TextButton(
-                  onPressed: _markAllAsRead,
-                  child: Text(
-                    'Tandai Sudah Dibaca',
-                    style: TextStyle(color: Colors.white),
-                  ),
+              if (_featureNotifications.any((n) => !n['read']))
+                IconButton(
+                  onPressed: _markAllFeatureNotificationsAsRead,
+                  icon: Icon(Icons.done_all),
+                  tooltip: 'Tandai semua sudah dibaca',
                 ),
             ],
           ),
-          body: _buildNotificationsContent(),
+          body: _buildFeatureNotificationsContent(),
         ),
       ),
     );
   }
 
-  // Build notifications content
-  Widget _buildNotificationsContent() {
-    if (_inAppNotifications.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.notifications_off_outlined,
-              size: 64,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Tidak ada notifikasi',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
+  // Build feature notifications content
+  Widget _buildFeatureNotificationsContent() {
+    // SEBELUM membangun UI, cek ulang permission status
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _checkAndUpdatePermissionStatus();
+    });
+    
+    return Column(
+      children: [
+        // Tombol permission jika belum diizinkan
+        if (_showPermissionBanner) 
+          _buildPermissionRequestSection(),
+        
+        // Daftar notifikasi fitur
+        Expanded(
+          child: _featureNotifications.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.new_releases_outlined,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Belum ada notifikasi fitur',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Notifikasi tentang fitur baru akan muncul di sini',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: _featureNotifications.length,
+                  itemBuilder: (context, index) {
+                    final notification = _featureNotifications[index];
+                    return _buildFeatureNotificationItem(notification);
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  // Build permission request section
+  Widget _buildPermissionRequestSection() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.orange[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.orange),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.notifications_off, color: Colors.orange),
+              SizedBox(width: 8),
+              Text(
+                'Notifikasi Belum Diaktifkan',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange[800],
+                ),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Notifikasi baru akan muncul di sini',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
+            ],
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Aktifkan notifikasi untuk mendapatkan informasi tentang fitur-fitur terbaru dan tips edukasi.',
+            style: TextStyle(fontSize: 14),
+          ),
+          SizedBox(height: 12),
+          Row(
+            children: [
+              // PERBAIKAN LOGIKA: 
+              // Jika sudah ditolak 2 kali ATAU ditolak selamanya, tampilkan "Buka Pengaturan"
+              if (_permissionRequestCount >= 2 || _permissionDeniedForever)
+                ElevatedButton(
+                  onPressed: () {
+                    print('📱 Opening app settings...');
+                    openAppSettings();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: Text('Buka Pengaturan'),
+                )
+              // Jika belum ditolak 2 kali, tampilkan "Aktifkan Notifikasi"
+              else
+                ElevatedButton(
+                  onPressed: () async {
+                    print('📱 Requesting notification permission...');
+                    // Minta permission
+                    await _requestNotificationPermission();
+                    
+                    // Refresh halaman notifikasi setelah request
+                    if (mounted) {
+                      setState(() {
+                        // State sudah diupdate di _requestNotificationPermission
+                      });
+                    }
+                    
+                    // Jika permission diberikan, tutup halaman
+                    if (_permissionGranted && mounted) {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        Navigator.pop(context); // Tutup halaman notifikasi
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                  ),
+                  child: Text('Aktifkan Notifikasi'),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Mark all feature notifications as read
+  Future<void> _markAllFeatureNotificationsAsRead() async {
+    AnalyticsService.trackInteraction('mark_all_features_read');
+    
+    bool hasUnread = false;
+    for (var notification in _featureNotifications) {
+      if (!notification['read']) {
+        notification['read'] = true;
+        hasUnread = true;
+      }
+    }
+    
+    if (hasUnread) {
+      setState(() {});
+      await _saveValidFeatureNotifications(_featureNotifications);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Semua notifikasi fitur telah dibaca'),
+          duration: Duration(seconds: 2),
         ),
       );
     }
-    
-    return ListView.builder(
-      itemCount: _inAppNotifications.length,
-      itemBuilder: (context, index) {
-        final notification = _inAppNotifications[index];
-        return _buildNotificationItem(notification);
-      },
-    );
-  }
-
-  // Mark all notifications as read
-  Future<void> _markAllAsRead() async {
-    AnalyticsService.trackInteraction('mark_all_notifications_read');
-    
-    for (var notification in _inAppNotifications) {
-      notification['read'] = true;
-    }
-    
-    setState(() {
-      _notificationCount = 0;
-    });
-    
-    await _saveValidNotifications(_inAppNotifications);
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Semua notifikasi telah dibaca'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-    
-    Navigator.pop(context);
   }
 
   @override
@@ -782,8 +1155,8 @@ class _HomeContentState extends State<HomeContent> {
               : Colors.blueAccent),
       title: _buildSearchField(context),
       actions: [
-        // Notification button with badge
-        _buildNotificationButton(context),
+        // Feature notification button
+        _buildFeatureNotificationButton(context),
         _buildProfileButton(context),
         // Config status indicator
         _buildConfigStatusIndicator(),
@@ -809,37 +1182,28 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  // New notification button with badge
-  Widget _buildNotificationButton(BuildContext context) {
+  // Feature notification button
+  Widget _buildFeatureNotificationButton(BuildContext context) {
     return Stack(
       children: [
         IconButton(
-          icon: Icon(Icons.notifications_outlined, size: 26),
-          onPressed: _showNotificationsScreen,
-          tooltip: "Notifikasi",
+          icon: Icon(Icons.new_releases_outlined, size: 26),
+          onPressed: _showFeatureNotificationsScreen,
+          tooltip: "Fitur & Update",
         ),
-        if (_notificationCount > 0)
+        if (_featureNotifications.any((n) => !n['read']))
           Positioned(
             right: 8,
             top: 8,
             child: Container(
               padding: EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Colors.amber,
                 borderRadius: BorderRadius.circular(10),
               ),
               constraints: BoxConstraints(
-                minWidth: 16,
-                minHeight: 16,
-              ),
-              child: Text(
-                _notificationCount > 9 ? '9+' : _notificationCount.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+                minWidth: 8,
+                minHeight: 8,
               ),
             ),
           ),
@@ -1241,35 +1605,22 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  // Build notification item
-  Widget _buildNotificationItem(Map<String, dynamic> notification) {
+  // Build feature notification item
+  Widget _buildFeatureNotificationItem(Map<String, dynamic> notification) {
     final isUnread = !notification['read'];
     final timestamp = notification['timestamp'] as DateTime;
-    final fromBackground = notification['fromBackground'] ?? false;
+    final featureName = notification['feature_name'] as String;
     
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       color: isUnread
-          ? (fromBackground ? Colors.orange.shade50 : Colors.blue.shade50)
+          ? Colors.blue.shade50
           : Theme.of(context).cardColor,
       child: ListTile(
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _getNotificationIcon(notification['type']),
-            if (fromBackground)
-              Container(
-                margin: EdgeInsets.only(top: 2),
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  'BG',
-                  style: TextStyle(fontSize: 8, color: Colors.white),
-                ),
-              ),
+            _getFeatureNotificationIcon(notification['type']),
           ],
         ),
         title: Column(
@@ -1281,6 +1632,18 @@ class _HomeContentState extends State<HomeContent> {
                 fontWeight: isUnread ? FontWeight.bold : FontWeight.normal,
               ),
             ),
+            if (featureName.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Text(
+                  featureName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
           ],
         ),
         subtitle: Column(
@@ -1295,28 +1658,36 @@ class _HomeContentState extends State<HomeContent> {
           ],
         ),
         trailing: isUnread
-            ? Icon(Icons.circle, size: 10, color: fromBackground ? Colors.orange : Colors.blue)
-            : null,
+            ? IconButton(
+                icon: Icon(Icons.circle, size: 10, color: Colors.blue),
+                onPressed: () async {
+                  await _markNotificationAsRead(notification['id']);
+                },
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                tooltip: 'Tandai sudah dibaca',
+              )
+            : Icon(Icons.check_circle, size: 10, color: Colors.green),
         onTap: () async {
           // Mark as read when tapped
           if (isUnread) {
-            setState(() {
-              notification['read'] = true;
-              _notificationCount--;
-            });
-            
-            await _saveValidNotifications(_inAppNotifications);
+            await _markNotificationAsRead(notification['id']);
           }
           
-          // Handle notification action based on type
-          _handleNotificationAction(notification);
+          // Show feature dialog
+          _showFeatureAnnouncementDialog(
+            notification['title'],
+            notification['message'],
+            featureName,
+            notification['action_url'],
+          );
         },
         onLongPress: () async {
           final result = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Hapus Notifikasi?'),
-              content: Text('Notifikasi ini akan dihapus secara permanen.'),
+              title: Text('Hapus Notifikasi Fitur?'),
+              content: Text('Notifikasi ini akan dihapus dari daftar.'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
@@ -1331,18 +1702,14 @@ class _HomeContentState extends State<HomeContent> {
           );
           
           if (result == true) {
-            _inAppNotifications.remove(notification);
-            setState(() {
-              if (!notification['read']) {
-                _notificationCount--;
-              }
-            });
+            _featureNotifications.remove(notification);
+            setState(() {});
             
-            await _saveValidNotifications(_inAppNotifications);
+            await _saveValidFeatureNotifications(_featureNotifications);
             
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Notifikasi telah dihapus'),
+                content: Text('Notifikasi fitur telah dihapus'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -1353,18 +1720,16 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   // Get icon based on notification type
-  Widget _getNotificationIcon(String type, {double size = 24}) {
+  Widget _getFeatureNotificationIcon(String type, {double size = 24}) {
     switch (type) {
-      case 'feature_update':
+      case 'feature_announcement':
         return Icon(Icons.new_releases, color: Colors.green, size: size);
-      case 'event':
-        return Icon(Icons.event, color: Colors.orange, size: size);
-      case 'tip':
-        return Icon(Icons.lightbulb, color: Colors.yellow.shade700, size: size);
-      case 'alert':
-        return Icon(Icons.warning, color: Colors.red, size: size);
-      case 'new_animal':
-        return Icon(Icons.pets, color: Colors.teal, size: size);
+      case 'app_update':
+        return Icon(Icons.update, color: Colors.purple, size: size);
+      case 'tip_of_the_day':
+        return Icon(Icons.lightbulb, color: Colors.amber, size: size);
+      case 'educational_content':
+        return Icon(Icons.school, color: Colors.teal, size: size);
       default:
         return Icon(Icons.info, color: Colors.blue, size: size);
     }
@@ -1382,79 +1747,6 @@ class _HomeContentState extends State<HomeContent> {
     
     return '${(difference.inDays / 30).floor()} bulan yang lalu';
   }
-
-  // Handle notification action
-  void _handleNotificationAction(Map<String, dynamic> notification) {
-    AnalyticsService.trackInteraction('notification_item_tapped');
-    
-    final type = notification['type'];
-    final payload = notification['payload'];
-    
-    switch (type) {
-      case 'new_animal':
-        if (payload != null && payload['animal_name'] != null) {
-          Navigator.pop(context); // Close notification screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailScreen(animalName: payload['animal_name']),
-            ),
-          );
-        }
-        break;
-      case 'event':
-        // Navigate to events page
-        Navigator.pop(context); // Close notification screen
-        final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
-        if (homeScreenState != null) {
-          homeScreenState._onItemTapped(2); // Event page index
-        }
-        break;
-      case 'feature_update':
-        // Show feature dialog
-        _showFeatureDialog(notification['title'], notification['message']);
-        break;
-      default:
-        // Close notification screen and show message
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Membuka: ${notification['title']}'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        break;
-    }
-  }
-
-  // Show feature dialog
-  void _showFeatureDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Tutup'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              AnalyticsService.trackFeatureUsage('feature_explored_from_notif');
-              // Navigate to Edukasi tab
-              final homeScreenState = context.findRootAncestorStateOfType<_HomeScreenState>();
-              if (homeScreenState != null) {
-                homeScreenState._onItemTapped(3); // Edukasi page index
-              }
-            },
-            child: Text('Jelajahi'),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class ProtectedAnimal extends StatefulWidget {
@@ -1470,7 +1762,7 @@ class ProtectedAnimal extends StatefulWidget {
   });
 
   @override
-  _ProtectedAnimalState createState() => _ProtectedAnimalState();
+  State<ProtectedAnimal> createState() => _ProtectedAnimalState();
 }
 
 class _ProtectedAnimalState extends State<ProtectedAnimal> {

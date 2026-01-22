@@ -375,42 +375,43 @@ class _SeeAllScreenState extends State<SeeAllScreen>
               ),
             ),
       floatingActionButton: ExpandableFab(
-        distance: 112,
-        children: [
-          FloatingActionButton.small(
-            heroTag: 'addAnimal',
-            onPressed: () async {
-              // Navigasi ke AddAnimalScreen
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => AddAnimalScreen()),
-              );
-              
-              // Cek dan tampilkan iklan setelah kembali
-              Future.delayed(const Duration(milliseconds: 300), () {
-                InterstitialAdManager().checkAndShowInterstitialAd();
-              });
-            },
-            tooltip: 'Ajukan Hewan Baru',
-            backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
-            foregroundColor: isDark ? Colors.white : Colors.white,
-            child: Icon(Icons.add),
-          ),
-          FloatingActionButton.small(
-            heroTag: 'viewHistory',
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SubmissionHistoryScreen()),
-              );
-            },
-            tooltip: 'Riwayat Pengajuan',
-            backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
-            foregroundColor: isDark ? Colors.white : Colors.white,
-            child: Icon(Icons.history),
-          ),
-        ],
-      ),
+  distance: 112,
+  children: [
+    FloatingActionButton.small(
+      heroTag: 'addAnimal',
+      onPressed: () async {
+        // Navigasi ke AddAnimalScreen dengan await
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => AddAnimalScreen()),
+        );
+        
+        // Setelah kembali dari AddAnimalScreen, cek dan tampilkan iklan
+        // Tunggu 500ms agar UI stabil dulu
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          await InterstitialAdManager().checkAndShowInterstitialAd();
+        });
+      },
+      tooltip: 'Ajukan Hewan Baru',
+      backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
+      foregroundColor: isDark ? Colors.white : Colors.white,
+      child: Icon(Icons.add),
+    ),
+    FloatingActionButton.small(
+      heroTag: 'viewHistory',
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => SubmissionHistoryScreen()),
+        );
+      },
+      tooltip: 'Riwayat Pengajuan',
+      backgroundColor: isDark ? Colors.grey[800] : Colors.blueAccent,
+      foregroundColor: isDark ? Colors.white : Colors.white,
+      child: Icon(Icons.history),
+    ),
+  ],
+),
       floatingActionButtonLocation: ExpandableFab.location,
     );
   }

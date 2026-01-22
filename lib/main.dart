@@ -217,7 +217,6 @@ import 'Ryan/providers/coral_species_action_provider.dart';
 import 'Ryan/providers/cardOverlay/card_overlay_provider.dart';
 import 'Ryan/providers/cardOverlay/cardC_overlay_provider.dart';
 import 'Ryan/providers/locale_provider.dart';
-import 'Ryan/providers/user_access_provider.dart';
 
 // Services Ryan
 import 'Ryan/services/analytics_service.dart';
@@ -231,6 +230,8 @@ import 'Ryan/screens/newpage_unlocked.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
 
   // === Inisialisasi Google Mobile Ads ===
   try {
@@ -247,6 +248,7 @@ Future<void> main() async {
   } catch (e) {
     debugPrint("Firebase initialization failed: $e");
   }
+  
 
   // === Nonaktifkan sesi login otomatis ===
   await FirebaseAuth.instance.signOut();
@@ -307,7 +309,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CardOverlayProvider()),
         ChangeNotifierProvider(create: (_) => CardOverlayCProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
-        ChangeNotifierProvider(create: (_) => UserAccessProvider()),
         Provider.value(value: analyticsService),
       ],
       child: MainApp(
@@ -317,9 +318,6 @@ Future<void> main() async {
       ),
     ),
   );
-  // === Hapus database notifikasi lama untuk pengujian ===
-  // Jangan Hapus Program ini, dan gunakan hanya untuk pengujian saja
-  // await NotificationDatabase.instance.deleteDatabaseFile();
 }
 
 class MainApp extends StatefulWidget {
@@ -374,7 +372,7 @@ class _MainAppState extends State<MainApp> {
       builder: (context, LocaleProvider, _) {
         return MaterialApp(
           locale: LocaleProvider.locale,
-          supportedLocales: const [
+           supportedLocales: const [
             Locale('id'),
             Locale('en'),
             Locale('zh'),

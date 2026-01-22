@@ -28,6 +28,144 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
       listen: false,
     ).formController;
   }
+  Future<void> _showSuccessConfirmationDialog(BuildContext context) async {
+  return showDialog(
+    context: context,
+    barrierDismissible: false, // User tidak bisa tutup dengan tap diluar
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: Colors.green[50],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: const Color.fromARGB(255, 2, 170, 248),
+              size: 60,
+            ),
+            SizedBox(height: 16),
+            Text(
+              '✅ BERHASIL!',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: const Color.fromARGB(255, 4, 146, 247),
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Pengajuan hewan berhasil dikirim\n\n'
+              'Data akan diverifikasi oleh admin terlebih dahulu.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Tutup dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 3, 159, 243),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'MENGERTI',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  ).then((_) {
+    // Setelah dialog ditutup, beri jeda sebentar
+    return Future.delayed(Duration(milliseconds: 300));
+  });
+}
+
+Future<void> _showErrorDialog(BuildContext context, String error) async {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: Colors.red[50],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            ),
+            SizedBox(height: 16),
+            Text(
+              '❌ GAGAL',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.red[800],
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Pengajuan tidak terkirim\n\n'
+              'Error: ${error.length > 100 ? error.substring(0, 100) + '...' : error}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'COBA LAGI',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -449,140 +587,136 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                         ),
                         SizedBox(width: 16),
                         Expanded(
-                          child: Obx(
-                            () => OutlinedButton(
-                              onPressed: formController.isAgreed.value &&
-                                      !_isSubmitting
-                                  ? () async {
-                                      if (formController.formKey.currentState
-                                              ?.saveAndValidate() ??
-                                          false) {
-                                        if (formController
-                                                .selectedType.value.isEmpty ||
-                                            formController
-                                                .selectedLocation.value.isEmpty) {
-                                          Get.snackbar(
-                                            'Form Tidak Lengkap',
-                                            'Harap pilih jenis dan lokasi hewan',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                          return;
-                                        }
+  child: Obx(
+    () => OutlinedButton(
+      onPressed: formController.isAgreed.value &&
+                !_isSubmitting
+          ? () async {
+              if (formController.formKey.currentState
+                      ?.saveAndValidate() ??
+                  false) {
+                if (formController
+                        .selectedType.value.isEmpty ||
+                    formController
+                        .selectedLocation.value.isEmpty) {
+                  Get.snackbar(
+                    'Form Tidak Lengkap',
+                    'Harap pilih jenis dan lokasi hewan',
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                    duration: Duration(seconds: 3),
+                  );
+                  return;
+                }
 
-                                        if (_imageFile == null) {
-                                          Get.snackbar(
-                                            'Foto Diperlukan',
-                                            'Harap tambahkan foto hewan',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                          return;
-                                        }
+                if (_imageFile == null) {
+                  Get.snackbar(
+                    'Foto Diperlukan',
+                    'Harap tambahkan foto hewan',
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                    duration: Duration(seconds: 3),
+                  );
+                  return;
+                }
 
-                                        showLoadingDialog();
-                                        setState(() => _isSubmitting = true);
+                showLoadingDialog();
+                setState(() => _isSubmitting = true);
 
-                                        try {
-                                          final formData = {
-                                            'name': formController
-                                                .nameController.text,
-                                            'type': formController
-                                                .selectedType.value,
-                                            'location': formController
-                                                .selectedLocation.value,
-                                            'count': formController
-                                                .countController.text,
-                                            'desc': formController
-                                                .descController.text,
-                                            'image': _imageFile?.path ?? '',
-                                            'timestamp': DateTime.now(),
-                                            'status': 'Pending',
-                                          };
+                try {
+                  final formData = {
+                    'name': formController
+                        .nameController.text,
+                    'type': formController
+                        .selectedType.value,
+                    'location': formController
+                        .selectedLocation.value,
+                    'count': formController
+                        .countController.text,
+                    'desc': formController
+                        .descController.text,
+                    'image': _imageFile?.path ?? '',
+                    'timestamp': DateTime.now(),
+                    'status': 'Pending',
+                  };
 
-                                          final provider =
-                                              Provider.of<HewanProvider>(
-                                            context,
-                                            listen: false,
-                                          );
+                  final provider =
+                      Provider.of<HewanProvider>(
+                    context,
+                    listen: false,
+                  );
 
-                                          await provider.addSubmission(formData);
+                  await provider.addSubmission(formData);
 
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).pop();
-                                          setState(() {
-                                            _isSubmitting = false;
-                                            _imageFile = null;
-                                          });
+                  // 1️⃣ TUTUP LOADING DIALOG
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).pop();
+                  
+                  setState(() {
+                    _isSubmitting = false;
+                  });
 
-                                          // 🆕 SET FLAG SUBMIT BERHASIL untuk iklan
-                                          InterstitialAdManager.setSubmitSuccessful();
+                  // 2️⃣ TAMPILKAN DIALOG KONFIRMASI YANG TIDAK BISA DITUTUP OTOMATIS
+                  await _showSuccessConfirmationDialog(context);
 
-                                          // Tampilkan snackbar konfirmasi
-                                          Get.snackbar(
-                                            'Berhasil!',
-                                            'Pengajuan hewan berhasil dikirim',
-                                            backgroundColor: Colors.green,
-                                            colorText: Colors.white,
-                                            duration: Duration(seconds: 2),
-                                          );
+                  // 3️⃣ SET FLAG SUBMIT BERHASIL UNTUK IKLAN
+                  InterstitialAdManager.setSubmitSuccessful();
 
-                                          formController.resetForm();
-                                          
-                                          // Navigasi kembali ke SeeAllScreen
-                                          if (mounted) Navigator.pop(context);
-                                          
-                                        } catch (e) {
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).pop();
-                                          setState(() => _isSubmitting = false);
-                                          Get.snackbar(
-                                            'Error',
-                                            'Gagal mengirim pengajuan: $e',
-                                            backgroundColor: Colors.red,
-                                            colorText: Colors.white,
-                                          );
-                                        }
-                                      }
-                                    }
-                                  : null,
-                              child: _isSubmitting
-                                  ? SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          Colors.blueAccent,
-                                        ),
-                                      ),
-                                    )
-                                  : Text(
-                                      'Ajukan',
-                                      style: TextStyle(
-                                        color: formController.isAgreed.value &&
-                                                !_isSubmitting
-                                            ? Colors.blueAccent
-                                            : Colors.grey,
-                                      ),
-                                    ),
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                side: BorderSide(
-                                  color: formController.isAgreed.value &&
-                                          !_isSubmitting
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                  // 4️⃣ RESET FORM
+                  formController.resetForm();
+                  
+                  // 5️⃣ TUTUP HALAMAN ADD DAN KEMBALI KE SEEALLSCREEN
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
+                  
+                } catch (e) {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).pop();
+                  setState(() => _isSubmitting = false);
+                  // Tampilkan pesan error yang jelas
+                  await _showErrorDialog(context, e.toString());
+                }
+              }
+            }
+          : null,
+      child: _isSubmitting
+          ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(
+                  Colors.blueAccent,
+                ),
+              ),
+            )
+          : Text(
+              'Ajukan',
+              style: TextStyle(
+                color: formController.isAgreed.value &&
+                        !_isSubmitting
+                    ? Colors.blueAccent
+                    : Colors.grey,
+              ),
+            ),
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        side: BorderSide(
+          color: formController.isAgreed.value &&
+                  !_isSubmitting
+              ? Colors.blueAccent
+              : Colors.grey,
+        ),
+      ),
+    ),
+  ),
+),
                       ],
                     ),
                     SizedBox(height: 16),
