@@ -26,11 +26,11 @@ class MockFirestoreProfileEdit implements FirestoreServiceBase {
   /// =================================================
   late final StreamController<Map<String, dynamic>> _controller =
       StreamController<Map<String, dynamic>>.broadcast(
-    onListen: () {
-      // 🔥 KIRIM DATA TERAKHIR SAAT LISTENER MASUK
-      _controller.add(Map<String, dynamic>.from(_data));
-    },
-  );
+        onListen: () {
+          // 🔥 KIRIM DATA TERAKHIR SAAT LISTENER MASUK
+          _controller.add(Map<String, dynamic>.from(_data));
+        },
+      );
 
   /// =================================================
   /// STREAM
@@ -56,10 +56,7 @@ class MockFirestoreProfileEdit implements FirestoreServiceBase {
     Map<String, dynamic> data, [
     String? userId,
   ]) async {
-    _data = {
-      ..._data,
-      ...data,
-    };
+    _data = {..._data, ...data};
 
     // 🔥 PENTING: UPDATE STREAM
     _controller.add(Map<String, dynamic>.from(_data));

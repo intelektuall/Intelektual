@@ -918,4 +918,118 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get learnMore => '了解更多';
+
+  @override
+  String get notification => '通知';
+
+  @override
+  String get backgroundMode => '后台模式';
+
+  @override
+  String get appLanguage => '应用语言';
+
+  @override
+  String get white => '白色';
+
+  @override
+  String get black => '黑色';
+
+  @override
+  String get enabled => '已启用';
+
+  @override
+  String get disabled => '已禁用';
+
+  @override
+  String get settings => '设置';
+
+  @override
+  String get cancel => '取消';
+
+  @override
+  String get ctn => '继续';
+
+  @override
+  String get cameraPermission => '相机权限';
+
+  @override
+  String get cameraPermissionDesc => '应用需要访问相机以拍摄头像';
+
+  @override
+  String get galleryPermission => '相册权限';
+
+  @override
+  String get galleryPermissionDesc => '应用需要访问相册以选择头像';
+
+  @override
+  String get accessDenied => '访问被拒绝';
+
+  @override
+  String get openCamera => '打开相机';
+
+  @override
+  String get chooseFromGallery => '从相册选择';
+
+  @override
+  String get deleteProfilePhoto => '删除头像';
+
+  @override
+  String get profilePage => '个人资料页面';
+
+  @override
+  String get removeAds => '移除广告';
+
+  @override
+  String get editProfile => '编辑资料';
+
+  @override
+  String get settingsMenu => '设置';
+
+  @override
+  String get aboutUs => '关于我们';
+
+  @override
+  String get phoneNumber => '电话号码';
+
+  @override
+  String get gender => '性别';
+
+  @override
+  String get age => '年龄';
+
+  @override
+  String get birthInfo => '出生地点和日期';
+
+  @override
+  String get job => '职业';
+
+  @override
+  String get homeAddress => '家庭住址';
+
+  @override
+  String get hobby => '爱好';
+
+  @override
+  String get maritalStatus => '婚姻状况';
+
+  @override
+  String get bio => '简介';
+
+  @override
+  String get logout => '退出登录';
+
+  @override
+  String get notifDeniedTitle => '通知权限被拒绝';
+
+  @override
+  String get notifPermissionTitle => '通知权限';
+
+  @override
+  String get notifPermissionDescLine1 => '此应用需要通知权限以';
+
+  @override
+  String get notifPermissionDescLine2 => '提供重要信息和更新';
+
+  @override
+  String get languageChangedTo => '语言已切换为';
 }

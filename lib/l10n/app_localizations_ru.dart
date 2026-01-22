@@ -918,4 +918,118 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get learnMore => 'Узнать больше';
+
+  @override
+  String get notification => 'Уведомления';
+
+  @override
+  String get backgroundMode => 'Фоновый режим';
+
+  @override
+  String get appLanguage => 'Язык приложения';
+
+  @override
+  String get white => 'Белый';
+
+  @override
+  String get black => 'Чёрный';
+
+  @override
+  String get enabled => 'Включено';
+
+  @override
+  String get disabled => 'Отключено';
+
+  @override
+  String get settings => 'Настройки';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get ctn => 'Продолжить';
+
+  @override
+  String get cameraPermission => 'Разрешение камеры';
+
+  @override
+  String get cameraPermissionDesc => 'Приложению требуется доступ к камере для съемки фото профиля';
+
+  @override
+  String get galleryPermission => 'Разрешение галереи';
+
+  @override
+  String get galleryPermissionDesc => 'Приложению требуется доступ к галерее для выбора фото профиля';
+
+  @override
+  String get accessDenied => 'Доступ запрещён';
+
+  @override
+  String get openCamera => 'Открыть камеру';
+
+  @override
+  String get chooseFromGallery => 'Выбрать из галереи';
+
+  @override
+  String get deleteProfilePhoto => 'Удалить фото профиля';
+
+  @override
+  String get profilePage => 'Страница профиля';
+
+  @override
+  String get removeAds => 'Убрать рекламу';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get settingsMenu => 'Настройки';
+
+  @override
+  String get aboutUs => 'О нас';
+
+  @override
+  String get phoneNumber => 'Номер телефона';
+
+  @override
+  String get gender => 'Пол';
+
+  @override
+  String get age => 'Возраст';
+
+  @override
+  String get birthInfo => 'Место и дата рождения';
+
+  @override
+  String get job => 'Профессия';
+
+  @override
+  String get homeAddress => 'Домашний адрес';
+
+  @override
+  String get hobby => 'Хобби';
+
+  @override
+  String get maritalStatus => 'Семейное положение';
+
+  @override
+  String get bio => 'Биография';
+
+  @override
+  String get logout => 'Выйти';
+
+  @override
+  String get notifDeniedTitle => 'Разрешение на уведомления отклонено';
+
+  @override
+  String get notifPermissionTitle => 'Разрешение на уведомления';
+
+  @override
+  String get notifPermissionDescLine1 => 'Приложению требуется разрешение на уведомления для';
+
+  @override
+  String get notifPermissionDescLine2 => 'предоставления важной информации и обновлений';
+
+  @override
+  String get languageChangedTo => 'Язык изменён на';
 }

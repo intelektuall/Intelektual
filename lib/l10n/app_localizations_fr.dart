@@ -918,4 +918,118 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get learnMore => 'En savoir plus';
+
+  @override
+  String get notification => 'Notification';
+
+  @override
+  String get backgroundMode => 'Mode arrière-plan';
+
+  @override
+  String get appLanguage => 'Langue de l\'application';
+
+  @override
+  String get white => 'Blanc';
+
+  @override
+  String get black => 'Noir';
+
+  @override
+  String get enabled => 'Activé';
+
+  @override
+  String get disabled => 'Désactivé';
+
+  @override
+  String get settings => 'Paramètres';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get ctn => 'Continuer';
+
+  @override
+  String get cameraPermission => 'Autorisation de la caméra';
+
+  @override
+  String get cameraPermissionDesc => 'L\'application nécessite l\'accès à la caméra pour prendre une photo de profil';
+
+  @override
+  String get galleryPermission => 'Autorisation de la galerie';
+
+  @override
+  String get galleryPermissionDesc => 'L\'application nécessite l\'accès à la galerie pour choisir une photo de profil';
+
+  @override
+  String get accessDenied => 'Accès refusé';
+
+  @override
+  String get openCamera => 'Ouvrir la caméra';
+
+  @override
+  String get chooseFromGallery => 'Choisir depuis la galerie';
+
+  @override
+  String get deleteProfilePhoto => 'Supprimer la photo de profil';
+
+  @override
+  String get profilePage => 'Page de profil';
+
+  @override
+  String get removeAds => 'Supprimer les publicités';
+
+  @override
+  String get editProfile => 'Modifier le profil';
+
+  @override
+  String get settingsMenu => 'Paramètres';
+
+  @override
+  String get aboutUs => 'À propos de nous';
+
+  @override
+  String get phoneNumber => 'Numéro de téléphone';
+
+  @override
+  String get gender => 'Genre';
+
+  @override
+  String get age => 'Âge';
+
+  @override
+  String get birthInfo => 'Lieu et date de naissance';
+
+  @override
+  String get job => 'Profession';
+
+  @override
+  String get homeAddress => 'Adresse du domicile';
+
+  @override
+  String get hobby => 'Loisir';
+
+  @override
+  String get maritalStatus => 'État civil';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get logout => 'Se déconnecter';
+
+  @override
+  String get notifDeniedTitle => 'Autorisation de notifications refusée';
+
+  @override
+  String get notifPermissionTitle => 'Autorisation de Notifications';
+
+  @override
+  String get notifPermissionDescLine1 => 'Cette application nécessite l’autorisation des notifications pour';
+
+  @override
+  String get notifPermissionDescLine2 => 'fournir des informations et des mises à jour importantes';
+
+  @override
+  String get languageChangedTo => 'Langue changée en';
 }

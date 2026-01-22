@@ -1,8 +1,12 @@
+import '../../services/localization_helper.dart';
 import 'section.dart';
 
 class Ocean {
   final String id;
-  final String name;
+
+  /// 🔥 MAP multilingual
+  final Map<String, dynamic> name;
+
   final String imagePath;
   final List<Section> sections;
 
@@ -18,18 +22,26 @@ class Ocean {
     List<Section> parsedSections = [];
 
     if (rawSections is List) {
-      parsedSections =
-          rawSections
-              .whereType<Map<String, dynamic>>() // hanya ambil yang Map
-              .map((item) => Section.fromJson(item))
-              .toList();
+      parsedSections = rawSections
+          .whereType<Map<String, dynamic>>()
+          .map((item) => Section.fromJson(item))
+          .toList();
     }
+
     return Ocean(
       id: json['id']?.toString() ?? '',
-      name: json['name'] ?? '',
+
+      /// ✅ parsing MAP multilingual
+      name: Map<String, dynamic>.from(json['name'] ?? {}),
+
       imagePath: json['imagePath'] ?? '',
       sections: parsedSections,
     );
+  }
+
+  /// 🔥 INI SATU-SATUNYA YANG DIPAKAI UI
+  String getName(String locale) {
+    return localizedValue(name, locale);
   }
 
   Map<String, dynamic> toJson() {
@@ -43,7 +55,7 @@ class Ocean {
 
   Ocean copyWith({
     String? id,
-    String? name,
+    Map<String, dynamic>? name,
     String? imagePath,
     List<Section>? sections,
   }) {

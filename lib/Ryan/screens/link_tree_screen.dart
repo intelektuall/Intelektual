@@ -6,7 +6,6 @@ import '../providers/link_provider.dart';
 import '../widgets/link_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
-import '../widgets/language_selector_sheet.dart';
 
 class LinkTreeScreen extends StatefulWidget {
   const LinkTreeScreen({super.key});
@@ -80,28 +79,6 @@ class _LinkTreeScreenState extends State<LinkTreeScreen>
                       size: 26,
                     ),
                   ),
-                ),
-
-                /// 🌐 Language Button
-                IconButton(
-                  icon: Icon(
-                    Icons.translate,
-                    color: isDark ? Colors.white : Colors.black,
-                    size: 26,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(24),
-                        ),
-                      ),
-                      builder: (_) => const LanguageSelectorSheet(),
-                    );
-                  },
                 ),
               ],
             ),

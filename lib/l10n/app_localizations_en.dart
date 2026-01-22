@@ -918,4 +918,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnMore => 'Learn More';
+
+  @override
+  String get notification => 'Notification';
+
+  @override
+  String get backgroundMode => 'Background Mode';
+
+  @override
+  String get appLanguage => 'App Language';
+
+  @override
+  String get white => 'White';
+
+  @override
+  String get black => 'Black';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get ctn => 'Continue';
+
+  @override
+  String get cameraPermission => 'Camera Permission';
+
+  @override
+  String get cameraPermissionDesc => 'The app requires camera access to take a profile photo';
+
+  @override
+  String get galleryPermission => 'Gallery Permission';
+
+  @override
+  String get galleryPermissionDesc => 'The app requires gallery access to select a profile photo';
+
+  @override
+  String get accessDenied => 'Access denied';
+
+  @override
+  String get openCamera => 'Open Camera';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get deleteProfilePhoto => 'Delete Profile Photo';
+
+  @override
+  String get profilePage => 'Profile Page';
+
+  @override
+  String get removeAds => 'Remove Ads';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get settingsMenu => 'Settings';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get gender => 'Gender';
+
+  @override
+  String get age => 'Age';
+
+  @override
+  String get birthInfo => 'Place & Date of Birth';
+
+  @override
+  String get job => 'Occupation';
+
+  @override
+  String get homeAddress => 'Home Address';
+
+  @override
+  String get hobby => 'Hobby';
+
+  @override
+  String get maritalStatus => 'Marital Status';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get logout => 'Log Out';
+
+  @override
+  String get notifDeniedTitle => 'Notification permission denied';
+
+  @override
+  String get notifPermissionTitle => 'Notification Permission';
+
+  @override
+  String get notifPermissionDescLine1 => 'This application requires notification permission to';
+
+  @override
+  String get notifPermissionDescLine2 => 'provide important information and updates';
+
+  @override
+  String get languageChangedTo => 'Language changed to';
 }

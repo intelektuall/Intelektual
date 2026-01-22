@@ -1922,6 +1922,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Learn More'**
   String get learnMore;
+
+  /// No description provided for @notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notification;
+
+  /// No description provided for @backgroundMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Background Mode'**
+  String get backgroundMode;
+
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App Language'**
+  String get appLanguage;
+
+  /// No description provided for @white.
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get white;
+
+  /// No description provided for @black.
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get black;
+
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @ctn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get ctn;
+
+  /// No description provided for @cameraPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Permission'**
+  String get cameraPermission;
+
+  /// No description provided for @cameraPermissionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The app requires camera access to take a profile photo'**
+  String get cameraPermissionDesc;
+
+  /// No description provided for @galleryPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery Permission'**
+  String get galleryPermission;
+
+  /// No description provided for @galleryPermissionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The app requires gallery access to select a profile photo'**
+  String get galleryPermissionDesc;
+
+  /// No description provided for @accessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access denied'**
+  String get accessDenied;
+
+  /// No description provided for @openCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Camera'**
+  String get openCamera;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @deleteProfilePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Profile Photo'**
+  String get deleteProfilePhoto;
+
+  /// No description provided for @profilePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Page'**
+  String get profilePage;
+
+  /// No description provided for @removeAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Ads'**
+  String get removeAds;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @settingsMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsMenu;
+
+  /// No description provided for @aboutUs.
+  ///
+  /// In en, this message translates to:
+  /// **'About Us'**
+  String get aboutUs;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @gender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get gender;
+
+  /// No description provided for @age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get age;
+
+  /// No description provided for @birthInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Place & Date of Birth'**
+  String get birthInfo;
+
+  /// No description provided for @job.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupation'**
+  String get job;
+
+  /// No description provided for @homeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Address'**
+  String get homeAddress;
+
+  /// No description provided for @hobby.
+  ///
+  /// In en, this message translates to:
+  /// **'Hobby'**
+  String get hobby;
+
+  /// No description provided for @maritalStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Marital Status'**
+  String get maritalStatus;
+
+  /// No description provided for @bio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get bio;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logout;
+
+  /// No description provided for @notifDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission denied'**
+  String get notifDeniedTitle;
+
+  /// No description provided for @notifPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Permission'**
+  String get notifPermissionTitle;
+
+  /// No description provided for @notifPermissionDescLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'This application requires notification permission to'**
+  String get notifPermissionDescLine1;
+
+  /// No description provided for @notifPermissionDescLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'provide important information and updates'**
+  String get notifPermissionDescLine2;
+
+  /// No description provided for @languageChangedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to'**
+  String get languageChangedTo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

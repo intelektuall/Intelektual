@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+
 import '../models/seaLifeModel/ocean.dart';
 import '../widgets/sea_life_card.dart';
 import '../services/my_http_helper.dart';
 import '../services/analytics_mixin.dart';
+import '../providers/locale_provider.dart';
 import 'detail_screen.dart';
 
 class RyanHomeScreen extends StatefulWidget {
-  // const RyanHomeScreen({super.key});
   final HttpHelper httpHelper;
 
-  RyanHomeScreen({
-    super.key,
-    HttpHelper? httpHelper,
-  }) : httpHelper = httpHelper ?? HttpHelper();
+  RyanHomeScreen({super.key, HttpHelper? httpHelper})
+    : httpHelper = httpHelper ?? HttpHelper();
 
   @override
   State<RyanHomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTracking{
+class _HomeScreenState extends State<RyanHomeScreen>
+    with AnalyticsScreenTracking {
   late Future<List<Ocean>> futureSeaLife;
 
   @override
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
   @override
   void initState() {
     super.initState();
-    futureSeaLife = widget.httpHelper.fetchSeaLife(); 
+    futureSeaLife = widget.httpHelper.fetchSeaLife();
   }
 
   @override
@@ -37,11 +38,15 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    /// 🔥 Ambil kode bahasa aktif
+    final lang = context.watch<LocaleProvider>().languageCode;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         elevation: 0,
+        centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -57,14 +62,11 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
             ),
           ],
         ),
-        centerTitle: true,
       ),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
-            color: theme.scaffoldBackgroundColor,
-          ),
+          Container(color: theme.scaffoldBackgroundColor),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -93,25 +95,31 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
                   return const Center(
                     child: CircularProgressIndicator(color: Colors.white),
                   );
-                } else if (snapshot.hasError) {
+                }
+
+                if (snapshot.hasError) {
                   return Center(
                     child: Text(
-                      "Terjadi kesalahan: ${snapshot.error}",
+                      "Terjadi kesalahan:\n${snapshot.error}",
                       style: const TextStyle(color: Colors.redAccent),
                       textAlign: TextAlign.center,
                     ),
                   );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                }
+
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
                     child: Text(
                       "Tidak ada data samudra tersedia.",
                       style: TextStyle(color: Colors.white70),
                     ),
                   );
-                } else {
-                  final seaLifeItems = snapshot.data!;
-                  return SeaLifeCarousel(seaLifeItems: seaLifeItems);
                 }
+
+                return SeaLifeCarousel(
+                  seaLifeItems: snapshot.data!,
+                  lang: lang, // 🔥 kirim bahasa aktif
+                );
               },
             ),
           ),
@@ -123,8 +131,13 @@ class _HomeScreenState extends State<RyanHomeScreen> with AnalyticsScreenTrackin
 
 class SeaLifeCarousel extends StatelessWidget {
   final List<Ocean> seaLifeItems;
+  final String lang;
 
-  const SeaLifeCarousel({super.key, required this.seaLifeItems});
+  const SeaLifeCarousel({
+    super.key,
+    required this.seaLifeItems,
+    required this.lang,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -140,20 +153,15 @@ class SeaLifeCarousel extends StatelessWidget {
         scrollPhysics: const BouncingScrollPhysics(),
       ),
       items: seaLifeItems.map((ocean) {
-        return Builder(
-          builder: (BuildContext context) {
-            return SeaLifeCard(
-              imagePath: ocean.imagePath,
-              title: ocean.name,
-              onTap: () {
-                // Kirim seluruh objek Ocean ke DetailScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailScreen(oceanId: ocean.id),
-                  ),
-                );
-              },
+        return SeaLifeCard(
+          imagePath: ocean.imagePath,
+          title: ocean.getName(lang), // ✅ FIX MULTILINGUAL
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => DetailScreen(oceanId: ocean.id),
+              ),
             );
           },
         );

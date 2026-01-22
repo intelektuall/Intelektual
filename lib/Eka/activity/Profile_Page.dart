@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; // ✅ FIX UTAMA
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,9 @@ import '/Eka/provider/permission_helper.dart';
 import '/Periklanan/HalamanHapusIklan.dart';
 import '/Fauzan/LoginPage/login_screen.dart';
 
-// 🔑 FIX UTAMA: FLAG KHUSUS INTEGRATION TEST
+import '../../l10n/app_localizations.dart';
+
+// 🔑 FLAG UNTUK INTEGRATION TEST
 const bool isIntegrationTest = bool.fromEnvironment(
   'INTEGRATION_TEST',
   defaultValue: false,
@@ -70,24 +72,36 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   // ================= PERMISSION DIALOG =================
-  Future<bool> _showPermissionReasonDialog({
-    required String title,
-    required String message,
-  }) async {
+  Future<bool> _showPermissionReasonDialog(
+    BuildContext context,
+    String title,
+    String messageLine1,
+    String messageLine2,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+
     return await showDialog<bool>(
           context: context,
           barrierDismissible: false,
           builder: (ctx) => AlertDialog(
             title: Text(title),
-            content: Text(message),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(messageLine1),
+                const SizedBox(height: 8),
+                Text(messageLine2),
+              ],
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text("Batal"),
+                child: Text(l10n.cancel),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text("Lanjutkan"),
+                child: Text(l10n.ctn),
               ),
             ],
           ),
@@ -97,6 +111,7 @@ class _MyProfileState extends State<MyProfile> {
 
   // ================= PICK IMAGE =================
   Future<void> _pickImage(ImageSource source) async {
+    final l10n = AppLocalizations.of(context)!;
     bool granted = false;
 
     if (source == ImageSource.camera) {
@@ -105,9 +120,10 @@ class _MyProfileState extends State<MyProfile> {
         granted = true;
       } else {
         final allow = await _showPermissionReasonDialog(
-          title: "Izin Kamera",
-          message:
-              "Aplikasi memerlukan akses kamera untuk mengambil foto profil.",
+          context,
+          l10n.cameraPermission,
+          l10n.cameraPermissionDesc,
+          l10n.ctn,
         );
         if (!allow) return;
         granted = await PermissionHelper.requestCamera(context);
@@ -118,9 +134,10 @@ class _MyProfileState extends State<MyProfile> {
         granted = true;
       } else {
         final allow = await _showPermissionReasonDialog(
-          title: "Izin Galeri",
-          message:
-              "Aplikasi memerlukan akses galeri untuk memilih foto profil.",
+          context,
+          l10n.galleryPermission,
+          l10n.galleryPermissionDesc,
+          l10n.ctn,
         );
         if (!allow) return;
         granted = await PermissionHelper.requestGallery(context);
@@ -130,7 +147,7 @@ class _MyProfileState extends State<MyProfile> {
     if (!granted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Akses ditolak")));
+      ).showSnackBar(SnackBar(content: Text(l10n.accessDenied)));
       return;
     }
 
@@ -154,8 +171,10 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
-  // ================= BOTTOM SHEET =================
+  // ================= IMAGE PICKER BOTTOM SHEET =================
   void _showImagePickerOptions() {
+    final l10n = AppLocalizations.of(context)!;
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -165,7 +184,7 @@ class _MyProfileState extends State<MyProfile> {
         children: [
           ListTile(
             leading: const Icon(Icons.camera_alt),
-            title: const Text("Buka Kamera"),
+            title: Text(l10n.openCamera),
             onTap: () {
               Navigator.pop(context);
               _pickImage(ImageSource.camera);
@@ -173,7 +192,7 @@ class _MyProfileState extends State<MyProfile> {
           ),
           ListTile(
             leading: const Icon(Icons.photo_library),
-            title: const Text("Pilih dari Galeri"),
+            title: Text(l10n.chooseFromGallery),
             onTap: () {
               Navigator.pop(context);
               _pickImage(ImageSource.gallery);
@@ -181,7 +200,7 @@ class _MyProfileState extends State<MyProfile> {
           ),
           ListTile(
             leading: const Icon(Icons.delete_outline),
-            title: const Text("Hapus Foto Profil"),
+            title: Text(l10n.deleteProfilePhoto),
             onTap: () async {
               Navigator.pop(context);
               final dir = await getApplicationDocumentsDirectory();
@@ -262,9 +281,10 @@ class _MyProfileState extends State<MyProfile> {
   // ================= BUILD =================
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final settings = context.watch<SettingsProvider>();
-    final isDark = settings.backgroundMode == "Hitam";
 
+    final isDark = settings.backgroundMode == "Hitam";
     final bg = isDark ? Colors.black : Colors.grey[100]!;
     final text = isDark ? Colors.white : Colors.black87;
     final sub = isDark ? Colors.grey[400]! : Colors.blueGrey;
@@ -273,10 +293,10 @@ class _MyProfileState extends State<MyProfile> {
       backgroundColor: bg,
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        title: Text("Profile Page", style: TextStyle(color: text)),
+        title: Text(l10n.profilePage, style: TextStyle(color: text)),
         actions: [
           IconButton(
-            tooltip: "Hapus Iklan",
+            tooltip: l10n.removeAds,
             icon: Image.asset('assets/icons/remove_ads.png', width: 60),
             onPressed: () {
               Navigator.push(
@@ -285,19 +305,15 @@ class _MyProfileState extends State<MyProfile> {
               );
             },
           ),
-
-          // 🔑 POPUP MENU (PRODUCTION)
           PopupMenuButton<String>(
             key: const Key('profile_menu'),
             onSelected: _handleMenuSelection,
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit Profil')),
-              PopupMenuItem(value: 'settings', child: Text('Settings')),
-              PopupMenuItem(value: 'about', child: Text('About Us')),
+            itemBuilder: (_) => [
+              PopupMenuItem(value: 'edit', child: Text(l10n.editProfile)),
+              PopupMenuItem(value: 'settings', child: Text(l10n.settingsMenu)),
+              PopupMenuItem(value: 'about', child: Text(l10n.aboutUs)),
             ],
           ),
-
-          // 🧪 TEST-ONLY BUTTON (DEBUG & TEST MODE)
           if (isIntegrationTest)
             IconButton(
               key: const Key('test_edit_profile'),
@@ -311,7 +327,6 @@ class _MyProfileState extends State<MyProfile> {
         initialData: const {},
         builder: (context, snap) {
           final data = snap.data ?? {};
-
           if (data.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -366,25 +381,25 @@ class _MyProfileState extends State<MyProfile> {
                   ],
                 ),
               ),
-              buildInfoTile("Nomor HP", data['nomorHP'] ?? '', sub, text),
+              buildInfoTile(l10n.phoneNumber, data['nomorHP'] ?? '', sub, text),
+              buildInfoTile(l10n.gender, data['jenisKelamin'] ?? '', sub, text),
+              buildInfoTile(l10n.age, data['umur'] ?? '', sub, text),
               buildInfoTile(
-                "Jenis Kelamin",
-                data['jenisKelamin'] ?? '',
+                l10n.birthInfo,
+                data['tempatTanggalLahir'] ?? '',
                 sub,
                 text,
               ),
-              buildInfoTile("Umur", data['umur'] ?? '', sub, text),
-              buildInfoTile("TTL", data['tempatTanggalLahir'] ?? '', sub, text),
               const SizedBox(height: 12),
-              buildInfoTile("Pekerjaan", data['pekerjaan'] ?? '', sub, text),
+              buildInfoTile(l10n.job, data['pekerjaan'] ?? '', sub, text),
               buildInfoTile(
-                "Alamat Rumah",
+                l10n.homeAddress,
                 data['alamatRumah'] ?? '',
                 sub,
                 text,
               ),
               buildInfoTile(
-                "Hobi",
+                l10n.hobby,
                 (data['hobi'] is List)
                     ? (data['hobi'] as List).join(', ')
                     : data['hobi'] ?? '',
@@ -392,21 +407,21 @@ class _MyProfileState extends State<MyProfile> {
                 text,
               ),
               buildInfoTile(
-                "Status Pernikahan",
+                l10n.maritalStatus,
                 data['statusPernikahan'] ?? '',
                 sub,
                 text,
               ),
-              buildInfoTile("Bio", data['bio'] ?? '', sub, text),
+              buildInfoTile(l10n.bio, data['bio'] ?? '', sub, text),
               const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   key: const Key('btn_logout'),
                   icon: const Icon(Icons.logout, color: Colors.black),
-                  label: const Text(
-                    "Log Out",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.logout,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -427,7 +442,6 @@ class _MyProfileState extends State<MyProfile> {
                   },
                 ),
               ),
-
               const SizedBox(height: 30),
             ],
           );

@@ -918,4 +918,118 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get learnMore => 'अधिक जानें';
+
+  @override
+  String get notification => 'सूचना';
+
+  @override
+  String get backgroundMode => 'पृष्ठभूमि मोड';
+
+  @override
+  String get appLanguage => 'ऐप भाषा';
+
+  @override
+  String get white => 'सफेद';
+
+  @override
+  String get black => 'काला';
+
+  @override
+  String get enabled => 'सक्रिय';
+
+  @override
+  String get disabled => 'निष्क्रिय';
+
+  @override
+  String get settings => 'सेटिंग्स';
+
+  @override
+  String get cancel => 'रद्द करें';
+
+  @override
+  String get ctn => 'जारी रखें';
+
+  @override
+  String get cameraPermission => 'कैमरा अनुमति';
+
+  @override
+  String get cameraPermissionDesc => 'प्रोफ़ाइल फ़ोटो लेने के लिए ऐप को कैमरा एक्सेस की आवश्यकता है';
+
+  @override
+  String get galleryPermission => 'गैलरी अनुमति';
+
+  @override
+  String get galleryPermissionDesc => 'प्रोफ़ाइल फ़ोटो चुनने के लिए ऐप को गैलरी एक्सेस की आवश्यकता है';
+
+  @override
+  String get accessDenied => 'पहुंच अस्वीकृत';
+
+  @override
+  String get openCamera => 'कैमरा खोलें';
+
+  @override
+  String get chooseFromGallery => 'गैलरी से चुनें';
+
+  @override
+  String get deleteProfilePhoto => 'प्रोफ़ाइल फ़ोटो हटाएँ';
+
+  @override
+  String get profilePage => 'प्रोफ़ाइल पेज';
+
+  @override
+  String get removeAds => 'विज्ञापन हटाएँ';
+
+  @override
+  String get editProfile => 'प्रोफ़ाइल संपादित करें';
+
+  @override
+  String get settingsMenu => 'सेटिंग्स';
+
+  @override
+  String get aboutUs => 'हमारे बारे में';
+
+  @override
+  String get phoneNumber => 'फ़ोन नंबर';
+
+  @override
+  String get gender => 'लिंग';
+
+  @override
+  String get age => 'आयु';
+
+  @override
+  String get birthInfo => 'जन्म स्थान और तिथि';
+
+  @override
+  String get job => 'पेशा';
+
+  @override
+  String get homeAddress => 'घर का पता';
+
+  @override
+  String get hobby => 'शौक';
+
+  @override
+  String get maritalStatus => 'वैवाहिक स्थिति';
+
+  @override
+  String get bio => 'परिचय';
+
+  @override
+  String get logout => 'लॉग आउट';
+
+  @override
+  String get notifDeniedTitle => 'सूचना अनुमति अस्वीकृत';
+
+  @override
+  String get notifPermissionTitle => 'सूचना अनुमति';
+
+  @override
+  String get notifPermissionDescLine1 => 'इस एप्लिकेशन को सूचना अनुमति की आवश्यकता है ताकि';
+
+  @override
+  String get notifPermissionDescLine2 => 'महत्वपूर्ण जानकारी और अपडेट प्रदान किए जा सकें';
+
+  @override
+  String get languageChangedTo => 'भाषा बदली गई है';
 }

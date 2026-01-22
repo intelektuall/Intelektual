@@ -1,27 +1,53 @@
+import '../../services/localization_helper.dart';
 import 'point.dart';
 
 class Section {
-  final String title;
-  final String? text;
+  /// 🔥 Map multilingual
+  final Map<String, dynamic> title;
+
+  /// 🔥 text bisa null atau map multilingual
+  final Map<String, dynamic>? text;
+
   final List<Point> points;
 
   Section({
     required this.title,
-    required this.text,
+    this.text,
     required this.points,
   });
 
   factory Section.fromJson(Map<String, dynamic> json) {
-    final rawText = json['text'] as String?;
-    final normalizedText = (rawText != null && rawText.trim().isNotEmpty) ? rawText.trim() : null;
+    /// title WAJIB map
+    final titleMap =
+        Map<String, dynamic>.from(json['title'] ?? {});
+
+    /// text OPTIONAL & multilingual
+    final rawText = json['text'];
+    final Map<String, dynamic>? textMap =
+        rawText is Map<String, dynamic> && rawText.isNotEmpty
+            ? Map<String, dynamic>.from(rawText)
+            : null;
+
     return Section(
-      title: json['title'] ?? '',
-      text: normalizedText,
+      title: titleMap,
+      text: textMap,
       points: (json['points'] as List<dynamic>?)
-              ?.map((item) => Point.fromJson(item))
+              ?.whereType<Map<String, dynamic>>()
+              .map((item) => Point.fromJson(item))
               .toList() ??
           [],
     );
+  }
+
+  /// 🔥 INI YANG DIPAKAI UI
+  String getTitle(String locale) {
+    return localizedValue(title, locale);
+  }
+
+  String? getText(String locale) {
+    if (text == null) return null;
+    final value = localizedValue(text, locale);
+    return value.isNotEmpty ? value : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -33,8 +59,8 @@ class Section {
   }
 
   Section copyWith({
-    String? title,
-    String? text,
+    Map<String, dynamic>? title,
+    Map<String, dynamic>? text,
     List<Point>? points,
   }) {
     return Section(

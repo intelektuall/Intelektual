@@ -918,4 +918,118 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get learnMore => 'Pelajari Selengkapnya';
+
+  @override
+  String get notification => 'Notifikasi';
+
+  @override
+  String get backgroundMode => 'Mode Latar Belakang';
+
+  @override
+  String get appLanguage => 'Bahasa Aplikasi';
+
+  @override
+  String get white => 'Putih';
+
+  @override
+  String get black => 'Hitam';
+
+  @override
+  String get enabled => 'diaktifkan';
+
+  @override
+  String get disabled => 'dinonaktifkan';
+
+  @override
+  String get settings => 'Pengaturan';
+
+  @override
+  String get cancel => 'Batal';
+
+  @override
+  String get ctn => 'Lanjutkan';
+
+  @override
+  String get cameraPermission => 'Izin Kamera';
+
+  @override
+  String get cameraPermissionDesc => 'Aplikasi memerlukan akses kamera untuk mengambil foto profil';
+
+  @override
+  String get galleryPermission => 'Izin Galeri';
+
+  @override
+  String get galleryPermissionDesc => 'Aplikasi memerlukan akses galeri untuk memilih foto profil';
+
+  @override
+  String get accessDenied => 'Akses ditolak';
+
+  @override
+  String get openCamera => 'Buka Kamera';
+
+  @override
+  String get chooseFromGallery => 'Pilih dari Galeri';
+
+  @override
+  String get deleteProfilePhoto => 'Hapus Foto Profil';
+
+  @override
+  String get profilePage => 'Profile Page';
+
+  @override
+  String get removeAds => 'Hapus Iklan';
+
+  @override
+  String get editProfile => 'Edit Profil';
+
+  @override
+  String get settingsMenu => 'Settings';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get phoneNumber => 'Nomor HP';
+
+  @override
+  String get gender => 'Jenis Kelamin';
+
+  @override
+  String get age => 'Umur';
+
+  @override
+  String get birthInfo => 'TTL';
+
+  @override
+  String get job => 'Pekerjaan';
+
+  @override
+  String get homeAddress => 'Alamat Rumah';
+
+  @override
+  String get hobby => 'Hobi';
+
+  @override
+  String get maritalStatus => 'Status Pernikahan';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get logout => 'Log Out';
+
+  @override
+  String get notifDeniedTitle => 'Izin notifikasi ditolak';
+
+  @override
+  String get notifPermissionTitle => 'Izin Notifikasi';
+
+  @override
+  String get notifPermissionDescLine1 => 'Aplikasi membutuhkan izin notifikasi untuk';
+
+  @override
+  String get notifPermissionDescLine2 => 'memberikan informasi dan pembaruan penting';
+
+  @override
+  String get languageChangedTo => 'Bahasa diubah ke';
 }

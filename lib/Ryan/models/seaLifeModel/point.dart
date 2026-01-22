@@ -1,6 +1,11 @@
+import '../../services/localization_helper.dart';
+
 class Point {
-  final String title;
-  final String? description;
+  /// 🔥 Map multilingual
+  final Map<String, dynamic> title;
+
+  /// 🔥 description optional & multilingual
+  final Map<String, dynamic>? description;
 
   Point({
     required this.title,
@@ -8,10 +13,30 @@ class Point {
   });
 
   factory Point.fromJson(Map<String, dynamic> json) {
+    final titleMap =
+        Map<String, dynamic>.from(json['title'] ?? {});
+
+    final rawDescription = json['description'];
+    final Map<String, dynamic>? descriptionMap =
+        rawDescription is Map<String, dynamic> && rawDescription.isNotEmpty
+            ? Map<String, dynamic>.from(rawDescription)
+            : null;
+
     return Point(
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
+      title: titleMap,
+      description: descriptionMap,
     );
+  }
+
+  /// 🔥 INI YANG DIPAKAI UI
+  String getTitle(String locale) {
+    return localizedValue(title, locale);
+  }
+
+  String? getDescription(String locale) {
+    if (description == null) return null;
+    final value = localizedValue(description, locale);
+    return value.isNotEmpty ? value : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,8 +47,8 @@ class Point {
   }
 
   Point copyWith({
-    String? title,
-    String? description,
+    Map<String, dynamic>? title,
+    Map<String, dynamic>? description,
   }) {
     return Point(
       title: title ?? this.title,
